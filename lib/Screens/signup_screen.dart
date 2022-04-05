@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Models/auth.dart';
 import 'successful_screen.dart';
+import 'dart:convert';
 
 class SignupScreen extends StatelessWidget {
 
@@ -13,6 +14,9 @@ class SignupScreen extends StatelessWidget {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final firstnameController = TextEditingController();
+  final lastnameController = TextEditingController();
+  final study_yearController = TextEditingController();
 
   Widget signUpWith(IconData icon) {
     return Container(
@@ -62,8 +66,8 @@ class SignupScreen extends StatelessWidget {
           image: DecorationImage(
             alignment: Alignment.topCenter,
             fit: BoxFit.fill,
-            image: NetworkImage(
-              'https://www.teahub.io/photos/full/246-2460189_full-hd-background-abstract-portrait.jpg',
+            image: AssetImage(
+              'assets/Images/light-1834289.jpg',
             ),
           ),
         ),
@@ -71,7 +75,7 @@ class SignupScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
-              height: 510,
+              height: 600,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -85,7 +89,10 @@ class SignupScreen extends StatelessWidget {
                   children: [
                     SizedBox(height: 45),
                     userInput(emailController, 'Email', TextInputType.emailAddress),
+                    userInput(firstnameController, 'First name', TextInputType.text),
+                    userInput(lastnameController, 'Last name', TextInputType.text),
                     userInput(passwordController, 'Password', TextInputType.visiblePassword),
+                    userInput(study_yearController, 'Study year', TextInputType.number),
                     Container(
                       height: 55,
                       // for an exact replicate, remove the padding.
@@ -97,22 +104,22 @@ class SignupScreen extends StatelessWidget {
                         onPressed: () {
                           print(emailController);
                           print(passwordController);
-                          Provider.of<Auth>(context, listen: false).signup(emailController.text, passwordController.text);
+                          print(firstnameController);
+                          print(lastnameController);
+                          print(study_yearController);
+                          Provider.of<Auth>(context, listen: false).signup(emailController.text, firstnameController.text, lastnameController.text, int.parse(study_yearController.text),passwordController.text);
                           Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SuccessfulScreen()));
                         },
                         child: Text('Sign up', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white,),),
                       ),
                     ),
-                    SizedBox(height: 20),
-                    Center(child: Text('Forgot password ?'),),
-                    SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.only(top: 25.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          signUpWith(Icons.add),
-                          signUpWith(Icons.book_online),
+                          /*signUpWith(Icons.add),
+                          signUpWith(Icons.book_online),*/
                         ],
                       ),
                     ),
