@@ -36,7 +36,7 @@ class LoginScreen extends StatelessWidget {
     return Container(
       height: 55,
       margin: EdgeInsets.only(bottom: 15),
-      decoration: BoxDecoration(color: Colors.blueGrey.shade200, borderRadius: BorderRadius.circular(30)),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(30)),
       child: Padding(
         padding: const EdgeInsets.only(left: 25.0, top: 15, right: 25),
         child: TextField(
@@ -46,7 +46,7 @@ class LoginScreen extends StatelessWidget {
           autofocus: false,
           decoration: InputDecoration.collapsed(
             hintText: hintTitle,
-            hintStyle: TextStyle(fontSize: 18, color: Colors.white70, fontStyle: FontStyle.italic),
+            hintStyle: TextStyle(fontSize: 18, color: Colors.black54, fontStyle: FontStyle.italic),
           ),
           keyboardType: keyboardType,
         ),
@@ -74,7 +74,7 @@ class LoginScreen extends StatelessWidget {
               height: 510,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.grey[200],
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
               ),
               child: Padding(
@@ -93,7 +93,7 @@ class LoginScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 5, left: 70, right: 70),
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                        color: Colors.indigo.shade800,
+                        color: Colors.deepPurpleAccent[400],
                         onPressed: () {
                           print(emailController);
                           print(passwordController);
