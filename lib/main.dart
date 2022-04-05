@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import './Screens/login_screen.dart';
 import './Screens/signup_screen.dart';
 import './Screens/welcome_screen.dart';
+import './Screens/search_screen.dart';
 import './Models/auth.dart';
 
 void main() {
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
           WelcomeScreen.routeName: (context) => WelcomeScreen(),
           SignupScreen.routeName: (context) => SignupScreen(),
           LoginScreen.routeName: (context) => LoginScreen(),
+          SearchScreen.routeName: (context) => SearchScreen(),
         },
       ),
     );
