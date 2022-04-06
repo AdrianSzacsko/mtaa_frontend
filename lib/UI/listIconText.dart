@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-
-Widget tempuserInput(TextEditingController userInput, Widget icon, String hintText) {
+Widget listIconText(TextEditingController Text, String code) {
   return Container(
     //width: 400,
     child: Material(
@@ -14,8 +12,19 @@ Widget tempuserInput(TextEditingController userInput, Widget icon, String hintTe
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: icon,
-          ),
+            child:
+              (code == 'USER') ?
+                const Icon(
+                  Icons.account_circle_rounded
+                ):
+                (code == 'PROF') ?
+                  const Icon(
+                    Icons.work_rounded
+                  ):
+                    const Icon(
+                      Icons.article_rounded
+                    )
+            ),
           Container(
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -30,14 +39,14 @@ Widget tempuserInput(TextEditingController userInput, Widget icon, String hintTe
               child: Form(
                 child: TextField(
                   //TestField
-                  controller: userInput,
+                  controller: Text,
 
-                  decoration: InputDecoration(
+                  /*decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: hintText,
                     fillColor: Colors.white,
                     filled: true,
-                  ),
+                  ),*/
                   style: const TextStyle(
                     fontSize: 20,
                     color: Colors.black,
