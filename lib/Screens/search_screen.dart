@@ -14,6 +14,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class SearchScreenState extends State<SearchScreen> {
+  ScrollController scrollController = ScrollController();
 
   static const routeName = '/search-screen';
   final searchController = TextEditingController();
@@ -23,35 +24,55 @@ class SearchScreenState extends State<SearchScreen> {
     ['Ing. Marek Galinski','PROF','5']];
 
   Widget buildList() {
-    return ListView.builder(
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      padding: const EdgeInsets.all(5.0),
-      key: UniqueKey(),
-      itemCount: list_of_rows.isEmpty ? 1 : list_of_rows.length,
-      itemBuilder: (context, item) {
-        if (list_of_rows.isEmpty) {
-          list_of_rows.addAll([['Mobilné technológie a Aplikácie','MTAA','5'],
-            ['Marko Stahovec','USER','5'],
-            ['Ing. Marek Galinski','PROF','5']]);
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height -228,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          controller: scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(5.0),
+          key: UniqueKey(),
+          itemCount: list_of_rows.isEmpty ? 1 : list_of_rows.length,
+          itemBuilder: (context, item) {
+            if (list_of_rows.isEmpty) {
+              list_of_rows.addAll([['Mobilné technológie a Aplikácie','MTAA','5'],
+                ['Marko Stahovec','USER','5'],
+                ['Ing. Marek Galinski','PROF','5']]);
 
-        }
-        //TODO add get method
-        return _buildRow(list_of_rows[item]);
-      },
+            }
+            //TODO add get method
+            return _buildRow(list_of_rows[item]);
+          },
+        ),
+      )
+
     );
   }
 
+  BouncingScrollPhysics bouncingScrollPhysics = BouncingScrollPhysics();
+
   Widget _buildRow(List<String> row) {
-    return ListTile(
-        title: Text(row[0], style: TextStyle(fontSize: 18.0)),
-        trailing: Icon(row[1] == 'PROF' ? Icons.work_rounded :
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Padding (
+        padding: EdgeInsets.all(5),
+        child: ListTile(
+            title: Text(row[0], style: TextStyle(fontSize: 18.0)),
+            trailing: Icon(row[1] == 'PROF' ? Icons.work_rounded :
             row[1] == 'USER' ? Icons.account_circle_rounded :
             Icons.article_rounded,
-            color: Colors.black),
-        onTap: () {
-          print(row);
-        });
+                color: Colors.black),
+            onTap: () {
+              print(row);
+            }),
+      ),
+    );
   }
 
   @override
