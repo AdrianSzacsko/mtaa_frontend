@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Models/auth.dart';
+import '../constants.dart';
 import 'successful_screen.dart';
 import 'search_screen.dart';
 
@@ -20,7 +21,7 @@ class LoginScreen extends StatelessWidget {
       height: 50,
       width: 115,
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1),
+        border: Border.all(color: backgroundColor.withOpacity(0.4), width: 1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -47,7 +48,7 @@ class LoginScreen extends StatelessWidget {
           autofocus: false,
           decoration: InputDecoration.collapsed(
             hintText: hintTitle,
-            hintStyle: TextStyle(fontSize: 18, color: Colors.black54, fontStyle: FontStyle.italic),
+            hintStyle: TextStyle(fontSize: 18, color: textColor, fontStyle: FontStyle.italic),
           ),
           keyboardType: keyboardType,
         ),
@@ -75,7 +76,7 @@ class LoginScreen extends StatelessWidget {
               height: 510,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: backgroundColor[200],
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
               ),
               child: Padding(
@@ -94,7 +95,7 @@ class LoginScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 5, left: 70, right: 70),
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                        color: Colors.deepPurpleAccent[400],
+                        color:primaryColor[300],
                         onPressed: () {
                           print(emailController);
                           print(passwordController);

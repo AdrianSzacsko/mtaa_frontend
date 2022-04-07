@@ -5,6 +5,8 @@ import './Screens/login_screen.dart';
 import './Screens/signup_screen.dart';
 import './Screens/welcome_screen.dart';
 import './Screens/search_screen.dart';
+import './Screens/register_screen.dart';
+import './Screens/sign_in_screen.dart';
 import './Models/auth.dart';
 
 void main() {
@@ -29,8 +31,8 @@ class MyApp extends StatelessWidget {
         home: WelcomeScreen(),
         routes: {
           WelcomeScreen.routeName: (context) => WelcomeScreen(),
-          SignupScreen.routeName: (context) => SignupScreen(),
-          LoginScreen.routeName: (context) => LoginScreen(),
+          SignupScreen.routeName: (context) => SignUpScreen(),
+          LoginScreen.routeName: (context) => SignInScreen(),
           SearchScreen.routeName: (context) => SearchScreen(),
         },
       ),
