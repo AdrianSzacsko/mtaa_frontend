@@ -28,12 +28,12 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: WelcomeScreen(),
+        home: SignInScreen(),
         routes: {
           WelcomeScreen.routeName: (context) => WelcomeScreen(),
           SignupScreen.routeName: (context) => SignUpScreen(),
           LoginScreen.routeName: (context) => SignInScreen(),
-          SearchScreen.routeName: (context) => SearchScreen(),
+          // SearchScreen.routeName: (context) => SearchScreen(),
         },
       ),
     );

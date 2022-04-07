@@ -1,12 +1,17 @@
 import 'package:mtaa_frontend/Screens/register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:mtaa_frontend/Screens/search_screen.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants.dart';
+import '../Models/auth.dart';
 import 'components/sign_in_form.dart';
 
 class SignInScreen extends StatelessWidget {
   // It's time to validat the text field
   final _formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -76,13 +81,20 @@ class SignInScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                       color:primaryColor[300],
                         onPressed: () {
+                          print(emailController);
+                          print(passwordController);
+                          Provider.of<Auth>(context, listen: false).login(emailController.text, passwordController.text);
+                          Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+                        },
+                        /*
+                        onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             // Sign up form is done
                             // It saved our inputs
                             _formKey.currentState!.save();
                             //  Sign in also done
                           }
-                        },
+                        },*/
                         child: const Text("Login", style: TextStyle(color: textColor)),
                       ),
                     ),

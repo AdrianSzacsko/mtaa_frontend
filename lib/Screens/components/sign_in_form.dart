@@ -61,7 +61,7 @@ class SignInForm extends StatelessWidget {
                 borderSide: const BorderSide(color: secondaryColor, width: 2.0),
                 borderRadius: BorderRadius.circular(25.0),
               ),),
-            validator: passwordValidator,
+            // validator: passwordValidator,
             onSaved: (password) => _password = password!,
           ),
           const SizedBox(height: defaultPadding * 2),
