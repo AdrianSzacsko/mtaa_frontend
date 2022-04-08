@@ -62,7 +62,7 @@ class SignupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             alignment: Alignment.topCenter,
             fit: BoxFit.fill,
@@ -77,7 +77,7 @@ class SignupScreen extends StatelessWidget {
             Container(
               height: 600,
               width: double.infinity,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
               ),
@@ -117,13 +117,13 @@ class SignupScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 25.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
+                        children: const [
                           /*signUpWith(Icons.add),
                           signUpWith(Icons.book_online),*/
                         ],
                       ),
                     ),
-                    Divider(thickness: 0, color: Colors.white),
+                    const Divider(thickness: 0, color: Colors.white),
                     /*
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
