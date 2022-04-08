@@ -26,7 +26,7 @@ class SearchScreenState extends State<SearchScreen> {
   Widget buildList() {
     return Container(
       width: double.infinity,
-      height: MediaQuery.of(context).size.height -228,
+      height: MediaQuery.of(context).size.height -276,
       child: Align(
         alignment: Alignment.topCenter,
         child: ListView.builder(
@@ -143,19 +143,29 @@ class SearchScreenState extends State<SearchScreen> {
                 alignment: Alignment.center,
                 child: buildList(),
               ),
-            )
-            //buildList(),
-            /*ListView.builder(
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    height: 60,margin: EdgeInsets.all(2),
-                    color: Colors.white,
-                    child: Center(
-                      child: _buildList(),
+            ),
+            BottomAppBar(
+              color: Colors.blue,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                      icon: Icon(Icons.settings),
+                      color: Colors.white,
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+                      },
                     ),
-                  );
-                }
-            ),*/
+                  IconButton(
+                    icon: Icon(Icons.assignment_ind),
+                    color: Colors.white,
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       )
