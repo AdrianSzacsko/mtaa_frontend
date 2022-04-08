@@ -44,18 +44,20 @@ class Auth with ChangeNotifier {
 
   login(String email, String password)async{
     var dio = Dio();
-    var body = <String, dynamic>{};
-    body['grant_type'] = 'password';
-    body['client_id'] = null;
-    body['client_secret'] = null;
-    body['username'] = email;
-    body['password'] = password;
+    dio.options.headers['content-Type'] = "application/x-www-form-urlencoded";
     try {
-      FormData formData = FormData.fromMap(body);
+      FormData formData = FormData.fromMap({
+        'grant_type': 'password',
+        'client_id': null,
+        'client_secret': null,
+        'username': email,
+        'password': password,
+      });
       var response = await dio.post(urlLogin + apiKey, data: formData);
       print(response.data);
       return response.data;
     } catch (e) {
+      print("motherfucker");
       print(e);
     }
   }
