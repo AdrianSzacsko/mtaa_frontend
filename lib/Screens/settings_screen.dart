@@ -165,7 +165,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 },
                 child: const Text("Delete Account",
                   style: TextStyle(
-                    fontSize: 22,
+                    //fontSize: 22,
                     color: Colors.black,
                   ),
                 ),
