@@ -1,11 +1,13 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:mtaa_frontend/Screens/profile_screen.dart';
 //import 'package:flutter/rendering.dart';
 import 'package:mtaa_frontend/UI/inputField.dart';
 import 'package:mtaa_frontend/Screens/search_screen.dart';
 import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
 
+import '../UI/appbar.dart';
 import '../constants.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -25,53 +27,8 @@ class SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: primaryColor[300], //change your color here
-          ),
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          title: IconButton(
-            icon: Image.asset('assets/Images/puzzle.png',
-              height: 80.0,
-              fit: BoxFit.cover,
-            ),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SignInScreen()));
-            },
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.search_outlined,
-                  color: primaryColor[300]),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
-              },
-            ),
-          ],
-        ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-              icon: Icon(Icons.settings_outlined),
-              color: primaryColor[300],
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.account_circle_outlined),
-              color: primaryColor[300],
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
-              },
-            ),
-          ],
-        ),
-      ),
+      appBar: myAppBar(context),
+      bottomNavigationBar: myBottomAppBar(context),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -105,6 +62,7 @@ class SettingsScreenState extends State<SettingsScreen> {
               child: TextButton(
                 onPressed: () {
                   //TODO add info
+
                 },
                 child: const Text("Info",
                 style: TextStyle(
@@ -146,23 +104,71 @@ class SettingsScreenState extends State<SettingsScreen> {
                       context: context,
                       builder: (context) {
                         return Dialog(
+                          alignment: Alignment.center,
+
                           //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                          elevation: 16,
+                          elevation: 0,
+                          backgroundColor: Colors.transparent,
                           child: Container(
-                            margin: const EdgeInsets.all(5),
+
+                            margin: const EdgeInsets.all(15),
                             decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
                             ),
                             child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Container(
-                                  child: const Text("Are you sure you want to permanently delete your account?",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    ),
+                                const SizedBox(height: 10),
+                                const Text("Are you sure you want to permanently delete your account?",
+                                style: TextStyle(
+                                  fontSize: 18,
+
                                   ),
+                                  textAlign: TextAlign.center,
                                 ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.all(2),
+                                      decoration: BoxDecoration(
+                                        color: secondaryColor,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: TextButton(
+                                          onPressed: (){
+                                              //TODO delete account
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SignInScreen()));
+                                          },
+                                          child: const Text("Yes",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        color: primaryColor,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: TextButton(
+                                          onPressed: () => Navigator.pop(context, false),
+                                          child: const Text("No",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
                               ],
                             ),
                           ),
@@ -172,7 +178,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 },
                 child: const Text("Delete Account",
                   style: TextStyle(
-                    //fontSize: 22,
+                    fontSize: 22,
                     color: Colors.black,
                   ),
                 ),
