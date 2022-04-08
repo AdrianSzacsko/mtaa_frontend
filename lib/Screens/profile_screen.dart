@@ -108,6 +108,26 @@ class ProfileScreenState extends State<ProfileScreen> {
               information("Email:","xstahovec@stuba.sk",Icons.mail_rounded),
               information("Study year:","2",Icons.book_outlined),
               information("Register date:","2022.02.11",Icons.vpn_key_rounded),
+              const SizedBox(height: 20),
+              TextButton(
+                onPressed: () {
+                  //TODO add picture
+                },
+                child: Container(
+                  //alignment: Alignment.center,
+                  margin: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: primaryColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Text("Modify picture",
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.black,
+                    ),
+                  ),
+                )
+              ),
             ],
           ),
         ),

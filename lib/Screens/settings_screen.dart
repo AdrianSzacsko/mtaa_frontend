@@ -52,38 +52,37 @@ class SettingsScreenState extends State<SettingsScreen> {
               color: Colors.black,
               thickness: 1,
             ),
-            Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: TextButton(
-                onPressed: () {
-                  //TODO add info
-
-                },
+            TextButton(
+              onPressed: () {
+                //TODO add info
+              },
+              child: Container(
+                alignment: Alignment.center,
+                margin: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 child: const Text("Info",
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Colors.black,
-                  ),
+              style: TextStyle(
+                fontSize: 22,
+                color: Colors.black,
                 ),
               ),
             ),
-            Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: TextButton(
+            ),
+            TextButton(
                 onPressed: () {
                   //TODO add webrtc call screen
                 },
-                child: const Text("Call Support",
+                child: Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Text("Call Support",
                   style: TextStyle(
                     fontSize: 22,
                     color: Colors.black,
@@ -91,14 +90,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
             ),
-            Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: TextButton(
+            TextButton(
                 onPressed: () {
                   showDialog(
                       context: context,
@@ -176,7 +168,14 @@ class SettingsScreenState extends State<SettingsScreen> {
                       }
                   );
                 },
-                child: const Text("Delete Account",
+                child: Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Text("Delete Account",
                   style: TextStyle(
                     fontSize: 22,
                     color: Colors.black,
