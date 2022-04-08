@@ -4,9 +4,10 @@ import 'package:form_field_validator/form_field_validator.dart';
 const primaryColor = Colors.cyan;
 const secondaryColor = Colors.pink;
 const tertiaryColor = Colors.purple;
+const mainTextColor = Colors.black87;
 const textColor = Colors.black54;
 const backgroundText = Colors.black26;
-const backgroundColor = Colors.grey;
+const backgroundColor = Color(0xFFEAEAEA);
 
 const defaultPadding = 16.0;
 

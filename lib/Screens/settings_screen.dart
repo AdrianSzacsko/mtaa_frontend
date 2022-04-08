@@ -7,6 +7,8 @@ import 'package:mtaa_frontend/UI/inputField.dart';
 import 'package:mtaa_frontend/Screens/search_screen.dart';
 import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
 
+import '../constants.dart';
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
@@ -25,18 +27,24 @@ class SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: primaryColor[300], //change your color here
+          ),
+          backgroundColor: Colors.white,
           centerTitle: true,
           title: IconButton(
-            icon: const Icon(Icons.home_rounded,
-                color: Colors.white),
+            icon: Image.asset('assets/Images/puzzle.png',
+              height: 80.0,
+              fit: BoxFit.cover,
+            ),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SignInScreen()));
             },
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.search,
-                  color: Colors.white),
+              icon: Icon(Icons.search_outlined,
+                  color: primaryColor[300]),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
               },
@@ -44,20 +52,20 @@ class SettingsScreenState extends State<SettingsScreen> {
           ],
         ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.blue,
+        color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
-              icon: Icon(Icons.settings),
-              color: Colors.white,
+              icon: Icon(Icons.settings_outlined),
+              color: primaryColor[300],
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
               },
             ),
             IconButton(
-              icon: Icon(Icons.assignment_ind),
-              color: Colors.white,
+              icon: Icon(Icons.account_circle_outlined),
+              color: primaryColor[300],
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
               },
@@ -65,6 +73,11 @@ class SettingsScreenState extends State<SettingsScreen> {
           ],
         ),
       ),
+      body: Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      color: backgroundColor,
+      )
     );
   }
 }
