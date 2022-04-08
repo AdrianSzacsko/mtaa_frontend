@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 //import 'package:flutter/rendering.dart';
 import 'package:mtaa_frontend/Screens/welcome_screen.dart';
 import 'package:mtaa_frontend/UI/inputField.dart';
-import 'package:mtaa_frontend/UI/listIconText.dart';
+import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
+import 'package:mtaa_frontend/Screens/settings_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   //SearchScreen({Key key}) : super(key: key);
@@ -84,7 +85,7 @@ class SearchScreenState extends State<SearchScreen> {
           icon: const Icon(Icons.home_rounded,
               color: Colors.white),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => WelcomeScreen()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SignInScreen()));
           },
         ),
         actions: [
@@ -96,6 +97,28 @@ class SearchScreenState extends State<SearchScreen> {
             },
           ),
         ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.blue,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+              icon: Icon(Icons.settings),
+              color: Colors.white,
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SettingsScreen()));
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.assignment_ind),
+              color: Colors.white,
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+              },
+            ),
+          ],
+        ),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -142,28 +165,6 @@ class SearchScreenState extends State<SearchScreen> {
               child: Align(
                 alignment: Alignment.center,
                 child: buildList(),
-              ),
-            ),
-            BottomAppBar(
-              color: Colors.blue,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                      icon: Icon(Icons.settings),
-                      color: Colors.white,
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
-                      },
-                    ),
-                  IconButton(
-                    icon: Icon(Icons.assignment_ind),
-                    color: Colors.white,
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
-                    },
-                  ),
-                ],
               ),
             ),
           ],
