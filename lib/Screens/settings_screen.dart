@@ -7,8 +7,6 @@ import 'package:mtaa_frontend/UI/inputField.dart';
 import 'package:mtaa_frontend/Screens/search_screen.dart';
 import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
 
-import '../constants.dart';
-
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 

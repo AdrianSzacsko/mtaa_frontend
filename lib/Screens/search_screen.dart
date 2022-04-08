@@ -7,6 +7,8 @@ import 'package:mtaa_frontend/UI/inputField.dart';
 import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
 import 'package:mtaa_frontend/Screens/settings_screen.dart';
 
+import '../constants.dart';
+
 class SearchScreen extends StatefulWidget {
   //SearchScreen({Key key}) : super(key: key);
 
@@ -64,11 +66,11 @@ class SearchScreenState extends State<SearchScreen> {
       child: Padding (
         padding: EdgeInsets.all(5),
         child: ListTile(
-            title: Text(row[0], style: TextStyle(fontSize: 18.0)),
+            title: Text(row[0], style: TextStyle(fontSize: 18.0, color: mainTextColor)),
             trailing: Icon(row[1] == 'PROF' ? Icons.work_rounded :
             row[1] == 'USER' ? Icons.account_circle_rounded :
             Icons.article_rounded,
-                color: Colors.black),
+                color: primaryColor[300]),
             onTap: () {
               print(row);
             }),
@@ -80,18 +82,24 @@ class SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: primaryColor[300], //change your color here
+        ),
+        backgroundColor: Colors.white,
         centerTitle: true,
         title: IconButton(
-          icon: const Icon(Icons.home_rounded,
-              color: Colors.white),
+            icon: Image.asset('assets/Images/puzzle.png',
+              height: 80.0,
+              fit: BoxFit.cover,
+            ),
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SignInScreen()));
           },
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search,
-                color: Colors.white),
+            icon: Icon(Icons.search_outlined,
+                color: primaryColor[300]),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
             },
@@ -99,20 +107,20 @@ class SearchScreenState extends State<SearchScreen> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.blue,
+        color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
-              icon: Icon(Icons.settings),
-              color: Colors.white,
+              icon: Icon(Icons.settings_outlined),
+              color: primaryColor[300],
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SettingsScreen()));
               },
             ),
             IconButton(
-              icon: Icon(Icons.assignment_ind),
-              color: Colors.white,
+              icon: Icon(Icons.account_circle_outlined),
+              color: primaryColor[300],
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
               },
@@ -123,7 +131,7 @@ class SearchScreenState extends State<SearchScreen> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        color: Colors.lightBlueAccent,
+        color: backgroundColor,
         child: Column(
           children: [
             Container(
@@ -132,12 +140,10 @@ class SearchScreenState extends State<SearchScreen> {
               padding: const EdgeInsets.all(5.0),
               child: Align(
                 child: Form(
-                  child: userInput(searchController,
-
-                  //Calling inputField  class
+                  child: userInput(searchController, //Calling inputField  class
                     const Icon(
-                      Icons.search,
-                      color: Colors.grey,
+                      Icons.search_outlined,
+                      color: backgroundText,
                     ),
                     "Search..."),
                 ),
@@ -148,7 +154,9 @@ class SearchScreenState extends State<SearchScreen> {
                 child: Align(
                   alignment: Alignment.center,
                   //alignment: Alignment.topCenter,
-                    child: ElevatedButton(
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                    color:secondaryColor[300],
                       onPressed: () {
                         setState(() {
                           list_of_rows.add(['Marko Stahovec','USER','5']);
