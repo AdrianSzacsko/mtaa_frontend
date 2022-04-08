@@ -11,7 +11,7 @@ import 'package:dio/dio.dart';
 class Auth with ChangeNotifier {
 
   Future<void> signup(String email, String firstname, String lastname, int study_year, String password) async {
-    final url = Uri.parse(urlAuth + apiKey);
+    final url = Uri.parse(urlRegister + apiKey);
     final response = await http.post(url, body: json.encode({
       'email': email,
       'first_name': firstname,
@@ -23,24 +23,27 @@ class Auth with ChangeNotifier {
     print(json.decode(response.body));
   }
 
-  /*
-  Future<void> login(String email, String password) async {
-    var map = <String, dynamic>{};
-    map['grant_type'] = 'password';
-    map['client_id'] = null;
-    map['client_secret'] = null;
-    map['username'] = email;
-    map['password'] = password;
-    final url = Uri.parse(urlLogin + apiKey);
-    http.Response response = await http.post(url, body: {
-      'grant_type': 'password',
-      'client_id': null,
-      'client_secret': null,
-      'username': email,
-      'password': password,
-    });
-    print(map);
-  }*/
+
+  register(String email, String firstname, String lastname, int studyYear, String password) async {
+    var dio = Dio();
+    // dio.options.headers['Authorization'] = 'Bearer '+ token;
+    // dio.options.headers['Content-Type'] = 'application/json';
+    try {
+      var response = await dio.post(urlRegister + apiKey, data: {
+        'email': email,
+        'first_name': firstname,
+        'last_name': lastname,
+        'study_year': studyYear,
+        'pwd': password
+      });
+      print(response.data);
+      return response.data;
+    }
+    catch (e) {
+      print(e);
+    }
+  }
+
 
   login(String email, String password)async{
     var dio = Dio();
@@ -57,7 +60,6 @@ class Auth with ChangeNotifier {
       print(response.data);
       return response.data;
     } catch (e) {
-      print("motherfucker");
       print(e);
     }
   }

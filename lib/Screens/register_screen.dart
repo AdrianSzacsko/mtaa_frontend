@@ -1,5 +1,7 @@
 import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
+import 'package:provider/provider.dart';
 
+import '../Models/auth.dart';
 import '../constants.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -9,6 +11,12 @@ import 'components/sign_up_form.dart';
 class SignUpScreen extends StatelessWidget {
   // It's time to validat the text field
   final _formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final firstnameController = TextEditingController();
+  final lastnameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final studyYearController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +66,176 @@ class SignUpScreen extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.bold),
                     ),*/
                     const SizedBox(height: defaultPadding * 2),
-                    SignUpForm(formKey: _formKey),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // TextFieldName(text: "Email"),
+                        // const SizedBox(height:defaultPadding * 2),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white, borderRadius: BorderRadius.circular(30)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: defaultPadding),
+                            child: TextFormField(
+                              controller: emailController,
+                              autocorrect: false,
+                              enableSuggestions: false,
+                              autofocus: false,
+                              keyboardType: TextInputType.emailAddress,
+                              obscureText: false,
+                              decoration: InputDecoration(hintText: "Email",
+                                hintStyle: const TextStyle(color: backgroundText),
+                                prefixIcon: const Padding(
+                                  padding: EdgeInsets.only(top: 0), // add padding to adjust icon
+                                  child: Icon(Icons.email_outlined),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(color: primaryColor),
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                                focusedBorder:OutlineInputBorder(
+                                  borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),),
+                              validator: EmailValidator(errorText: "Invalid email"),
+                              // Let's save our email
+                            ),
+                          ),
+                        ),
+                        //const SizedBox(height: defaultPadding),
+
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white, borderRadius: BorderRadius.circular(30)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: defaultPadding),
+                            child: TextFormField(
+                              controller: firstnameController,
+                              autocorrect: false,
+                              enableSuggestions: false,
+                              autofocus: false,
+                              keyboardType: TextInputType.text,
+                              obscureText: false,
+                              decoration: InputDecoration(hintText: "Joseph",
+                                hintStyle: const TextStyle(color: backgroundText),
+                                prefixIcon: const Padding(
+                                  padding: EdgeInsets.only(top: 0), // add padding to adjust icon
+                                  child: Icon(Icons.account_circle_outlined),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(color: primaryColor),
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                                focusedBorder:OutlineInputBorder(
+                                  borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),),
+                              validator: RequiredValidator(errorText: "First name is required"),
+                            ),
+                          ),
+                        ),
+
+                        //const SizedBox(height: defaultPadding),
+
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white, borderRadius: BorderRadius.circular(30)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: defaultPadding),
+                            child: TextFormField(
+                              controller: lastnameController,
+                              autocorrect: false,
+                              enableSuggestions: false,
+                              autofocus: false,
+                              keyboardType: TextInputType.text,
+                              obscureText: false,
+                              decoration: InputDecoration(hintText: "Carrot",
+                                hintStyle: const TextStyle(color: backgroundText),
+                                prefixIcon: const Padding(
+                                  padding: EdgeInsets.only(top: 0), // add padding to adjust icon
+                                  child: Icon(Icons.account_circle_outlined),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(color: primaryColor),
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                                focusedBorder:OutlineInputBorder(
+                                  borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),),
+                              validator: RequiredValidator(errorText: "Last name is required"),
+                            ),
+                          ),
+                        ),
+
+                        //const SizedBox(height: defaultPadding),
+
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white, borderRadius: BorderRadius.circular(30)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: defaultPadding),
+                            child: TextFormField(
+                              controller: passwordController,
+                              autocorrect: false,
+                              enableSuggestions: false,
+                              autofocus: false,
+                              keyboardType: TextInputType.text,
+                              // We want to hide our password
+                              obscureText: true,
+                              decoration: InputDecoration(hintText: "Password",
+                                hintStyle: const TextStyle(color: backgroundText),
+                                prefixIcon: const Padding(
+                                  padding: EdgeInsets.only(top: 0), // add padding to adjust icon
+                                  child: Icon(Icons.lock_outlined),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(color: primaryColor),
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                                focusedBorder:OutlineInputBorder(
+                                  borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),),
+                              validator: RequiredValidator(errorText: "Password is required"),
+                            ),
+                          ),
+                        ),
+
+                        // const SizedBox(height: defaultPadding),
+
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white, borderRadius: BorderRadius.circular(30)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: defaultPadding),
+                            child: TextFormField(
+                              controller: studyYearController,
+                              autocorrect: false,
+                              enableSuggestions: false,
+                              autofocus: false,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(hintText: "1",
+                                hintStyle: const TextStyle(color: backgroundText),
+                                prefixIcon: const Padding(
+                                  padding: EdgeInsets.only(top: 0), // add padding to adjust icon
+                                  child: Icon(Icons.school_outlined),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(color: primaryColor),
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                                focusedBorder:OutlineInputBorder(
+                                  borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),),
+                              validator: RequiredValidator(errorText: "Study year is required"),
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
                     const SizedBox(height: defaultPadding * 2),
                     SizedBox(
                       width: 125,
@@ -66,12 +243,18 @@ class SignUpScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                         color:primaryColor[300],
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            // Sign up form is done
-                            // It saved our inputs
-                            _formKey.currentState!.save();
-                            //  Sign in also done
-                          }
+                          print(emailController);
+                          print(firstnameController);
+                          print(lastnameController);
+                          print(passwordController);
+                          print(studyYearController);
+                          Provider.of<Auth>(context, listen: false).register(emailController.text,
+                            firstnameController.text,
+                              lastnameController.text,
+                            int.parse(studyYearController.text),
+                              passwordController.text,
+                          );
+                          Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SignUpScreen()));
                         },
                         child: const Text("Register", style: TextStyle(color: textColor)),
                       ),
