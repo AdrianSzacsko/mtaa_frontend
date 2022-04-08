@@ -26,6 +26,10 @@ class SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: primaryColor[300], //change your color here
+          ),
+          backgroundColor: Colors.white,
           centerTitle: true,
           title: IconButton(
             icon: Image.asset('assets/Images/puzzle.png',
@@ -71,7 +75,7 @@ class SettingsScreenState extends State<SettingsScreen> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        color: Colors.lightBlueAccent,
+        color: backgroundColor,
         child: Column(
           children: [
             const SizedBox(
