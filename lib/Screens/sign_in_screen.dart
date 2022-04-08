@@ -1,3 +1,4 @@
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:mtaa_frontend/Screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:mtaa_frontend/Screens/search_screen.dart';
@@ -5,13 +6,46 @@ import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 import '../Models/auth.dart';
-import 'components/sign_in_form.dart';
+
 
 class SignInScreen extends StatelessWidget {
   // It's time to validat the text field
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  Widget emailInput(TextEditingController userInput, String hintTitle, TextInputType keyboardType,
+      bool obscure, IconData icon_) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(30)),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 25.0, top: 15, right: 25),
+        child: TextField(
+          controller: userInput,
+          autocorrect: false,
+          enableSuggestions: false,
+          autofocus: false,
+          keyboardType: keyboardType,
+          obscureText: obscure,
+          decoration: InputDecoration(hintText: hintTitle,
+            hintStyle: const TextStyle(color: backgroundText),
+            prefixIcon: Padding(
+              padding: EdgeInsets.only(top: 0), // add padding to adjust icon
+              child: Icon(Icons.email_outlined),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: primaryColor),
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            focusedBorder:OutlineInputBorder(
+              borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+              borderRadius: BorderRadius.circular(25.0),
+            ),),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +82,7 @@ class SignInScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: defaultPadding * 7.5),
+                    const SizedBox(height: defaultPadding * 12),
                     Align(
                         child: Image.asset('assets/Images/puzzle.png',
                           height: 80.0,
@@ -72,14 +106,76 @@ class SignInScreen extends StatelessWidget {
                         ),
                       ],
                     ),*/
-                    const SizedBox(height: defaultPadding * 2),
-                    SignInForm(formKey: _formKey),
+                    const SizedBox(height: defaultPadding * 4),
+                    //const SizedBox(height:defaultPadding * 4),
+                    // TextFieldName(text: "Email"),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white, borderRadius: BorderRadius.circular(30)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 25.0, top: 15, right: 25),
+                        child: TextField(
+                          controller: emailController,
+                          autocorrect: false,
+                          enableSuggestions: false,
+                          autofocus: false,
+                          keyboardType: TextInputType.emailAddress,
+                          obscureText: false,
+                          decoration: InputDecoration(hintText: "Email",
+                            hintStyle: const TextStyle(color: backgroundText),
+                            prefixIcon: const Padding(
+                              padding: EdgeInsets.only(top: 0), // add padding to adjust icon
+                              child: Icon(Icons.email_outlined),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: primaryColor),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            focusedBorder:OutlineInputBorder(
+                              borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),),
+                        ),
+                      ),
+                    ),
+                    //const SizedBox(height: defaultPadding),
+                    // TextFieldName(text: "Password"),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white, borderRadius: BorderRadius.circular(30)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 25.0, top: 15, right: 25),
+                        child: TextField(
+                          controller: passwordController,
+                          autocorrect: false,
+                          enableSuggestions: false,
+                          autofocus: false,
+                          keyboardType: TextInputType.text,
+                          obscureText: true,
+                          decoration: InputDecoration(hintText: "Password",
+                            hintStyle: const TextStyle(color: backgroundText),
+                            prefixIcon: const Padding(
+                              padding: EdgeInsets.only(top: 0), // add padding to adjust icon
+                              child: Icon(Icons.lock_outlined),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: primaryColor),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            focusedBorder:OutlineInputBorder(
+                              borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),),
+                        ),
+                      ),
+                    ),
+                    //const SizedBox(height: defaultPadding * 2),
                     const SizedBox(height: defaultPadding),
                     SizedBox(
                       width: 125,
                       child: RaisedButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                      color:primaryColor[300],
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                        color:primaryColor[300],
                         onPressed: () {
                           print(emailController);
                           print(passwordController);
