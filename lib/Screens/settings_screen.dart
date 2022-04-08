@@ -105,6 +105,7 @@ class SettingsScreenState extends State<SettingsScreen> {
               child: TextButton(
                 onPressed: () {
                   //TODO add info
+
                 },
                 child: const Text("Info",
                 style: TextStyle(
@@ -146,23 +147,71 @@ class SettingsScreenState extends State<SettingsScreen> {
                       context: context,
                       builder: (context) {
                         return Dialog(
+                          alignment: Alignment.center,
+
                           //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                          elevation: 16,
+                          elevation: 0,
+                          backgroundColor: Colors.transparent,
                           child: Container(
-                            margin: const EdgeInsets.all(5),
+
+                            margin: const EdgeInsets.all(15),
                             decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
                             ),
                             child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Container(
-                                  child: const Text("Are you sure you want to permanently delete your account?",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    ),
+                                const SizedBox(height: 10),
+                                const Text("Are you sure you want to permanently delete your account?",
+                                style: TextStyle(
+                                  fontSize: 18,
+
                                   ),
+                                  textAlign: TextAlign.center,
                                 ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.all(2),
+                                      decoration: BoxDecoration(
+                                        color: secondaryColor,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: TextButton(
+                                          onPressed: (){
+                                              //TODO delete account
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SignInScreen()));
+                                          },
+                                          child: const Text("Yes",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        color: primaryColor,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: TextButton(
+                                          onPressed: () => Navigator.pop(context, false),
+                                          child: const Text("No",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
                               ],
                             ),
                           ),
@@ -172,7 +221,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 },
                 child: const Text("Delete Account",
                   style: TextStyle(
-                    //fontSize: 22,
+                    fontSize: 22,
                     color: Colors.black,
                   ),
                 ),
