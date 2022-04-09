@@ -11,6 +11,7 @@ import 'package:mtaa_frontend/Screens/settings_screen.dart';
 import 'package:mtaa_frontend/UI/loading_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Models/prof.dart';
 import '../Models/profile.dart';
 import '../Models/search.dart';
 import '../Models/User.dart';
@@ -130,10 +131,12 @@ class SearchScreenState extends State<SearchScreen> {
                 );
               }
               else if (row[1] == "PROF") {
+                var resp = await Professor().getProfessor(row[2]);
+                print(resp);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfilePage(),
+                    builder: (context) => const SettingsScreen(),
                   ),
                 );
               }
@@ -141,7 +144,7 @@ class SearchScreenState extends State<SearchScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfilePage(),
+                    builder: (context) => const SettingsScreen(),
                   ),
                 );
               }
