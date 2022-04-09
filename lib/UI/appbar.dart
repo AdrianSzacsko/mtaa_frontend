@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../Screens/profile_page.dart';
 import '../Screens/profile_screen.dart';
 import '../Screens/search_screen.dart';
 import '../Screens/settings_screen.dart';
@@ -51,7 +52,7 @@ Widget myBottomAppBar(BuildContext context){
           icon: const Icon(Icons.account_circle_outlined),
           color: primaryColor[300],
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProfileScreen()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProfilePage()));
           },
         ),
       ],

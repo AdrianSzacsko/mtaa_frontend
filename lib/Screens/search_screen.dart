@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mtaa_frontend/Screens/profile_page.dart';
 import 'package:mtaa_frontend/Screens/profile_screen.dart';
 //import 'package:flutter/rendering.dart';
 import 'package:mtaa_frontend/UI/inputField.dart';
@@ -10,7 +11,9 @@ import 'package:mtaa_frontend/Screens/settings_screen.dart';
 import 'package:mtaa_frontend/UI/loading_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Models/profile.dart';
 import '../Models/search.dart';
+import '../Models/User.dart';
 import '../UI/appbar.dart';
 import '../constants.dart';
 
@@ -99,9 +102,51 @@ class SearchScreenState extends State<SearchScreen> {
             row[1] == 'USER' ? Icons.account_circle_rounded :
             Icons.article_rounded,
                 color: primaryColor[300]),
-            onTap: () {
-              print(row);
-            }),
+
+            onTap: () async {
+              if (row[1] == "USER") {
+                var resp = await Profile().getProfile(row[2]);
+                print(resp);
+
+                var myUser = User(
+                  email: resp[0]["email"],
+                  name: resp[0]["name"],
+                  comments: resp[0]["comments"].toString(),
+                  reg_date: resp[0]["reg_date"].toString(),
+                  study_year: resp[0]["study_year"].toString(),
+                  imagePath:
+                  'https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80',
+                );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfilePage(),
+                    // Pass the arguments as part of the RouteSettings. The
+                    // DetailScreen reads the arguments from these settings.
+                    settings: RouteSettings(
+                      arguments: myUser,
+                    ),
+                  ),
+                );
+              }
+              else if (row[1] == "PROF") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfilePage(),
+                  ),
+                );
+              }
+              else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfilePage(),
+                  ),
+                );
+              }
+            }
+        ),
       ),
     );
   }

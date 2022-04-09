@@ -1,5 +1,4 @@
 import 'dart:ffi';
-import 'dart:html';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
@@ -110,6 +109,7 @@ class ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: myAppBar(context),
       bottomNavigationBar: myBottomAppBar(context),
       body: Container(
