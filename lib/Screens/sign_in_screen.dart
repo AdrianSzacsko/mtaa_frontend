@@ -6,13 +6,37 @@ import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 import '../Models/auth.dart';
+import '../UI/loading_screen.dart';
+
+class SignInScreen extends StatefulWidget {
+  //SearchScreen({Key key}) : super(key: key);
+
+  @override
+  SignInScreenState createState() => SignInScreenState();
+}
 
 
-class SignInScreen extends StatelessWidget {
+class SignInScreenState extends State<SignInScreen> {
+  bool _isloading = false;
   // It's time to validat the text field
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+
+  sendLogin() async {
+    setState(() {
+      _isloading = true;
+    });
+    await Future.delayed(const Duration(seconds: 2));  //comment this
+    //fetch data here
+    //TODO add method to post login
+    Provider.of<Auth>(context, listen: false).login(emailController.text, passwordController.text);
+    setState(() {
+      _isloading = false;
+    });
+  }
+
 
   Widget emailInput(TextEditingController userInput, String hintTitle, TextInputType keyboardType,
       bool obscure, IconData icon_) {
@@ -179,7 +203,8 @@ class SignInScreen extends StatelessWidget {
                         onPressed: () {
                           print(emailController);
                           print(passwordController);
-                          Provider.of<Auth>(context, listen: false).login(emailController.text, passwordController.text);
+                          sendLogin();
+                          //Provider.of<Auth>(context, listen: false).login(emailController.text, passwordController.text);
                           Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
                         },
                         /*
@@ -213,6 +238,7 @@ class SignInScreen extends StatelessWidget {
               ),
             ),
           ),
+          circularLoadingScreen(_isloading),
         ],
       ),
     );

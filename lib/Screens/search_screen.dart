@@ -6,6 +6,7 @@ import 'package:mtaa_frontend/Screens/profile_screen.dart';
 import 'package:mtaa_frontend/UI/inputField.dart';
 import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
 import 'package:mtaa_frontend/Screens/settings_screen.dart';
+import 'package:mtaa_frontend/UI/loading_screen.dart';
 
 import '../UI/appbar.dart';
 import '../constants.dart';
@@ -25,13 +26,11 @@ class SearchScreenState extends State<SearchScreen> {
   static const routeName = '/search-screen';
   final searchController = TextEditingController();
   //List<String> row = <String>['name','code','id'];
-  List<List<String>> list_of_rows = <List<String>>[['Mobilné technológie a Aplikácie','MTAA','5'],
-    ['Marko Stahovec','USER','5'],
-    ['Ing. Marek Galinski','PROF','5']];
+  List<List<String>> list_of_rows = <List<String>>[];
 
 
   @override
-  void inisState() {
+  void initState() {
     super.initState();
     dataLoadFunction();
   }
@@ -40,8 +39,11 @@ class SearchScreenState extends State<SearchScreen> {
     setState(() {
       _isloading = true;
     });
+    print(searchController);
     await Future.delayed(const Duration(seconds: 2));
     //fetch data here
+    //TODO add method to get search data
+    list_of_rows.add(['Marko Stahovec','USER','5']);
     setState(() {
       _isloading = false;
     });
@@ -61,15 +63,9 @@ class SearchScreenState extends State<SearchScreen> {
           shrinkWrap: true,
           padding: const EdgeInsets.all(5.0),
           key: UniqueKey(),
-          itemCount: list_of_rows.isEmpty ? 1 : list_of_rows.length,
+          itemCount: list_of_rows.length,
           itemBuilder: (context, item) {
-            if (list_of_rows.isEmpty) {
-              list_of_rows.addAll([['Mobilné technológie a Aplikácie','MTAA','5'],
-                ['Marko Stahovec','USER','5'],
-                ['Ing. Marek Galinski','PROF','5']]);
 
-            }
-            //TODO add get method
             return _buildRow(list_of_rows[item]);
           },
         ),
@@ -139,7 +135,6 @@ class SearchScreenState extends State<SearchScreen> {
                       onPressed: () {
                         setState(() {
                           dataLoadFunction();
-                          list_of_rows.add(['Marko Stahovec','USER','5']);
                         });
                         print(searchController.text);
                         searchController.text = '';
@@ -158,12 +153,7 @@ class SearchScreenState extends State<SearchScreen> {
               ],
             ),
           ),
-          _isloading ? Container(
-            alignment: Alignment.center,
-            child: const CircularProgressIndicator(
-              color: secondaryColor,
-            ),
-          ): const SizedBox.shrink(),
+          linearLoadingScreen(_isloading),
         ],
       ),
 
