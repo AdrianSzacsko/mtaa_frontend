@@ -31,37 +31,6 @@ class SearchScreenState extends State<SearchScreen> {
   //List<String> row = <String>['name','code','id'];
   List<List<String>> list_of_rows = <List<String>>[];
 
-  Future<List?> search(String searchString) async {
-    Response response;
-
-    var dio = Dio();
-    dio.options.headers['content-Type'] = 'application/json';
-
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token') ?? '';
-    dio.options.headers['authorization'] = "Bearer " + token;
-
-    //print("++++++++++++++++++++++++++++++++++++++++++++++");
-    //print(token);
-
-    /*
-    var t = token;
-    if (t != null) {
-      dio.options.headers['Authorization'] = "Bearer" + t;
-    }*/
-
-    try {
-      response = await dio.get('http://10.0.2.2:8000/search?search_string=' + searchString);
-      print(response.data);
-      return response.data;
-    }
-    catch (e) {
-      print(e);
-    }
-
-    return null;
-  }
-
 
   @override
   void initState() {
@@ -75,11 +44,16 @@ class SearchScreenState extends State<SearchScreen> {
     });
     print(searchController);
     //await Future.delayed(const Duration(seconds: 2));
-    var resp = await search(searchController.text);
-    print(resp);
-    //fetch data here
-    //TODO add method to get search data
-    list_of_rows.add(['Marko Stahovec','USER','5']);
+    var resp = await Search().search(searchController.text);
+    //print(resp.runtimeType);
+
+    list_of_rows.clear();
+    resp?.forEach((item){
+      list_of_rows.add([item["name"].toString(), item["code"].toString(), item["id"].toString()]);
+      print(item);
+    });
+
+    // list_of_rows.add(['Marko Stahovec','USER','5']);
     setState(() {
       _isloading = false;
     });
