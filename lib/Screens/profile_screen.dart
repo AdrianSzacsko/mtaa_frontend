@@ -1,6 +1,10 @@
 import 'dart:ffi';
+import 'dart:html';
+import 'dart:typed_data';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mtaa_frontend/Screens/settings_screen.dart';
 //import 'package:flutter/rendering.dart';
 import 'package:mtaa_frontend/UI/inputField.dart';
@@ -50,6 +54,56 @@ class ProfileScreenState extends State<ProfileScreen> {
         const SizedBox(height: 15,),
       ],
     );
+  }
+
+  selectFile(context) {
+    showDialog(context: context,
+        builder: (context) {
+          FilePickerResult? file;
+          return Dialog(
+            alignment: Alignment.center,
+            child: Container(
+              margin: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                children: [
+                  /*Align(
+                    alignment: Alignment.topCenter,
+                    child: CircleAvatar(
+                      radius: 80,
+                      backgroundImage:
+                        Image.memory(file != null ? file.files.first.bytes:
+                        (await rootBundle.load("assets/Images/profile-unknown.png")).buffer.asUint8List()).image,
+                    ),
+                  ),*/
+                  
+                  const Align(
+                    alignment: Alignment.topCenter,
+                    child: Text("Please insert an image"),
+                  ),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: TextButton(
+                      onPressed: () async {
+                        final image = await FilePicker.platform.pickFiles(
+                        type: FileType.custom,
+                        allowedExtensions: ['jpg','png'],
+                        );
+                        if (image == null) return;
+                        file = image;
+                        setState(() {});
+                      },
+                      child: const Text("Select image"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
 
@@ -111,7 +165,7 @@ class ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 20),
               TextButton(
                 onPressed: () {
-                  //TODO add picture
+                  selectFile(context);
                 },
                 child: Container(
                   //alignment: Alignment.center,
