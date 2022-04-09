@@ -117,12 +117,13 @@ class ProfileScreenState extends State<ProfileScreen> {
                   //alignment: Alignment.center,
                   margin: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
+                    border: Border.all(width: 7, color: primaryColor),
                     color: primaryColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Text("Modify picture",
                     style: TextStyle(
-                      fontSize: 22,
+                      fontSize: 18,
                       color: Colors.black,
                     ),
                   ),

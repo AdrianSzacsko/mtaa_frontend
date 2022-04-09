@@ -18,6 +18,8 @@ class SearchScreen extends StatefulWidget {
 }
 
 class SearchScreenState extends State<SearchScreen> {
+  bool _isloading = false;
+
   ScrollController scrollController = ScrollController();
 
   static const routeName = '/search-screen';
@@ -26,6 +28,25 @@ class SearchScreenState extends State<SearchScreen> {
   List<List<String>> list_of_rows = <List<String>>[['Mobilné technológie a Aplikácie','MTAA','5'],
     ['Marko Stahovec','USER','5'],
     ['Ing. Marek Galinski','PROF','5']];
+
+
+  @override
+  void inisState() {
+    super.initState();
+    dataLoadFunction();
+  }
+
+  dataLoadFunction() async {
+    setState(() {
+      _isloading = true;
+    });
+    await Future.delayed(const Duration(seconds: 2));
+    //fetch data here
+    setState(() {
+      _isloading = false;
+    });
+  }
+
 
   Widget buildList() {
     return Container(
@@ -84,37 +105,40 @@ class SearchScreenState extends State<SearchScreen> {
     return Scaffold(
         appBar: myAppBar(context),
         bottomNavigationBar: myBottomAppBar(context),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        color: backgroundColor,
-        child: Column(
-          children: [
-            Container(
-              height: 100,
-              alignment: Alignment.topCenter,
-              padding: const EdgeInsets.all(5.0),
-              child: Align(
-                child: Form(
-                  child: userInput(searchController, //Calling inputField  class
-                    const Icon(
-                      Icons.search_outlined,
-                      color: backgroundText,
+      body: Stack(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            color: backgroundColor,
+            child: Column(
+              children: [
+                Container(
+                  height: 100,
+                  alignment: Alignment.topCenter,
+                  padding: const EdgeInsets.all(5.0),
+                  child: Align(
+                    child: Form(
+                      child: userInput(searchController, //Calling inputField  class
+                          const Icon(
+                            Icons.search_outlined,
+                            color: backgroundText,
+                          ),
+                          "Search..."),
                     ),
-                    "Search..."),
+                  ),
                 ),
-              ),
-            ),
-            Container(
-              //height: 200,
-                child: Align(
-                  alignment: Alignment.center,
-                  //alignment: Alignment.topCenter,
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                    color:secondaryColor[300],
+                Container(
+                  //height: 200,
+                  child: Align(
+                    alignment: Alignment.center,
+                    //alignment: Alignment.topCenter,
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                      color:secondaryColor[300],
                       onPressed: () {
                         setState(() {
+                          dataLoadFunction();
                           list_of_rows.add(['Marko Stahovec','USER','5']);
                         });
                         print(searchController.text);
@@ -122,18 +146,28 @@ class SearchScreenState extends State<SearchScreen> {
                       },
                       child: const Text("Search"),
                     ),
+                  ),
                 ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: buildList(),
+                  ),
+                ),
+              ],
             ),
-            Container(
-              alignment: Alignment.center,
-              child: Align(
-                alignment: Alignment.center,
-                child: buildList(),
-              ),
+          ),
+          _isloading ? Container(
+            alignment: Alignment.center,
+            child: const CircularProgressIndicator(
+              color: secondaryColor,
             ),
-          ],
-        ),
-      )
+          ): const SizedBox.shrink(),
+        ],
+      ),
+
+
     );
   }
 }
