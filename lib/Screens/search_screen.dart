@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mtaa_frontend/Screens/profile_screen.dart';
 //import 'package:flutter/rendering.dart';
@@ -7,7 +8,9 @@ import 'package:mtaa_frontend/UI/inputField.dart';
 import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
 import 'package:mtaa_frontend/Screens/settings_screen.dart';
 import 'package:mtaa_frontend/UI/loading_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Models/search.dart';
 import '../UI/appbar.dart';
 import '../constants.dart';
 
@@ -40,10 +43,17 @@ class SearchScreenState extends State<SearchScreen> {
       _isloading = true;
     });
     print(searchController);
-    await Future.delayed(const Duration(seconds: 2));
-    //fetch data here
-    //TODO add method to get search data
-    list_of_rows.add(['Marko Stahovec','USER','5']);
+    //await Future.delayed(const Duration(seconds: 2));
+    var resp = await Search().search(searchController.text);
+    //print(resp.runtimeType);
+
+    list_of_rows.clear();
+    resp?.forEach((item){
+      list_of_rows.add([item["name"].toString(), item["code"].toString(), item["id"].toString()]);
+      print(item);
+    });
+
+    // list_of_rows.add(['Marko Stahovec','USER','5']);
     setState(() {
       _isloading = false;
     });

@@ -2,14 +2,17 @@
 * this dart file made by: https://github.com/tommybarral/Sign-in-up
 */
 
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../key.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class Auth with ChangeNotifier {
-
   Future<void> signup(String email, String firstname, String lastname, int study_year, String password) async {
     final url = Uri.parse(urlRegister + apiKey);
     final response = await http.post(url, body: json.encode({
@@ -45,6 +48,7 @@ class Auth with ChangeNotifier {
   }
 
 
+
   login(String email, String password)async{
     var dio = Dio();
     dio.options.headers['content-Type'] = "application/x-www-form-urlencoded";
@@ -57,7 +61,16 @@ class Auth with ChangeNotifier {
         'password': password,
       });
       var response = await dio.post(urlLogin + apiKey, data: formData);
+      /*
+      print("**************************************");
       print(response.data);
+      print("**************************************");
+      print(response.data["access_token"]);
+      print("**************************************");
+      */
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('token', response.data["access_token"]);
+
       return response.data;
     } catch (e) {
       print(e);
