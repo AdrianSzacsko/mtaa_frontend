@@ -17,6 +17,7 @@ class ProfessorScreen extends StatefulWidget {
 class _ProfessorScreenState extends State<ProfessorScreen> {
   bool _isloading = false;
   List<Widget> allReviews = List<Widget>.empty(growable: true);
+  num averageRating = 0;
 
   Widget buildImage() {
     const image = const NetworkImage('https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80');
@@ -52,6 +53,12 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Text("Rating: ",
+                style: TextStyle(fontSize: 16,),
+              ),
+            ),
             const Icon(
               Icons.star_outlined,
               color: primaryColor,
@@ -100,10 +107,13 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
     //List<Widget> widgets = List<Widget>.empty(growable: true);
     for (var item in reviews) {
       var author = await Profile().getProfile(item[0].toString());
+      //var pic = await Profile().getProfilePic(item[0].toString());
+      averageRating = averageRating + int.parse(item[2]);
       print("9999999999999999999999999999999999");
       print(item);
       print("8888888888888888888888888888888888");
       print(author);
+      print("7777777777777777777777777777777777");
       allReviews.add(ProfessorReview(
         name: author[0]["name"],
         description: item[1],
@@ -143,11 +153,10 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
                    ),
                   const SizedBox(height: defaultPadding * 2),
                   buildName(professor.name),
-                  const SizedBox(height: defaultPadding * 2),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      buildButton("65"),
+                      buildButton(averageRating != 0 ? ((averageRating ~/ allReviews.length).toString()) : "50"),
                     ],
                   ),
                   const SizedBox(height: defaultPadding * 2),
@@ -162,12 +171,6 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
                           'Reviews',
                           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(defaultPadding * 2,
-                            defaultPadding * 2, defaultPadding * 2,
-                            defaultPadding),
-                        child: buildInfo("80"),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(defaultPadding * 2,
@@ -336,6 +339,35 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
     );*/
 
 class ProfessorReview extends StatelessWidget {
+  Widget buildInfo(String value) => Container(
+    padding: const EdgeInsets.symmetric(),
+    child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Align(
+                alignment: Alignment.bottomRight,
+                child: Text("Rating: ",
+                  style: TextStyle(fontSize: 14,),
+                ),
+              ),
+              const Icon(
+                Icons.star_outlined,
+                color: primaryColor,
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Text(value,
+                  style: TextStyle(fontSize: 14,),
+                ),
+              ),
+            ],
+          )
+        ]
+    ),
+  );
+
   ProfessorReview({required this.name, required this.description, required this.rating, required this.image});
   final String name;
   final String description;
@@ -379,9 +411,8 @@ class ProfessorReview extends StatelessWidget {
                                   fontWeight: FontWeight.bold
                               )
                               ),
-                              Text(description), Text(
-                                  "Rating: " + rating.toString()
-                              ),
+                              Text(description),
+                              buildInfo(rating.toString()),
                             ],
                           )
                       )

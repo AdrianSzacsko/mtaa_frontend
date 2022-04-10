@@ -7,6 +7,7 @@ import 'package:mtaa_frontend/Models/Professor.dart';
 import 'package:mtaa_frontend/Screens/professor_screen.dart';
 import 'package:mtaa_frontend/Screens/profile_page.dart';
 import 'package:mtaa_frontend/Screens/profile_screen.dart';
+import 'package:mtaa_frontend/Screens/subject_screen.dart';
 //import 'package:flutter/rendering.dart';
 import 'package:mtaa_frontend/UI/inputField.dart';
 import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
@@ -14,6 +15,7 @@ import 'package:mtaa_frontend/Screens/settings_screen.dart';
 import 'package:mtaa_frontend/UI/loading_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Models/Subject.dart';
 import '../Models/prof.dart';
 import '../Models/profile.dart';
 import '../Models/search.dart';
@@ -58,9 +60,10 @@ class SearchScreenState extends State<SearchScreen> {
     list_of_rows.clear();
     resp?.forEach((item){
       list_of_rows.add([item["name"].toString(), item["code"].toString(), item["id"].toString()]);
-      //print(item);
+      print(item);
     });
 
+    print(list_of_rows);
     // list_of_rows.add(['Marko Stahovec','USER','5']);
     setState(() {
       _isloading = false;
@@ -167,14 +170,42 @@ class SearchScreenState extends State<SearchScreen> {
                 );
               }
               else {
-                var resp = await Subject().getSubject(row[2]);
+                var resp = await SubjectClass().getSubject(row[2]);
                 print(resp);
-                var resp2 = await Subject().getSubjectReviews(row[2]);
+                List<String> allProfessors = <String>[];
+                resp?.forEach((item) {
+                  allProfessors.add(item["teachers"]);
+                });
+
+                var resp2 = await SubjectClass().getSubjectReviews(row[2]);
+                print("*********************************");
+                print(resp2);
+                print("*********************************");
+
+                List<List<String>> allReviews = <List<String>>[];
+                resp2?.forEach((item) {
+                  allReviews.add([item["user_id"].toString(),
+                    item["message"].toString(), item["difficulty"].toString(),
+                    item["usability"].toString(), item["prof_avg"].toString()]);
+                });
+
+                print(allReviews);
+
+                var subject = Subject(
+                  name: resp[0]["name"],
+                  professors: allProfessors,
+                  reviews: allReviews,
+                );
 
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const SettingsScreen(),
+                    builder: (context) => const SubjectScreen(),
+                    // Pass the arguments as part of the RouteSettings. The
+                    // DetailScreen reads the arguments from these settings.
+                    settings: RouteSettings(
+                      arguments: subject,
+                    ),
                   ),
                 );
               }

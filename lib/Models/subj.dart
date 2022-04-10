@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-class Subject with ChangeNotifier {
+class SubjectClass with ChangeNotifier {
   Future<dynamic> getSubject(String subj_id) async {
     Response response;
 
