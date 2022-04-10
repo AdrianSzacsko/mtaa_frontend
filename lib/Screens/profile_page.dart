@@ -1,10 +1,14 @@
+import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import '../Models/User.dart';
 import '../UI/appbar.dart';
 import '../constants.dart';
 
-
+/*
 class UserPreferences {
   static const myUser = User(
     email: 'sarah.abs@gmail.com',
@@ -13,20 +17,20 @@ class UserPreferences {
     '5',
     reg_date: "2022-04-05",
     study_year: "2",
-    imagePath:
+    image:
     'https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80',
   );
-}
+}*/
 
-
+/*
 class ProfileWidget extends StatelessWidget {
-  final String imagePath;
+  final Image image;
   final bool isEdit;
   final VoidCallback onClicked;
 
   const ProfileWidget({
     Key? key,
-    required this.imagePath,
+    required this.image,
     this.isEdit = false,
     required this.onClicked,
   }) : super(key: key);
@@ -48,51 +52,7 @@ class ProfileWidget extends StatelessWidget {
       ),
     );
   }
-
-  Widget buildImage() {
-    final image = NetworkImage(imagePath);
-
-    return ClipOval(
-      child: Material(
-        color: Colors.transparent,
-        child: Ink.image(
-          image: image,
-          fit: BoxFit.cover,
-          width: 128,
-          height: 128,
-          // child: InkWell(onTap: onClicked),
-        ),
-      ),
-    );
-  }
-
-  Widget buildEditIcon(Color color) => buildCircle(
-    color: Colors.white,
-    all: 3,
-    child: buildCircle(
-      color: primaryColor,
-      all: 8,
-      child: Icon(
-        isEdit ? Icons.add_a_photo : Icons.edit,
-        color: Colors.white,
-        size: 16,
-      ),
-    ),
-  );
-
-  Widget buildCircle({
-    required Widget child,
-    required double all,
-    required Color color,
-  }) =>
-      ClipOval(
-        child: Container(
-          padding: EdgeInsets.all(all),
-          color: color,
-          child: child,
-        ),
-      );
-}
+}*/
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -113,17 +73,17 @@ class _ProfilePageState extends State<ProfilePage> {
             physics: BouncingScrollPhysics(),
             children: [
               const SizedBox(height: defaultPadding * 2),
-              ProfileWidget(
-                imagePath: user.imagePath,
-                onClicked: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ProfileWidget(
-                      imagePath: user.imagePath,
-                      isEdit: true,
-                      onClicked: () async {},
-                    ),),
-                  );
-                },
+              Center(
+                child: Stack(
+                  children: [
+                    buildImage(user),
+                    Positioned(
+                      bottom: 0,
+                      right: 4,
+                      child: buildEditIcon(primaryColor),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: defaultPadding * 2),
               buildName(user),
@@ -151,6 +111,51 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
     );
   }
+
+  Widget buildImage(User user) {
+    //final image = NetworkImage(user.image);
+    final image = const NetworkImage('https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80');
+
+    return ClipOval(
+      child: Material(
+        color: Colors.transparent,
+        child: Ink.image(
+          image: image,
+          fit: BoxFit.cover,
+          width: 128,
+          height: 128,
+          // child: InkWell(onTap: onClicked),
+        ),
+      ),
+    );
+  }
+
+  Widget buildEditIcon(Color color) => buildCircle(
+    color: Colors.white,
+    all: 3,
+    child: buildCircle(
+      color: primaryColor,
+      all: 8,
+      child: const Icon(
+        Icons.edit,
+        color: Colors.white,
+        size: 16,
+      ),
+    ),
+  );
+
+  Widget buildCircle({
+    required Widget child,
+    required double all,
+    required Color color,
+  }) =>
+      ClipOval(
+        child: Container(
+          padding: EdgeInsets.all(all),
+          color: color,
+          child: child,
+        ),
+      );
 
   Widget buildVerticalDivider() => Container(
     height: 24,

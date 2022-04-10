@@ -109,14 +109,17 @@ class SearchScreenState extends State<SearchScreen> {
                 var resp = await Profile().getProfile(row[2]);
                 print(resp);
 
+                var resp2 = await Profile().getProfilePic(row[2]);
+                print(resp2);
+                print(resp2.runtimeType);
+
                 var myUser = User(
                   email: resp[0]["email"],
                   name: resp[0]["name"],
                   comments: resp[0]["comments"].toString(),
                   reg_date: resp[0]["reg_date"].toString(),
                   study_year: resp[0]["study_year"].toString(),
-                  imagePath:
-                  'https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80',
+                  image: resp2,
                 );
                 Navigator.push(
                   context,
@@ -133,6 +136,8 @@ class SearchScreenState extends State<SearchScreen> {
               else if (row[1] == "PROF") {
                 var resp = await Professor().getProfessor(row[2]);
                 print(resp);
+                var resp2 = await Professor().getProfessorReviews(row[2]);
+                print(resp2);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
