@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-class Professor with ChangeNotifier {
+class ProfessorClass with ChangeNotifier {
   Future<dynamic> getProfessor(String prof_id) async {
     Response response;
 

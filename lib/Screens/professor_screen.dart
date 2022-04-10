@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:mtaa_frontend/Models/Professor.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
 
 import '../Models/profile.dart';
 import '../constants.dart';
 import '../Screens/profile_page.dart';
 
-class ProfessorScreen extends StatelessWidget {
-  ProfessorScreen({required this.title});
-  final String title;
+
+class ProfessorScreen extends StatefulWidget {
+  const ProfessorScreen({Key? key}) : super(key: key);
+
+  @override
+  _ProfessorScreenState createState() => _ProfessorScreenState();
+}
+
+class _ProfessorScreenState extends State<ProfessorScreen> {
+  bool _isloading = false;
 
   Widget buildImage() {
     const image = const NetworkImage('https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80');
@@ -73,10 +81,25 @@ class ProfessorScreen extends StatelessWidget {
         ),
       );
 
-
+  dataLoadFunction(List<dynamic> subjects) async {
+    for (var item in subjects) {
+      var author = await Profile().getProfile(item["user_id"].toString());
+      print(author);
+      ProfessorReview(
+        name: author[0]["name"],
+        description: item["message"],
+        price: item["rating"],
+        image: "puzzle.png",
+      );
+      print(item);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    final professor = ModalRoute.of(context)!.settings.arguments as Professor;
+
     return Scaffold(
         appBar: myAppBar(context),
         bottomNavigationBar: myBottomAppBar(context),
@@ -94,7 +117,7 @@ class ProfessorScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: defaultPadding * 2),
-            buildName("GALINSKI"),
+            buildName(professor.name),
             const SizedBox(height: defaultPadding * 2),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -150,6 +173,8 @@ class ProfessorScreen extends StatelessWidget {
                 ),
               ],
             ),
+            dataLoadFunction(professor.reviews),
+            /*
             ProfessorReview(
                 name: "iPhone",
                 description: "iPhone is the stylist phone ever",
@@ -192,7 +217,7 @@ class ProfessorScreen extends StatelessWidget {
                     "Floppy drive is useful rescue storage medium.",
                 price: 20,
                 image: "puzzle.png",
-            ),
+            ),*/
           ],
         )
     );

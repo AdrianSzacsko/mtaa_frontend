@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mtaa_frontend/Models/Professor.dart';
 import 'package:mtaa_frontend/Screens/professor_screen.dart';
 import 'package:mtaa_frontend/Screens/profile_page.dart';
 import 'package:mtaa_frontend/Screens/profile_screen.dart';
@@ -136,16 +137,24 @@ class SearchScreenState extends State<SearchScreen> {
                 );
               }
               else if (row[1] == "PROF") {
-                var resp = await Professor().getProfessor(row[2]);
+                var resp = await ProfessorClass().getProfessor(row[2]);
                 print(resp);
-                var resp2 = await Professor().getProfessorReviews(row[2]);
-                print(resp2);
+                var resp2 = await ProfessorClass().getProfessorReviews(row[2]);
+                print(resp2.runtimeType);
+
+                var professor = Professor(
+                  name: resp[0]["name"],
+                  reviews: resp2 ?? [],
+                );
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfessorScreen(
-                        title: resp[0]["name"],
-
+                    builder: (context) => const ProfessorScreen(),
+                    // Pass the arguments as part of the RouteSettings. The
+                    // DetailScreen reads the arguments from these settings.
+                    settings: RouteSettings(
+                      arguments: professor,
                     ),
                   ),
                 );
