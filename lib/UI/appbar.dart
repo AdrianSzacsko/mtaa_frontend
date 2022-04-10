@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../Models/User.dart';
+import '../Models/profile.dart';
 import '../Screens/profile_page.dart';
 import '../Screens/profile_screen.dart';
 import '../Screens/search_screen.dart';
@@ -51,8 +53,33 @@ Widget myBottomAppBar(BuildContext context){
         IconButton(
           icon: const Icon(Icons.account_circle_outlined),
           color: primaryColor[300],
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProfilePage()));
+          onPressed: () async {
+            var resp = await Profile().getProfile("1");
+            print(resp);
+
+            var resp2 = await Profile().getProfilePic("1");
+            print(resp2);
+            print(resp2.runtimeType);
+
+            var myUser = User(
+              email: resp[0]["email"],
+              name: resp[0]["name"],
+              comments: resp[0]["comments"].toString(),
+              reg_date: resp[0]["reg_date"].toString(),
+              study_year: resp[0]["study_year"].toString(),
+              image: resp2,
+            );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfilePage(),
+                // Pass the arguments as part of the RouteSettings. The
+                // DetailScreen reads the arguments from these settings.
+                settings: RouteSettings(
+                  arguments: myUser,
+                ),
+              ),
+            );
           },
         ),
       ],

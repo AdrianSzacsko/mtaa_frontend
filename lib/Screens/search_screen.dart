@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mtaa_frontend/Screens/professor_screen.dart';
 import 'package:mtaa_frontend/Screens/profile_page.dart';
 import 'package:mtaa_frontend/Screens/profile_screen.dart';
 //import 'package:flutter/rendering.dart';
@@ -15,6 +16,7 @@ import '../Models/prof.dart';
 import '../Models/profile.dart';
 import '../Models/search.dart';
 import '../Models/User.dart';
+import '../Models/subj.dart';
 import '../UI/appbar.dart';
 import '../constants.dart';
 
@@ -141,11 +143,18 @@ class SearchScreenState extends State<SearchScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const SettingsScreen(),
+                    builder: (context) => ProfessorScreen(
+                        title: resp[0]["name"],
+
+                    ),
                   ),
                 );
               }
               else {
+                var resp = await Subject().getSubject(row[2]);
+                print(resp);
+                var resp2 = await Subject().getSubjectReviews(row[2]);
+                print(resp2);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
