@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../Models/User.dart';
+import '../Models/profile.dart';
 import '../UI/appbar.dart';
 import '../constants.dart';
 
@@ -60,6 +63,9 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  var file;
+
   @override
   Widget build(BuildContext context) {
     // final user = UserPreferences.myUser;
@@ -130,16 +136,150 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  ImageProvider returnImage(){
+    if (file == null ||file.files.isEmpty) {
+      return const AssetImage("assets/Images/profile-unknown.png");
+    }
+    else {
+      //return Image.file(File(file.files.first.path.toString())).image;
+      //return Image.memory(Uint8List.fromList(file.files.first.bytes!.toList())).image;
+      return Image.memory(file.files.first.bytes!).image;
+    }
+  }
+
+
+  selectFile(context) {
+    showDialog(context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return Dialog(
+              alignment: Alignment.center,
+              child: Container(
+                margin: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: CircleAvatar(
+                        radius: 80,
+                        backgroundImage: returnImage(),
+                        /*file == null ? const AssetImage("assets/Images/profile-unknown.png") :
+                        Image.memory(file.files.first.bytes) as ImageProvider,*/
+                        /*Image.memory(file != null ? file.files.first.bytes :
+                        (await rootBundle.load("assets/Images/profile-unknown.png")).buffer.asUint8List()).image,*/
+                      ),
+                    ),
+
+                    const Align(
+                      alignment: Alignment.topCenter,
+                      child: Text("Please insert an image"),
+                    ),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        margin: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.lightBlueAccent,
+                          borderRadius: BorderRadius.circular(12),
+                          ),
+                        child: TextButton(
+
+                        onPressed: () async {
+                          final image = await FilePicker.platform.pickFiles(
+                            withData: true,
+                            //type: FileType.custom,
+                            //allowedExtensions: ['jpg','png'],
+                          );
+                          if (image == null) return;
+                          file = image;
+                          setState(() {});
+                          },
+                        child: const Text("Select image", style: TextStyle(color: Colors.black),),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20,),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: secondaryColor,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: TextButton(
+                              onPressed: (){
+                                //TODO commit image
+                                if (file == null ||file.files.isEmpty) {
+                                  Navigator.pop(context, false);
+                                }
+                                else {
+                                  print("sdfasf");
+                                  print(file.files.first.bytes.buffer);
+                                  Profile().putProfilePic(profile_id: '1', bytes: file.files.first.bytes.buffer);
+                                  Navigator.pop(context, false);
+                                }
+                              },
+                              child: const Text("Apply",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: primaryColor,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: TextButton(
+                              onPressed: () => Navigator.pop(context, false),
+                              child: const Text("Abort",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                          ),
+                        ),
+                      ],
+                    ),
+
+                  ],
+                ),
+              ),
+            );
+          });
+        });
+  }
+
+
   Widget buildEditIcon(Color color) => buildCircle(
     color: Colors.white,
     all: 3,
     child: buildCircle(
       color: primaryColor,
       all: 8,
-      child: const Icon(
-        Icons.edit,
-        color: Colors.white,
-        size: 16,
+      child: IconButton(
+        constraints: const BoxConstraints(maxHeight: 16, maxWidth: 16),
+        onPressed: () {
+          selectFile(context);
+        },
+        icon: const Icon(
+          Icons.edit,
+          color: Colors.white,
+          size: 16,
+        ),
       ),
     ),
   );
