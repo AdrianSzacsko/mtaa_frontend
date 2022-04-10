@@ -1,16 +1,105 @@
 import 'package:flutter/material.dart';
+import 'package:mtaa_frontend/Models/Professor.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
 
 import '../Models/profile.dart';
 import '../constants.dart';
 import '../Screens/profile_page.dart';
 
-class ProfessorScreen extends StatelessWidget {
-  ProfessorScreen({required this.title});
-  final String title;
+
+class ProfessorScreen extends StatefulWidget {
+  const ProfessorScreen({Key? key}) : super(key: key);
+
+  @override
+  _ProfessorScreenState createState() => _ProfessorScreenState();
+}
+
+class _ProfessorScreenState extends State<ProfessorScreen> {
+  bool _isloading = false;
+
+  Widget buildImage() {
+    const image = const NetworkImage('https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80');
+
+    return ClipOval(
+      child: Material(
+        color: Colors.transparent,
+        child: Ink.image(
+          image: image,
+          fit: BoxFit.cover,
+          width: 128,
+          height: 128,
+          // child: InkWell(onTap: onClicked),
+        ),
+      ),
+    );
+  }
+
+  Widget buildName(String name) => Column(
+    children: [
+      Text(
+        name,
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+      ),
+      const SizedBox(height: 4),
+    ],
+  );
+
+  Widget buildInfo(String value) => Container(
+    padding: const EdgeInsets.symmetric(),
+    child: Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.star_outlined,
+              color: primaryColor,
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Text(value,
+                style: TextStyle(fontSize: 16,),
+              ),
+            ),
+          ],
+        )
+      ]
+    ),
+  );
+
+  Widget buildButton(String value) =>
+      MaterialButton(
+        padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+        onPressed: () {},
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            buildInfo(value)
+          ],
+        ),
+      );
+
+  dataLoadFunction(List<dynamic> subjects) async {
+    for (var item in subjects) {
+      var author = await Profile().getProfile(item["user_id"].toString());
+      print(author);
+      ProfessorReview(
+        name: author[0]["name"],
+        description: item["message"],
+        price: item["rating"],
+        image: "puzzle.png",
+      );
+      print(item);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    final professor = ModalRoute.of(context)!.settings.arguments as Professor;
+
     return Scaffold(
         appBar: myAppBar(context),
         bottomNavigationBar: myBottomAppBar(context),
@@ -19,6 +108,73 @@ class ProfessorScreen extends StatelessWidget {
           shrinkWrap: true,
           padding: const EdgeInsets.fromLTRB(2.0, 10.0, 2.0, 10.0),
           children: <Widget>[
+            const SizedBox(height: defaultPadding * 2),
+            Center(
+              child: Stack(
+                children: [
+                  buildImage(),
+                ],
+              ),
+            ),
+            const SizedBox(height: defaultPadding * 2),
+            buildName(professor.name),
+            const SizedBox(height: defaultPadding * 2),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                buildButton("65"),
+              ],
+            ),
+            const SizedBox(height: defaultPadding * 2),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(defaultPadding * 2,
+                      defaultPadding * 2, defaultPadding * 2,
+                      defaultPadding),
+                  child: Text(
+                    'Reviews',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(defaultPadding * 2,
+                      defaultPadding * 2, defaultPadding * 2,
+                      defaultPadding),
+                  child: buildInfo("80"),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(defaultPadding * 2,
+                      defaultPadding * 2, defaultPadding * 2,
+                      defaultPadding),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: SizedBox.fromSize(
+                      size: Size(56, 56), // button width and height
+                      child: ClipOval(
+                        child: Material(
+                          color: secondaryColor[300], // button color
+                          child: InkWell(
+                            splashColor: primaryColor[300], // splash color
+                            onTap: () {}, // button pressed
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const <Widget>[
+                                Icon(Icons.add_outlined), // icon
+                                //Text("Add"), // text
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            dataLoadFunction(professor.reviews),
+            /*
             ProfessorReview(
                 name: "iPhone",
                 description: "iPhone is the stylist phone ever",
@@ -61,7 +217,7 @@ class ProfessorScreen extends StatelessWidget {
                     "Floppy drive is useful rescue storage medium.",
                 price: 20,
                 image: "puzzle.png",
-            ),
+            ),*/
           ],
         )
     );
@@ -76,8 +232,21 @@ class ProfessorReview extends StatelessWidget {
   final String image;
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(2),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          boxShadow: const <BoxShadow>[
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 10.0,
+              offset: Offset(0.0, 10.0),
+            ),
+          ],
+        ),
         child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            elevation:5,
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
