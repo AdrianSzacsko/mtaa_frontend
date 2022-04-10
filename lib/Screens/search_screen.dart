@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:dio/dio.dart';
@@ -57,7 +58,7 @@ class SearchScreenState extends State<SearchScreen> {
     list_of_rows.clear();
     resp?.forEach((item){
       list_of_rows.add([item["name"].toString(), item["code"].toString(), item["id"].toString()]);
-      print(item);
+      //print(item);
     });
 
     // list_of_rows.add(['Marko Stahovec','USER','5']);
@@ -113,8 +114,6 @@ class SearchScreenState extends State<SearchScreen> {
                 print(resp);
 
                 var resp2 = await Profile().getProfilePic(row[2]);
-                print(resp2);
-                print(resp2.runtimeType);
 
                 var myUser = User(
                   email: resp[0]["email"],
@@ -140,11 +139,19 @@ class SearchScreenState extends State<SearchScreen> {
                 var resp = await ProfessorClass().getProfessor(row[2]);
                 print(resp);
                 var resp2 = await ProfessorClass().getProfessorReviews(row[2]);
-                print(resp2.runtimeType);
+
+                List<List<String>> allReviews = <List<String>>[];
+                resp2?.forEach((item) {
+                  //var author = await Profile().getProfile(item["user_id"].toString());
+                  allReviews.add([item["user_id"].toString(),
+                    item["message"].toString(), item["rating"].toString()]);
+                  //print(item);
+                });
+
 
                 var professor = Professor(
                   name: resp[0]["name"],
-                  reviews: resp2 ?? [],
+                  reviews: allReviews,
                 );
 
                 Navigator.push(
@@ -163,7 +170,7 @@ class SearchScreenState extends State<SearchScreen> {
                 var resp = await Subject().getSubject(row[2]);
                 print(resp);
                 var resp2 = await Subject().getSubjectReviews(row[2]);
-                print(resp2);
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(

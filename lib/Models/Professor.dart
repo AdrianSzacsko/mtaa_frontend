@@ -2,7 +2,7 @@ import 'dart:ui';
 
 class Professor {
   final String name;
-  final List<dynamic> reviews;
+  final List<List<String>> reviews;
 
   const Professor({
     required this.name,

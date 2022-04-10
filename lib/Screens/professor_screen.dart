@@ -16,6 +16,7 @@ class ProfessorScreen extends StatefulWidget {
 
 class _ProfessorScreenState extends State<ProfessorScreen> {
   bool _isloading = false;
+  List<Widget> allReviews = List<Widget>.empty(growable: true);
 
   Widget buildImage() {
     const image = const NetworkImage('https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80');
@@ -81,18 +82,38 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
         ),
       );
 
-  dataLoadFunction(List<dynamic> subjects) async {
-    for (var item in subjects) {
+  loadData(List<dynamic> reviews) async {
+    for (var item in reviews) {
       var author = await Profile().getProfile(item["user_id"].toString());
-      print(author);
       ProfessorReview(
-        name: author[0]["name"],
+        name: item["user_id"].toString(),
         description: item["message"],
-        price: item["rating"],
+        rating: item["rating"],
         image: "puzzle.png",
       );
-      print(item);
+      setState(() {});
     }
+  }
+
+
+  Future<List<Widget>> makeWidgets(List<List<String>> reviews) async {
+    //List<Widget> widgets = List<Widget>.empty(growable: true);
+    for (var item in reviews) {
+      var author = await Profile().getProfile(item[0].toString());
+      print("9999999999999999999999999999999999");
+      print(item);
+      print("8888888888888888888888888888888888");
+      print(author);
+      allReviews.add(ProfessorReview(
+        name: author[0]["name"],
+        description: item[1],
+        rating: int.parse(item[2]),
+        image: "puzzle.png",
+      ));
+    }
+    print(allReviews);
+    //setState(() {});
+    return allReviews;
   }
 
   @override
@@ -100,6 +121,100 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
 
     final professor = ModalRoute.of(context)!.settings.arguments as Professor;
 
+    return Scaffold(
+        appBar: myAppBar(context),
+        bottomNavigationBar: myBottomAppBar(context),
+        body: FutureBuilder(
+          future: makeWidgets(professor.reviews),
+          builder: (context, snapshot) {
+            if (snapshot.data == null) return CircularProgressIndicator();
+
+              return ListView(
+                physics: BouncingScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(2, 10, 2, 10),
+                children: <Widget>[
+                  const SizedBox(height: defaultPadding * 2),
+                  Center(
+                    child: Stack(
+                      children: [
+                       buildImage(),
+                      ],
+                    ),
+                   ),
+                  const SizedBox(height: defaultPadding * 2),
+                  buildName(professor.name),
+                  const SizedBox(height: defaultPadding * 2),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      buildButton("65"),
+                    ],
+                  ),
+                  const SizedBox(height: defaultPadding * 2),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(defaultPadding * 2,
+                            defaultPadding * 2, defaultPadding * 2,
+                            defaultPadding),
+                        child: Text(
+                          'Reviews',
+                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(defaultPadding * 2,
+                            defaultPadding * 2, defaultPadding * 2,
+                            defaultPadding),
+                        child: buildInfo("80"),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(defaultPadding * 2,
+                            defaultPadding * 2, defaultPadding * 2,
+                            defaultPadding),
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: SizedBox.fromSize(
+                            size: Size(56, 56), // button width and height
+                            child: ClipOval(
+                              child: Material(
+                                color: secondaryColor[300], // button color
+                                child: InkWell(
+                                  splashColor: primaryColor[300], // splash color
+                                  onTap: () {}, // button pressed
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const <Widget>[
+                                      Icon(Icons.add_outlined), // icon
+                                      //Text("Add"), // text
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),/*
+                  ProfessorReview(
+                    name: professor.reviews[0][0],
+                    description: professor.reviews[0][1],
+                    rating: int.parse(professor.reviews[0][2]),
+                    image: "puzzle.png",
+                  ),*/
+                  Column(children: [
+                    for ( var i in allReviews ) i,
+                  ],)
+                ],
+            );
+          },
+        )
+    );
+  }
+}
+/*
     return Scaffold(
         appBar: myAppBar(context),
         bottomNavigationBar: myBottomAppBar(context),
@@ -116,8 +231,6 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: defaultPadding * 2),
-            buildName(professor.name),
             const SizedBox(height: defaultPadding * 2),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -173,11 +286,11 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
                 ),
               ],
             ),
-            dataLoadFunction(professor.reviews),
-            /*
+            loadData(professor.reviews),
+
             ProfessorReview(
-                name: "iPhone",
-                description: "iPhone is the stylist phone ever",
+                name: "Kokot",
+                description: "Zobraz sa mi",
                 price: 1000,
                 image: "puzzle.png",
             ),
@@ -217,19 +330,18 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
                     "Floppy drive is useful rescue storage medium.",
                 price: 20,
                 image: "puzzle.png",
-            ),*/
+            ),
           ],
         )
-    );
-  }
-}
+    );*/
 
 class ProfessorReview extends StatelessWidget {
-  ProfessorReview({required this.name, required this.description, required this.price, required this.image});
+  ProfessorReview({required this.name, required this.description, required this.rating, required this.image});
   final String name;
   final String description;
-  final int price;
+  final int rating;
   final String image;
+  @override
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
@@ -258,17 +370,17 @@ class ProfessorReview extends StatelessWidget {
                   ),
                   Expanded(
                       child: Container(
-                          padding: EdgeInsets.all(5),
+                          padding: const EdgeInsets.all(defaultPadding / 2),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               Text(
-                                  this.name, style: const TextStyle(
+                                  name, style: const TextStyle(
                                   fontWeight: FontWeight.bold
                               )
                               ),
-                              Text(this.description), Text(
-                                  "Price: " + this.price.toString()
+                              Text(description), Text(
+                                  "Rating: " + rating.toString()
                               ),
                             ],
                           )
