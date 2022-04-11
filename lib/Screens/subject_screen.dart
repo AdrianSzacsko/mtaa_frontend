@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mtaa_frontend/Models/Professor.dart';
 import 'package:mtaa_frontend/Screens/settings_screen.dart';
+import 'package:mtaa_frontend/Screens/subject_review_screen.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,6 +11,8 @@ import '../Models/subj.dart';
 import '../constants.dart';
 import '../Screens/profile_page.dart';
 import 'package:mtaa_frontend/UI/loading_screen.dart';
+
+import 'edit_subject_review_screen.dart';
 
 class SubjectScreen extends StatefulWidget {
   const SubjectScreen({Key? key}) : super(key: key);
@@ -252,7 +255,10 @@ class _SubjectScreenState extends State<SubjectScreen> {
                               color: secondaryColor[300], // button color
                               child: InkWell(
                                 splashColor: primaryColor[300], // splash color
-                                onTap: () {}, // button pressed
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SubjectReviewScreen(subj_id: subject.subj_id,)));
+                                  //setState(() {});
+                                }, // button pressed
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: const <Widget>[
@@ -399,6 +405,7 @@ class SubjectReview extends StatelessWidget {
     //print(allReviews);
 
     var subject = Subject(
+      subj_id: subj_id,
       name: resp[0]["name"],
       professors: allProfessors,
       reviews: allReviews,
@@ -481,7 +488,12 @@ class SubjectReview extends StatelessWidget {
                                           color: secondaryColor[300], // button color
                                           child: InkWell(
                                             splashColor: primaryColor[300], // splash color
-                                            onTap: () {}, // button pressed
+                                            onTap: () {
+                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => EditSubjectReviewScreen(subj_id: subj_id.toString(),
+                                              message: description, difficulty: difficulty.toString(), usability: usability.toString(),
+                                              prof_avg: prof_avg.toString(),)));
+                                              // revertState(context, subj_id.toString());
+                                            }, // button pressed
                                             child: Column(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: const <Widget>[
@@ -514,20 +526,5 @@ class SubjectReview extends StatelessWidget {
         );
       }
     );
-  }
-}
-
-
-class SubjectReviewScreen extends StatefulWidget {
-  const SubjectReviewScreen({Key? key}) : super(key: key);
-
-  @override
-  _SubjectReviewScreenState createState() => _SubjectReviewScreenState();
-}
-
-class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
-  @override
-  Widget build(BuildContext context) {
-    throw UnimplementedError();
   }
 }

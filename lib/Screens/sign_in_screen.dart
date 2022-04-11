@@ -146,7 +146,7 @@ class SignInScreenState extends State<SignInScreen> {
                           keyboardType: TextInputType.emailAddress,
                           obscureText: false,
                           decoration: InputDecoration(hintText: "Email",
-                            hintStyle: const TextStyle(color: backgroundText),
+                            hintStyle: const TextStyle(color: backgroundText, fontFamily: 'RobotoMono'),
                             prefixIcon: const Padding(
                               padding: EdgeInsets.only(top: 0), // add padding to adjust icon
                               child: Icon(Icons.email_outlined),
@@ -177,7 +177,7 @@ class SignInScreenState extends State<SignInScreen> {
                           keyboardType: TextInputType.text,
                           obscureText: true,
                           decoration: InputDecoration(hintText: "Password",
-                            hintStyle: const TextStyle(color: backgroundText),
+                            hintStyle: const TextStyle(color: backgroundText, fontFamily: 'Roboto'),
                             prefixIcon: const Padding(
                               padding: EdgeInsets.only(top: 0), // add padding to adjust icon
                               child: Icon(Icons.lock_outlined),
