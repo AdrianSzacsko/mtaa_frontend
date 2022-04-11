@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:mime/mime.dart';
 
 import '../Models/User.dart';
 import '../Models/profile.dart';
@@ -59,7 +64,15 @@ Widget myBottomAppBar(BuildContext context){
 
             var resp2 = await Profile().getProfilePic("1");
             print(resp2);
-            print(resp2.runtimeType);
+            //print(resp2.runtimeType);
+            /*Uint8List(resp2);
+            //final mime = lookupMimeType('', headerBytes: resp2);
+            Latin1Encoder encoder = const Latin1Encoder();
+            var bytes = encoder.convert(resp2);
+
+            final codec = await instantiateImageCodec(bytes.buffer.asUint8List());
+            final frameInfo = await codec.getNextFrame();
+            //return frameInfo.image;*/
 
             var myUser = User(
               email: resp[0]["email"],
@@ -67,7 +80,7 @@ Widget myBottomAppBar(BuildContext context){
               comments: resp[0]["comments"].toString(),
               reg_date: resp[0]["reg_date"].toString(),
               study_year: resp[0]["study_year"].toString(),
-              image: resp2,
+              image: resp2 == null ? const AssetImage("assets/Images/profile-unknown.png") : resp2,
             );
             Navigator.push(
               context,

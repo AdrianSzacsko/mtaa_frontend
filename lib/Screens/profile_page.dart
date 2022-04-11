@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mime/mime.dart';
 
 import '../Models/User.dart';
 import '../Models/profile.dart';
@@ -119,14 +121,14 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget buildImage(User user) {
-    final image = NetworkImage(user.image);
-    //final image = const NetworkImage('https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80');
+    //ImageProvider<Object> image = const AssetImage("assets/Images/profile-unknown.png");
+
 
     return ClipOval(
       child: Material(
         color: Colors.transparent,
         child: Ink.image(
-          image: image,
+          image: user.image,
           fit: BoxFit.cover,
           width: 128,
           height: 128,
@@ -217,13 +219,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           child: TextButton(
                               onPressed: (){
-                                //TODO commit image
                                 if (file == null ||file.files.isEmpty) {
                                   Navigator.pop(context, false);
                                 }
                                 else {
-                                  print("sdfasf");
-                                  print(file.files.first.bytes);
                                   Profile().putProfilePic(profile_id: '1', bytes: file.files.first.bytes);
                                   Navigator.pop(context, false);
                                 }
