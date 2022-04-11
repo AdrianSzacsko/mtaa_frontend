@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mtaa_frontend/constants.dart';
 import 'package:provider/provider.dart';
 import './Screens/login_screen.dart';
 import './Screens/signup_screen.dart';
@@ -26,7 +28,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: primaryColor,
+          fontFamily: "Roboto",
+          textTheme: GoogleFonts.robotoTextTheme(
+            Theme.of(context).textTheme,)
         ),
         home: SignInScreen(),
         routes: {

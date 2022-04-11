@@ -34,7 +34,7 @@ dependencies:
   dio: ^4.0.6
   form_field_validator: ^1.1.0
   file_picker: ^4.5.1
-
+  google_fonts: ^2.3.1
   shared_preferences: ^2.0.13
   jwt_decode: ^0.3.1
 
@@ -76,6 +76,13 @@ flutter:
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
+
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Regular.ttf
+        - asset: assets/fonts/roboto/Roboto-Italic.ttf
+          style: italic
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mtaa_frontend/Models/Professor.dart';
 import 'package:mtaa_frontend/Screens/settings_screen.dart';
+import 'package:mtaa_frontend/Screens/subject_review_screen.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -252,7 +253,9 @@ class _SubjectScreenState extends State<SubjectScreen> {
                               color: secondaryColor[300], // button color
                               child: InkWell(
                                 splashColor: primaryColor[300], // splash color
-                                onTap: () {}, // button pressed
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => StarFeedback()));
+                                }, // button pressed
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: const <Widget>[
@@ -514,20 +517,5 @@ class SubjectReview extends StatelessWidget {
         );
       }
     );
-  }
-}
-
-
-class SubjectReviewScreen extends StatefulWidget {
-  const SubjectReviewScreen({Key? key}) : super(key: key);
-
-  @override
-  _SubjectReviewScreenState createState() => _SubjectReviewScreenState();
-}
-
-class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
-  @override
-  Widget build(BuildContext context) {
-    throw UnimplementedError();
   }
 }
