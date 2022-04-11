@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mtaa_frontend/Models/Professor.dart';
+import 'package:mtaa_frontend/Screens/settings_screen.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/Subject.dart';
 import '../Models/profile.dart';
@@ -171,6 +173,7 @@ class _SubjectScreenState extends State<SubjectScreen> {
       print(author);
       print("7777777777777777777777777777777777");
       allReviews.add(SubjectReview(
+        id: int.parse(item[0]),
         name: author[0]["name"],
         description: item[1],
         difficulty: int.parse(item[2]),
@@ -304,8 +307,20 @@ class SubjectReview extends StatelessWidget {
     ),
   );
 
-  SubjectReview({required this.name, required this.description,
+  Future<bool> userIdMatch(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final user_id = prefs.getInt('user_id') ?? '';
+
+    if (user_id == id) {
+      return true;
+    }
+
+    return false;
+  }
+
+  SubjectReview({required this.id, required this.name, required this.description,
     required this.difficulty, required this.usability, required this.prof_avg, required this.image});
+  final int id;
   final String name;
   final String description;
   final int difficulty;
@@ -325,7 +340,19 @@ class SubjectReview extends StatelessWidget {
             ),
           ],
         ),
-        child: Card(
+        child: GestureDetector(
+            onLongPress: () async {
+              bool areIdsMatching = await userIdMatch(id);
+              if (areIdsMatching == true) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsScreen(),
+                  ),
+                );
+              }
+            },
+            child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15.0),
             ),
@@ -347,19 +374,34 @@ class SubjectReview extends StatelessWidget {
                             children: <Widget>[
                               Text(
                                   name, style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16,
+                                fontWeight: FontWeight.bold, fontSize: 16,
                               )
                               ),
                               Text(description, style: const TextStyle(fontSize: 14)),
                               _SubjectScreenState().buildInfo(difficulty.toString(),
-                                usability.toString(),prof_avg.toString()),
+                                  usability.toString(),prof_avg.toString()),
                             ],
                           )
                       )
                   )
                 ]
             )
-        )
+        )),
     );
+  }
+}
+
+
+class SubjectReviewScreen extends StatefulWidget {
+  const SubjectReviewScreen({Key? key}) : super(key: key);
+
+  @override
+  _SubjectReviewScreenState createState() => _SubjectReviewScreenState();
+}
+
+class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
+  @override
+  Widget build(BuildContext context) {
+    throw UnimplementedError();
   }
 }

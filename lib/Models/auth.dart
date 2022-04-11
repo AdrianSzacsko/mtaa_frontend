@@ -3,6 +3,7 @@
 */
 
 import 'dart:io';
+import 'package:jwt_decode/jwt_decode.dart';
 
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
@@ -70,6 +71,11 @@ class Auth with ChangeNotifier {
       */
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('token', response.data["access_token"]);
+      Map<String, dynamic> payload = Jwt.parseJwt(response.data["access_token"]);
+      prefs.setInt('user_id', payload["user_id"]);
+
+      final t = prefs.getInt('user_id') ?? '';
+      print(t);
 
       return response.data;
     } catch (e) {
