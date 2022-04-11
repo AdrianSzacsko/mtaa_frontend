@@ -1,36 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:mtaa_frontend/Screens/search_screen.dart';
+import 'package:mtaa_frontend/Screens/subject_screen.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
 
+import '../Models/Subject.dart';
 import '../Models/subj.dart';
 import '../constants.dart';
 
 
-class SubjectReviewScreen extends StatefulWidget {
+class EditSubjectReviewScreen extends StatefulWidget {
   final String subj_id;
-  String? message = "";
-  String? difficulty = "";
-  String? usability = "";
-  String? prof_avg = "";
+  final String message;
+  final String difficulty;
+  final String usability;
+  final String prof_avg;
 
-  SubjectReviewScreen({required this.subj_id, this.message,
-  this.difficulty, this.usability, this.prof_avg});
+  EditSubjectReviewScreen({required this.subj_id, required this.message,
+    required this.difficulty, required this.usability, required this.prof_avg});
 
   @override
-  _SubjectReviewScreenState createState() => _SubjectReviewScreenState();
+  _EditSubjectReviewScreenState createState() => _EditSubjectReviewScreenState();
 }
 
-class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
+class _EditSubjectReviewScreenState extends State<EditSubjectReviewScreen> {
+  //var myFeedbackText = "COULD BE BETTER";
   var myFeedbackText = "COULD BE BETTER";
-  late var difficultySlider = 0.0;
-  late var usabilitySlider = 0.0;
-  late var profSlider = 0.0;
-  late var reviewController = TextEditingController();
+  late var difficultySlider = double.parse(widget.difficulty);
+  late var usabilitySlider = double.parse(widget.usability);
+  late var profSlider = double.parse(widget.prof_avg);
+  late var reviewController = TextEditingController(text: widget.message);
+
   IconData myFeedback1= Icons.star, myFeedback2= Icons.star,myFeedback3= Icons.star,
       myFeedback4= Icons.star,myFeedback5 = Icons.star;
   Color myFeedbackColor1 = Colors.grey,myFeedbackColor2 = Colors.grey,myFeedbackColor3 = Colors.grey,
       myFeedbackColor4 = Colors.grey,myFeedbackColor5 = Colors.grey;
+
+  void revertState(BuildContext context, String subj_id) async {
+    var resp = await SubjectClass().getSubject(subj_id);
+    print(resp);
+    List<String> allProfessors = <String>[];
+    resp?.forEach((item) {
+      allProfessors.add(item["teachers"]);
+    });
+
+    var resp2 = await SubjectClass().getSubjectReviews(subj_id);
+    //print("*********************************");
+    //print(resp2);
+    //print("*********************************");
+
+    List<List<String>> allReviews = <List<String>>[];
+    resp2?.forEach((item) {
+      allReviews.add([item["id"].toString(),
+        item["user_id"].toString(),
+        item["message"].toString(), item["difficulty"].toString(),
+        item["usability"].toString(), item["prof_avg"].toString()]);
+    });
+
+    //print(allReviews);
+
+    var subject = Subject(
+      subj_id: subj_id,
+      name: resp[0]["name"],
+      professors: allProfessors,
+      reviews: allReviews,
+    );
+
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SubjectScreen(),
+        // Pass the arguments as part of the RouteSettings. The
+        // DetailScreen reads the arguments from these settings.
+        settings: RouteSettings(
+          arguments: subject,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +97,7 @@ class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
                     alignment: Alignment.topCenter,
                     child: Padding(
                       padding: EdgeInsets.all(defaultPadding),
-                      child: Text("Subject Review",
+                      child: Text("Edit Review",
                         style: TextStyle(color: Colors.black, fontSize: 22.0,fontWeight:FontWeight.bold),),
                     ),
                   ),
@@ -406,7 +454,7 @@ class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
                               padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, defaultPadding),
                               child: Container(
                                 child:
-                                TextField(
+                                TextFormField(
                                   controller: reviewController,
                                   autocorrect: false,
                                   enableSuggestions: false,
@@ -441,14 +489,15 @@ class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
                                     style: TextStyle(color: Color(0xffffffff)),
                                   ),
                                   onPressed: () async {
-                                    await SubjectClass().postReview(
-                                      reviewController.text,
+                                    await SubjectClass().modifyReview(
+                                        reviewController.text,
                                         difficultySlider.toStringAsFixed(0),
                                         usabilitySlider.toStringAsFixed(0),
                                         profSlider.toStringAsFixed(0),
                                         widget.subj_id);
 
-                                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+                                    //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+                                    revertState(context, widget.subj_id.toString());
                                   },
                                 ),
                               )),
@@ -470,65 +519,65 @@ class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
   Widget mySlider() {
     return Container(
       child: Row(children: [
-      Padding(
-      padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
-            child: Row(
-              children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Row(children: const [
-                    Icon(
-                      Icons.more_time_outlined,
-                      color: primaryColor,
-                    ),
-                    SizedBox(width: defaultPadding / 2),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
+                child: Row(
+                  children: [
                     Align(
-                      alignment: Alignment.topLeft,
-                      child: Text("Difficulty: ",
-                        style: TextStyle(fontSize: 16,),
-                      ),
+                      alignment: Alignment.topRight,
+                      child: Row(children: const [
+                        Icon(
+                          Icons.more_time_outlined,
+                          color: primaryColor,
+                        ),
+                        SizedBox(width: defaultPadding / 2),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Difficulty: ",
+                            style: TextStyle(fontSize: 16,),
+                          ),
+                        ),
+                      ],),
                     ),
-                  ],),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Text(difficultySlider.toStringAsFixed(0),
-                style: TextStyle(fontSize: 16,),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: Text(difficultySlider.toStringAsFixed(0),
+                    style: TextStyle(fontSize: 16,),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ),
-    Padding(
-      padding: const EdgeInsets.all(0),
-      child: Container(
-        child: Slider(
-          min: 0.0,
-          max: 100.0,
-          divisions: 100,
-          value: difficultySlider,
-          activeColor: primaryColor[300],
-          inactiveColor: secondaryColor[300],
-          onChanged: (newValue) {
-            setState(() {
-              difficultySlider = newValue;
+        ),
+        Padding(
+          padding: const EdgeInsets.all(0),
+          child: Container(
+            child: Slider(
+              min: 0.0,
+              max: 100.0,
+              divisions: 100,
+              value: difficultySlider,
+              activeColor: primaryColor[300],
+              inactiveColor: secondaryColor[300],
+              onChanged: (newValue) {
+                setState(() {
+                  difficultySlider = newValue;
 
-            }
-            );
-          },
-        ),),
-    ),
+                }
+                );
+              },
+            ),),
+        ),
       ],),
     );
   }

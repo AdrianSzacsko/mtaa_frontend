@@ -12,6 +12,8 @@ import '../constants.dart';
 import '../Screens/profile_page.dart';
 import 'package:mtaa_frontend/UI/loading_screen.dart';
 
+import 'edit_subject_review_screen.dart';
+
 class SubjectScreen extends StatefulWidget {
   const SubjectScreen({Key? key}) : super(key: key);
 
@@ -254,7 +256,8 @@ class _SubjectScreenState extends State<SubjectScreen> {
                               child: InkWell(
                                 splashColor: primaryColor[300], // splash color
                                 onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => StarFeedback(subj_id: subject.subj_id,)));
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SubjectReviewScreen(subj_id: subject.subj_id,)));
+                                  //setState(() {});
                                 }, // button pressed
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -485,7 +488,12 @@ class SubjectReview extends StatelessWidget {
                                           color: secondaryColor[300], // button color
                                           child: InkWell(
                                             splashColor: primaryColor[300], // splash color
-                                            onTap: () {}, // button pressed
+                                            onTap: () {
+                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => EditSubjectReviewScreen(subj_id: subj_id.toString(),
+                                              message: description, difficulty: difficulty.toString(), usability: usability.toString(),
+                                              prof_avg: prof_avg.toString(),)));
+                                              // revertState(context, subj_id.toString());
+                                            }, // button pressed
                                             child: Column(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: const <Widget>[
