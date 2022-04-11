@@ -67,6 +67,7 @@ class _EditSubjectReviewScreenState extends State<EditSubjectReviewScreen> {
     );
 
     Navigator.pop(context);
+    Navigator.pop(context);
     Navigator.push(
       context,
       MaterialPageRoute(
