@@ -184,7 +184,8 @@ class SearchScreenState extends State<SearchScreen> {
 
                 List<List<String>> allReviews = <List<String>>[];
                 resp2?.forEach((item) {
-                  allReviews.add([item["user_id"].toString(),
+                  allReviews.add([item["id"].toString(),
+                    item["user_id"].toString(),
                     item["message"].toString(), item["difficulty"].toString(),
                     item["usability"].toString(), item["prof_avg"].toString()]);
                 });
