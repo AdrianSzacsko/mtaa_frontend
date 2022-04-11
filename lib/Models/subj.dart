@@ -53,7 +53,6 @@ class SubjectClass with ChangeNotifier {
 
     var dio = Dio();
     //dio.options.headers['content-Type'] = 'application/json';
-
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
     dio.options.headers['authorization'] = "Bearer " + token;
