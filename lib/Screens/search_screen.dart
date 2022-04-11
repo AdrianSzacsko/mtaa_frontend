@@ -193,6 +193,7 @@ class SearchScreenState extends State<SearchScreen> {
                 print(allReviews);
 
                 var subject = Subject(
+                  subj_id: row[2],
                   name: resp[0]["name"],
                   professors: allProfessors,
                   reviews: allReviews,

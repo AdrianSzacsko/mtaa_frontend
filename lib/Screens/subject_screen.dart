@@ -254,7 +254,7 @@ class _SubjectScreenState extends State<SubjectScreen> {
                               child: InkWell(
                                 splashColor: primaryColor[300], // splash color
                                 onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => StarFeedback()));
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => StarFeedback(subj_id: subject.subj_id,)));
                                 }, // button pressed
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -402,6 +402,7 @@ class SubjectReview extends StatelessWidget {
     //print(allReviews);
 
     var subject = Subject(
+      subj_id: subj_id,
       name: resp[0]["name"],
       professors: allProfessors,
       reviews: allReviews,

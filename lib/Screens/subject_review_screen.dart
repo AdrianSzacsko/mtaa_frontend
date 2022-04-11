@@ -274,6 +274,10 @@ class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
 }
 
 class StarFeedback extends StatefulWidget {
+  final String subj_id;
+
+  StarFeedback({required this.subj_id});
+
   @override
   _StarFeedbackState createState() => _StarFeedbackState();
 }
@@ -700,10 +704,10 @@ class _StarFeedbackState extends State<StarFeedback> {
                                   onPressed: () async {
                                     await SubjectClass().postReview(
                                       reviewController.text,
-                                        difficultySlider.toString(),
-                                        usabilitySlider.toString(),
-                                        profSlider.toString(),
-                                        "5");
+                                        difficultySlider.toStringAsFixed(0),
+                                        usabilitySlider.toStringAsFixed(0),
+                                        profSlider.toStringAsFixed(0),
+                                        widget.subj_id);
                                   },
                                 ),
                               )),
