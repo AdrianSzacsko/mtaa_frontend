@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
 
+import '../Models/subj.dart';
 import '../constants.dart';
 
 
@@ -282,6 +283,7 @@ class _StarFeedbackState extends State<StarFeedback> {
   var difficultySlider = 0.0;
   var usabilitySlider = 0.0;
   var profSlider = 0.0;
+  final reviewController = TextEditingController();
   IconData myFeedback1= Icons.star, myFeedback2= Icons.star,myFeedback3= Icons.star,
       myFeedback4= Icons.star,myFeedback5 = Icons.star;
   Color myFeedbackColor1 = Colors.grey,myFeedbackColor2 = Colors.grey,myFeedbackColor3 = Colors.grey,
@@ -662,7 +664,7 @@ class _StarFeedbackState extends State<StarFeedback> {
                               child: Container(
                                 child:
                                 TextField(
-                                  //controller: passwordController,
+                                  controller: reviewController,
                                   autocorrect: false,
                                   enableSuggestions: false,
                                   autofocus: false,
@@ -695,8 +697,13 @@ class _StarFeedbackState extends State<StarFeedback> {
                                   child: const Text('Submit',
                                     style: TextStyle(color: Color(0xffffffff)),
                                   ),
-                                  onPressed: () {
-
+                                  onPressed: () async {
+                                    await SubjectClass().postReview(
+                                      reviewController.text,
+                                        difficultySlider.toString(),
+                                        usabilitySlider.toString(),
+                                        profSlider.toString(),
+                                        "5");
                                   },
                                 ),
                               )),
