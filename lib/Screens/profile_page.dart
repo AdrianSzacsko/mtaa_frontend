@@ -223,8 +223,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 }
                                 else {
                                   print("sdfasf");
-                                  print(file.files.first.bytes.buffer);
-                                  Profile().putProfilePic(profile_id: '1', bytes: file.files.first.bytes.buffer);
+                                  print(file.files.first.bytes);
+                                  Profile().putProfilePic(profile_id: '1', bytes: file.files.first.bytes);
                                   Navigator.pop(context, false);
                                 }
                               },
