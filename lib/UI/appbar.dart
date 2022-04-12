@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/User.dart';
 import '../Models/profile.dart';
@@ -59,11 +60,12 @@ Widget myBottomAppBar(BuildContext context){
           icon: const Icon(Icons.account_circle_outlined),
           color: primaryColor[300],
           onPressed: () async {
-            var resp = await Profile().getProfile("1");
-            print(resp);
+            final prefs = await SharedPreferences.getInstance();
+            final user_id = prefs.getInt('user_id') ?? '';
 
-            var resp2 = await Profile().getProfilePic("1");
-            print(resp2);
+            var resp = await Profile().getProfile(user_id.toString());
+            var resp2 = await Profile().getProfilePic(user_id.toString());
+
             //print(resp2.runtimeType);
             /*Uint8List(resp2);
             //final mime = lookupMimeType('', headerBytes: resp2);

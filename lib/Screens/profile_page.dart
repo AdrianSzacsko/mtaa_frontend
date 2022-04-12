@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mime/mime.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/User.dart';
 import '../Models/profile.dart';
@@ -108,6 +109,48 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
 
+  void revertState(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final user_id = prefs.getInt('user_id') ?? '';
+
+    var resp = await Profile().getProfile(user_id.toString());
+    var resp2 = await Profile().getProfilePic(user_id.toString());
+
+    //print(resp2.runtimeType);
+    /*Uint8List(resp2);
+            //final mime = lookupMimeType('', headerBytes: resp2);
+            Latin1Encoder encoder = const Latin1Encoder();
+            var bytes = encoder.convert(resp2);
+
+            final codec = await instantiateImageCodec(bytes.buffer.asUint8List());
+            final frameInfo = await codec.getNextFrame();
+            //return frameInfo.image;*/
+
+    var myUser = User(
+      email: resp[0]["email"],
+      name: resp[0]["name"],
+      comments: resp[0]["comments"].toString(),
+      reg_date: resp[0]["reg_date"].toString(),
+      study_year: resp[0]["study_year"].toString(),
+      image: resp2 == null ? const AssetImage("assets/Images/profile-unknown.png") : resp2,
+    );
+
+    Navigator.pop(context, false);
+    Navigator.pop(context, false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfilePage(),
+        // Pass the arguments as part of the RouteSettings. The
+        // DetailScreen reads the arguments from these settings.
+        settings: RouteSettings(
+          arguments: myUser,
+        ),
+      ),
+    );
+  }
+
+
   selectFile(context) {
     showDialog(context: context,
         builder: (context) {
@@ -179,12 +222,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: TextButton(
                               onPressed: (){
                                 if (file == newFile || newFileBytes.isEmpty) {
-                                  Navigator.pop(context, false);
                                 }
                                 else {
                                   Profile().putProfilePic(bytes: newFileBytes);
-                                  Navigator.pop(context, false);
                                 }
+
+                                revertState(context);
+
                               },
                               child: const Text("Apply",
                                 style: TextStyle(
@@ -219,10 +263,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: TextButton(
                               onPressed: () {
                                 Profile().deleteProfilePic();
-                                newFileBytes.clear();
+                                /*
+                                if (newFileBytes.isNotEmpty){
+                                  newFileBytes.clear();
+                                }*/
+
                                 newFile = const AssetImage("assets/Images/profile-unknown.png");
                                 file = const AssetImage("assets/Images/profile-unknown.png");
-                                Navigator.pop(context, false);
+                                revertState(context);
                               } ,
                               child: const Text("Delete",
                                 style: TextStyle(
