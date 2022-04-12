@@ -198,8 +198,9 @@ class SignInScreenState extends State<SignInScreen> {
                     SizedBox(
                       width: 125,
                       child: RaisedButton(
+                        elevation: 10,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                        color:primaryColor[300],
+                        color: primaryColor[300],
                         onPressed: () {
                           print(emailController);
                           print(passwordController);
@@ -207,21 +208,15 @@ class SignInScreenState extends State<SignInScreen> {
                           //Provider.of<Auth>(context, listen: false).login(emailController.text, passwordController.text);
                           Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
                         },
-                        /*
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            // Sign up form is done
-                            // It saved our inputs
-                            _formKey.currentState!.save();
-                            //  Sign in also done
-                          }
-                        },*/
-                        child: const Text("Login", style: TextStyle(color: textColor)),
+                        child: const Text("Login", style: TextStyle(color: Colors.white,
+                        fontSize: 16)),
                       ),
                     ),
+                    const SizedBox(height: defaultPadding / 4),
                     SizedBox(
                       width: 125,
                       child: RaisedButton(
+                        elevation: 10,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                         color:secondaryColor[300],
                         onPressed: () => Navigator.push(
@@ -230,7 +225,8 @@ class SignInScreenState extends State<SignInScreen> {
                             builder: (context) => SignUpScreen(),
                           ),
                         ),
-                        child: const Text("Register", style: TextStyle(color: textColor)),
+                        child: const Text("Register", style: TextStyle(color: Colors.white,
+                            fontSize: 16)),
                       ),     // width: size.width * 0.35,
                     ),
                   ],

@@ -82,7 +82,7 @@ class SearchScreenState extends State<SearchScreen> {
           controller: scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           shrinkWrap: true,
-          padding: const EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(defaultPadding),
           key: UniqueKey(),
           itemCount: list_of_rows.length,
           itemBuilder: (context, item) {
@@ -221,8 +221,8 @@ class SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: myAppBar(context),
-        bottomNavigationBar: myBottomAppBar(context),
+      appBar: myAppBar(context),
+      bottomNavigationBar: myBottomAppBar(context),
       body: Stack(
         children: [
           Container(
@@ -246,40 +246,43 @@ class SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  //height: 200,
-                  child: Align(
-                    alignment: Alignment.center,
-                    //alignment: Alignment.topCenter,
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                      color:secondaryColor[300],
-                      onPressed: () {
-                        setState(() {
-                          dataLoadFunction();
-                        });
-                        print(searchController.text);
-                        searchController.text = '';
-                      },
-                      child: const Text("Search"),
+                  Container(
+                    //height: 200,
+                    child: Align(
+                      alignment: Alignment.center,
+                      //alignment: Alignment.topCenter,
+                      child: FloatingActionButton(
+                        backgroundColor: secondaryColor[300],
+                        elevation: 10,
+                        //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                        onPressed: () {
+                          setState(() {
+                            dataLoadFunction();
+                          });
+                          print(searchController.text);
+                          searchController.text = '';
+                        },
+                        child: const Icon(
+                          Icons.search_outlined,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  child: Align(
+                  const SizedBox(height: defaultPadding),
+                  Container(
                     alignment: Alignment.center,
-                    child: buildList(),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: buildList(),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          linearLoadingScreen(_isloading),
-        ],
-      ),
-
-
+            linearLoadingScreen(_isloading),
+          ],
+        ),
     );
   }
 }
