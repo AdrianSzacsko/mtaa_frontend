@@ -1,28 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:mtaa_frontend/Screens/professor_screen.dart';
 import 'package:mtaa_frontend/Screens/search_screen.dart';
-import 'package:mtaa_frontend/Models/prof.dart';
+import 'package:mtaa_frontend/Screens/subject_screen.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
 
+import '../Models/Professor.dart';
+import '../Models/Subject.dart';
+import '../Models/prof.dart';
 import '../Models/subj.dart';
 import '../constants.dart';
 
 
-class ProfessorReviewScreen extends StatefulWidget {
+class EditProfessorReviewScreen extends StatefulWidget {
   final String prof_id;
-  String? message = "";
-  String? rating = "";
+  final String message;
+  final String rating;
 
-  ProfessorReviewScreen({required this.prof_id, this.message,
-    this.rating});
+  EditProfessorReviewScreen({required this.prof_id, required this.message,
+    required this.rating});
 
   @override
-  _ProfessorReviewScreenState createState() => _ProfessorReviewScreenState();
+  _EditProfessorReviewScreenState createState() => _EditProfessorReviewScreenState();
 }
 
-class _ProfessorReviewScreenState extends State<ProfessorReviewScreen> {
-  late var ratingSlider = 0.0;
-  late var reviewController = TextEditingController();
+class _EditProfessorReviewScreenState extends State<EditProfessorReviewScreen> {
+  //var myFeedbackText = "COULD BE BETTER";
+  var myFeedbackText = "COULD BE BETTER";
+  late var ratingSlider = double.parse(widget.rating);
+  late var reviewController = TextEditingController(text: widget.message);
+
+  void revertState(BuildContext context, String prof_id) async {
+    var resp = await ProfessorClass().getProfessor(prof_id);
+    var resp2 = await ProfessorClass().getProfessorReviews(prof_id);
+
+    List<List<String>> allReviews = <List<String>>[];
+    resp2?.forEach((item) {
+      //var author = await Profile().getProfile(item["user_id"].toString());
+      allReviews.add([item["id"].toString(), item["user_id"].toString(),
+        item["message"].toString(), item["rating"].toString()]);
+      //print(item);
+    });
+
+    var professor = Professor(
+      prof_id: prof_id,
+      name: resp[0]["name"],
+      reviews: allReviews,
+    );
+
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ProfessorScreen(),
+        settings: RouteSettings(
+          arguments: professor,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +77,7 @@ class _ProfessorReviewScreenState extends State<ProfessorReviewScreen> {
                     alignment: Alignment.topCenter,
                     child: Padding(
                       padding: EdgeInsets.all(defaultPadding),
-                      child: Text("Professor Review",
+                      child: Text("Edit Review",
                         style: TextStyle(color: Colors.black, fontSize: 22.0,fontWeight:FontWeight.bold),),
                     ),
                   ),
@@ -145,7 +181,7 @@ class _ProfessorReviewScreenState extends State<ProfessorReviewScreen> {
                               padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, defaultPadding),
                               child: Container(
                                 child:
-                                TextField(
+                                TextFormField(
                                   controller: reviewController,
                                   autocorrect: false,
                                   enableSuggestions: false,
@@ -180,12 +216,13 @@ class _ProfessorReviewScreenState extends State<ProfessorReviewScreen> {
                                     style: TextStyle(color: Color(0xffffffff)),
                                   ),
                                   onPressed: () async {
-                                    await ProfessorClass().postReview(
+                                    await ProfessorClass().modifyReview(
                                         reviewController.text,
                                         ratingSlider.toStringAsFixed(0),
                                         widget.prof_id);
 
-                                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+                                    //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+                                    revertState(context, widget.prof_id.toString());
                                   },
                                 ),
                               )),

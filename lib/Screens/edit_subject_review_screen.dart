@@ -176,53 +176,6 @@ class _EditSubjectReviewScreenState extends State<EditSubjectReviewScreen> {
                                     onChanged: (newValue) {
                                       setState(() {
                                         difficultySlider = newValue;
-/*
-                                    if (sliderValue == 1.0 ) {
-                                      myFeedback1 = Icons.star_outlined;
-                                      myFeedbackColor1 = Colors.yellow;
-                                    }
-                                    else if (sliderValue < 1.0 ){
-                                      myFeedback1 = Icons.star;
-                                      myFeedbackColor1 = Colors.grey;
-
-                                    }
-                                    if (sliderValue == 2.0 ) {
-                                      myFeedback2 = Icons.star_outlined;
-                                      myFeedbackColor2= Colors.yellow;
-                                    }
-                                    else if (sliderValue < 2.0 ){
-                                      myFeedback2 = Icons.star;
-                                      myFeedbackColor2 = Colors.grey;
-
-                                    }
-                                    if (sliderValue == 3.0 ) {
-                                      myFeedback3 = Icons.star_outlined;
-                                      myFeedbackColor3 = Colors.yellow;
-                                    }
-                                    else if (sliderValue < 3.0 ){
-                                      myFeedback3 = Icons.star;
-                                      myFeedbackColor3 = Colors.grey;
-
-                                    }
-                                    if (sliderValue == 4.0 ) {
-                                      myFeedback4 = Icons.star_outlined;
-                                      myFeedbackColor4 = Colors.yellow;
-                                    }
-                                    else if (sliderValue < 4.0 ){
-                                      myFeedback4 = Icons.star;
-                                      myFeedbackColor4 = Colors.grey;
-
-                                    }
-                                    if (sliderValue == 5.0 ) {
-                                      myFeedback5 = Icons.star_outlined;
-                                      myFeedbackColor5 = Colors.yellow;
-                                    }
-                                    else if (sliderValue < 5.0 ){
-                                      myFeedback5 = Icons.star;
-                                      myFeedbackColor5 = Colors.grey;
-
-                                    }*/
-
                                       });
                                     },
                                   ),),
