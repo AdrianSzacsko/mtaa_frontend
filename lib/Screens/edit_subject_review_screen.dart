@@ -433,15 +433,14 @@ class _EditSubjectReviewScreenState extends State<EditSubjectReviewScreen> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(defaultPadding / 4),
+                              padding: const EdgeInsets.fromLTRB(defaultPadding / 4, defaultPadding / 4,
+                                  defaultPadding / 4, defaultPadding),
                               child: Container(child: Align(
                                 alignment: Alignment.bottomCenter,
-                                child: RaisedButton(
-                                  shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                                  color: primaryColor[300],
-                                  child: const Text('Submit',
-                                    style: TextStyle(color: Color(0xffffffff)),
-                                  ),
+                                child: FloatingActionButton(
+                                  elevation: 10,
+                                  backgroundColor: primaryColor[300],
+                                  splashColor: secondaryColor[300],
                                   onPressed: () async {
                                     await SubjectClass().modifyReview(
                                         reviewController.text,
@@ -453,6 +452,10 @@ class _EditSubjectReviewScreenState extends State<EditSubjectReviewScreen> {
                                     //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
                                     revertState(context, widget.subj_id.toString());
                                   },
+                                  child: const Icon(
+                                    Icons.check_outlined,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               )),
                             ),

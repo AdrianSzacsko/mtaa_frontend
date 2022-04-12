@@ -431,18 +431,17 @@ class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(defaultPadding / 4),
+                              padding: const EdgeInsets.fromLTRB(defaultPadding / 4, defaultPadding / 4,
+                                  defaultPadding / 4, defaultPadding),
                               child: Container(child: Align(
                                 alignment: Alignment.bottomCenter,
-                                child: RaisedButton(
-                                  shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                                  color: primaryColor[300],
-                                  child: const Text('Submit',
-                                    style: TextStyle(color: Color(0xffffffff)),
-                                  ),
+                                child: FloatingActionButton(
+                                  elevation: 10,
+                                  backgroundColor: primaryColor[300],
+                                  splashColor: secondaryColor[300],
                                   onPressed: () async {
                                     await SubjectClass().postReview(
-                                      reviewController.text,
+                                        reviewController.text,
                                         difficultySlider.toStringAsFixed(0),
                                         usabilitySlider.toStringAsFixed(0),
                                         profSlider.toStringAsFixed(0),
@@ -450,6 +449,10 @@ class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
 
                                     Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
                                   },
+                                  child: const Icon(
+                                    Icons.check_outlined,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               )),
                             ),
