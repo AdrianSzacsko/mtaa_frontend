@@ -6,6 +6,7 @@ import 'package:mtaa_frontend/Screens/profile_screen.dart';
 import 'package:mtaa_frontend/UI/inputField.dart';
 import 'package:mtaa_frontend/Screens/search_screen.dart';
 import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
+import 'package:mtaa_frontend/webrtc/call_sample/call_sample.dart';
 
 import '../UI/appbar.dart';
 import '../constants.dart';
@@ -21,6 +22,83 @@ class SettingsScreen extends StatefulWidget {
 
 class SettingsScreenState extends State<SettingsScreen> {
   static const routeName = '/settings-screen';
+  var ipController = TextEditingController();
+
+addIpAddress(context){
+  showDialog(context: context,
+      builder: (context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            alignment: Alignment.center,
+            child: Container(
+              margin: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: TextField(
+                      controller: ipController,
+                      autocorrect: false,
+                      enableSuggestions: false,
+                      autofocus: false,
+                      maxLines: null,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(hintText: "Server IP Address",
+                        hintStyle: const TextStyle(color: backgroundText, fontFamily: 'Roboto'),
+                        prefixIcon: const Padding(
+                          padding: EdgeInsets.only(top: 0), // add padding to adjust icon
+                          child: Icon(Icons.text_snippet_outlined),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: primaryColor),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        focusedBorder:OutlineInputBorder(
+                          borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),),
+                    ),
+                  ),
+                  const SizedBox(height: 20,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      FloatingActionButton(
+                        backgroundColor: primaryColor[300],
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CallSample(host: ipController.text)));
+                        },
+                        
+                        child: const Icon(
+                          Icons.check_outlined,
+                          color: Colors.white,
+                        ),
+                      ),
+                      FloatingActionButton(
+                        backgroundColor: secondaryColor[300],
+                        onPressed: () => Navigator.pop(context, false),
+                        child: const Icon(
+                          Icons.clear,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          );
+        });
+      });
+}
 
 
 
@@ -74,6 +152,7 @@ class SettingsScreenState extends State<SettingsScreen> {
             TextButton(
                 onPressed: () {
                   //TODO add webrtc call screen
+                  addIpAddress(context);
                 },
                 child: Container(
                   alignment: Alignment.center,
