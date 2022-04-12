@@ -1,4 +1,7 @@
-import 'dart:ui';
+//import 'dart:ui';
+import 'dart:io';
+
+import 'package:flutter/widgets.dart';
 
 class User {
   final String email;
@@ -6,7 +9,7 @@ class User {
   final String comments;
   final String reg_date;
   final String study_year;
-  final String image;
+  final ImageProvider image;
 
   const User({
     required this.email,

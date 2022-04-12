@@ -124,7 +124,7 @@ class SearchScreenState extends State<SearchScreen> {
                   comments: resp[0]["comments"].toString(),
                   reg_date: resp[0]["reg_date"].toString(),
                   study_year: resp[0]["study_year"].toString(),
-                  image: resp2,
+                  image: resp2 == null ? const AssetImage("assets/Images/profile-unknown.png") : resp2,
                 );
                 Navigator.push(
                   context,
