@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mtaa_frontend/Models/Professor.dart';
+import 'package:mtaa_frontend/Screens/edit_professor_review_screen.dart';
 import 'package:mtaa_frontend/Screens/professor_review_screen.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -538,8 +539,8 @@ class ProfessorReview extends StatelessWidget {
                                             child: InkWell(
                                               splashColor: primaryColor[300], // splash color
                                               onTap: () {
-                                                // TODO EDIT PROFESSOR REVIEW SCREEN
-                                                // revertState(context, subj_id.toString());
+                                                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => EditProfessorReviewScreen(prof_id: prof_id.toString(),
+                                                  message: description, rating: rating.toString())));
                                               }, // button pressed
                                               child: Column(
                                                 mainAxisAlignment: MainAxisAlignment.center,
