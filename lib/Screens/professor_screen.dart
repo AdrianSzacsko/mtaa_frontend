@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mtaa_frontend/Models/Professor.dart';
+import 'package:mtaa_frontend/Screens/professor_review_screen.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Models/prof.dart';
 import '../Models/profile.dart';
 import '../constants.dart';
 import '../Screens/profile_page.dart';
@@ -50,22 +53,24 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
     padding: const EdgeInsets.symmetric(),
     child: Column(
       children: [
+        Divider(thickness: 2, color: secondaryColor[300]),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Text("Rating: ",
-                style: TextStyle(fontSize: 16,),
-              ),
-            ),
             const Icon(
               Icons.star_outlined,
               color: primaryColor,
             ),
+            const SizedBox(width: defaultPadding / 2),
+            const Align(
+              alignment: Alignment.bottomRight,
+              child: Text("Score: ",
+                style: TextStyle(fontSize: 16,),
+              ),
+            ),
             Align(
               alignment: Alignment.bottomRight,
-              child: Text(value,
+              child: Text(value + " /100",
                 style: TextStyle(fontSize: 16,),
               ),
             ),
@@ -89,6 +94,7 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
         ),
       );
 
+  /*
   loadData(List<dynamic> reviews) async {
     for (var item in reviews) {
       var author = await Profile().getProfile(item["user_id"].toString());
@@ -100,24 +106,26 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
       );
       setState(() {});
     }
-  }
+  }*/
 
 
   Future<List<Widget>> makeWidgets(List<List<String>> reviews) async {
     //List<Widget> widgets = List<Widget>.empty(growable: true);
     for (var item in reviews) {
-      var author = await Profile().getProfile(item[0].toString());
+      var author = await Profile().getProfile(item[1].toString());
       //var pic = await Profile().getProfilePic(item[0].toString());
-      averageRating = averageRating + int.parse(item[2]);
-      print("9999999999999999999999999999999999");
+      averageRating = averageRating + int.parse(item[3]);
+      //print("9999999999999999999999999999999999");
       print(item);
-      print("8888888888888888888888888888888888");
+      //print("8888888888888888888888888888888888");
       print(author);
-      print("7777777777777777777777777777777777");
+      //print("7777777777777777777777777777777777");
       allReviews.add(ProfessorReview(
+        prof_id: int.parse(item[0]),
+        user_id: int.parse(item[1]),
         name: author[0]["name"],
-        description: item[1],
-        rating: int.parse(item[2]),
+        description: item[2],
+        rating: int.parse(item[3]),
         image: "puzzle.png",
       ));
     }
@@ -141,7 +149,8 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
 
               return ListView(
                 physics: BouncingScrollPhysics(),
-                padding: const EdgeInsets.fromLTRB(2, 10, 2, 10),
+                padding: const EdgeInsets.fromLTRB(defaultPadding / 6, defaultPadding / 2,
+                    defaultPadding / 6, defaultPadding / 2),
                 children: <Widget>[
                   const SizedBox(height: defaultPadding * 2),
                   Center(
@@ -185,7 +194,9 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
                                 color: secondaryColor[300], // button color
                                 child: InkWell(
                                   splashColor: primaryColor[300], // splash color
-                                  onTap: () {}, // button pressed
+                                  onTap: () {
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProfessorReviewScreen(prof_id: professor.prof_id,)));
+                                  }, // button pressed
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: const <Widget>[
@@ -348,7 +359,7 @@ class ProfessorReview extends StatelessWidget {
             children: [
               const Align(
                 alignment: Alignment.bottomRight,
-                child: Text("Rating: ",
+                child: Text("Score: ",
                   style: TextStyle(fontSize: 14,),
                 ),
               ),
@@ -368,58 +379,199 @@ class ProfessorReview extends StatelessWidget {
     ),
   );
 
-  ProfessorReview({required this.name, required this.description, required this.rating, required this.image});
+  Future<bool> userIdMatch(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final user_id = prefs.getInt('user_id') ?? '';
+
+    if (user_id == id) {
+      return true;
+    }
+
+    return false;
+  }
+
+  ProfessorReview({required this.prof_id, required this.user_id, required this.name,
+    required this.description, required this.rating, required this.image});
+  final int prof_id;
+  final int user_id;
   final String name;
   final String description;
   final int rating;
   final String image;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0),
-          boxShadow: const <BoxShadow>[
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 10.0,
-              offset: Offset(0.0, 10.0),
+
+  static Future<bool> dialogConfirmation(
+      BuildContext context,
+      String title,
+      String content, {
+        String textNo = 'No',
+        String textYes = 'Yes',
+      }) async {
+    return await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              style: TextButton.styleFrom(
+                  primary: mainTextColor,
+                  elevation: 5,
+                  backgroundColor: secondaryColor),
+              child: Text(textNo, style: const TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 16,
+              ),),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              style: TextButton.styleFrom(
+                  primary: mainTextColor,
+                  elevation: 5,
+                  backgroundColor: primaryColor),
+              child: Text(textYes, style: const TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 16,
+              ),
+              ),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  void revertState(BuildContext context, String prof_id) async {
+    var resp = await ProfessorClass().getProfessor(prof_id);
+    print(resp);
+
+    var resp2 = await ProfessorClass().getProfessorReviews(prof_id);
+
+    List<List<String>> allReviews = <List<String>>[];
+    resp2?.forEach((item) {
+      //var author = await Profile().getProfile(item["user_id"].toString());
+      allReviews.add([item["id"].toString(), item["user_id"].toString(),
+        item["message"].toString(), item["rating"].toString()]);
+      //print(item);
+    });
+
+    var professor = Professor(
+      prof_id: prof_id,
+      name: resp[0]["name"],
+      reviews: allReviews,
+    );
+
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ProfessorScreen(),
+        // Pass the arguments as part of the RouteSettings. The
+        // DetailScreen reads the arguments from these settings.
+        settings: RouteSettings(
+          arguments: professor,
         ),
-        child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            elevation:5,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Align(
-                      child: Image.asset('assets/Images/' + image,
-                        height: 80.0,
-                        fit: BoxFit.cover,
-                      )
-                  ),
-                  Expanded(
-                      child: Container(
-                          padding: const EdgeInsets.all(defaultPadding / 2),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text(
-                                  name, style: const TextStyle(
-                                  fontWeight: FontWeight.bold
-                              )
-                              ),
-                              Text(description),
-                              buildInfo(rating.toString()),
-                            ],
-                          )
-                      )
-                  )
-                ]
-            )
-        )
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+        future: userIdMatch(user_id),
+    builder: (context, snapshot) {
+      if (snapshot.data == null) return CircularProgressIndicator();
+
+      return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.0),
+            boxShadow: const <BoxShadow>[
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10.0,
+                offset: Offset(0.0, 10.0),
+              ),
+            ],
+          ),
+          child: GestureDetector(
+            onLongPress: () async {
+              bool areIdsMatching = await userIdMatch(user_id);
+                if (areIdsMatching == true) {
+                  var res = await dialogConfirmation(context, "Delete review",
+                    "Are you sure you want to delete your review?");
+                  if (res == true) {
+                    await ProfessorClass().deleteReview(user_id.toString(), prof_id.toString());
+                    revertState(context, prof_id.toString());
+                  }
+                }
+                },
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              elevation:5,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Align(
+                        child: Image.asset('assets/Images/' + image,
+                          height: 80.0,
+                          fit: BoxFit.cover,
+                        )
+                    ),
+                    Expanded(
+                        child: Container(
+                            padding: const EdgeInsets.all(defaultPadding / 2),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                if (snapshot.data == true)
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                    child: Align(
+                                      alignment: Alignment.topRight,
+                                      child: SizedBox.fromSize(
+                                        size: Size(32, 32), // button width and height
+                                        child: ClipOval(
+                                          child: Material(
+                                            color: secondaryColor[300], // button color
+                                            child: InkWell(
+                                              splashColor: primaryColor[300], // splash color
+                                              onTap: () {
+                                                // TODO EDIT PROFESSOR REVIEW SCREEN
+                                                // revertState(context, subj_id.toString());
+                                              }, // button pressed
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: const <Widget>[
+                                                  Icon(Icons.edit_outlined), // icon
+                                                  //Text("Add"), // text
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                                Text(
+                                    name, style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16,
+                                )
+                                ),
+                                Text(description, style: const TextStyle(fontSize: 14)),
+                                _ProfessorScreenState().buildInfo(rating.toString()),
+                              ],
+                            )
+                        )
+                    )
+                  ]
+              )
+          ),
+          ),
+      );
+    }
     );
   }
 }
