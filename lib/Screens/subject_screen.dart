@@ -209,7 +209,8 @@ class _SubjectScreenState extends State<SubjectScreen> {
 
             return ListView(
               physics: BouncingScrollPhysics(),
-              padding: const EdgeInsets.fromLTRB(2, 10, 2, 10),
+              padding: const EdgeInsets.fromLTRB(defaultPadding / 6, defaultPadding / 2,
+                  defaultPadding / 6, defaultPadding / 2),
               children: <Widget>[
                 const SizedBox(height: defaultPadding * 2),
                 Center(

@@ -146,13 +146,14 @@ class SearchScreenState extends State<SearchScreen> {
                 List<List<String>> allReviews = <List<String>>[];
                 resp2?.forEach((item) {
                   //var author = await Profile().getProfile(item["user_id"].toString());
-                  allReviews.add([item["user_id"].toString(),
+                  allReviews.add([item["id"].toString(), item["user_id"].toString(),
                     item["message"].toString(), item["rating"].toString()]);
                   //print(item);
                 });
 
 
                 var professor = Professor(
+                  prof_id: row[2],
                   name: resp[0]["name"],
                   reviews: allReviews,
                 );
