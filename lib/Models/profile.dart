@@ -37,18 +37,40 @@ class Profile with ChangeNotifier {
     return null;
   }
 
+  check_exception(stream){
+    bool val = false;
+    stream.addListener(ImageStreamListener((info, call) {
+
+    },
+        onError: (dynamic exception, StackTrace? stackTrace) {
+          print('Error is $exception , stack is $stackTrace');
+          Exception('Error is $exception');
+          val = true;
+        }));
+    return val;
+  }
+
   Future<dynamic> getProfilePic(String profile_id) async {
+    Response response;
+
+    var dio = Dio();
+    //dio.options.headers['content-Type'] = 'image/jpeg';
 
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
+    dio.options.headers['authorization'] = "Bearer " + token;
+    dio.options.headers['responseType'] = ResponseType.plain;
 
     Map<String, String> headersMap = {
       'authorization' : "Bearer " + token,
       //'responseType' : ResponseType.plain
     };
 
+    ImageProvider img = Image.network('http://10.0.2.2:8000/profile/' + profile_id + "/pic", headers: headersMap,).image;
+
     try {
-      ImageProvider img = Image.network('http://10.0.2.2:8000/profile/' + profile_id + "/pic", headers: headersMap,).image;
+      response = await dio.get('http://10.0.2.2:8000/profile/' + profile_id + "/pic");
+      print(response.data);
       return img;
     }
     catch (e) {
@@ -59,7 +81,6 @@ class Profile with ChangeNotifier {
   }
 
     Future<dynamic> putProfilePic({
-      required String profile_id,
       required Uint8List bytes,
   }) async {
     var dio = Dio();
@@ -94,4 +115,28 @@ class Profile with ChangeNotifier {
 
     return null;
   }
+
+  Future<dynamic> deleteProfilePic() async {
+    Response response;
+
+    var dio = Dio();
+    dio.options.headers['content-Type'] = 'application/json';
+
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    dio.options.headers['authorization'] = "Bearer " + token;
+
+    try {
+      response = await dio.put('http://10.0.2.2:8000/profile/delete_pic');
+      print(response.data);
+      return response.data;
+    }
+    catch (e) {
+      print(e);
+    }
+
+    return null;
+  }
+
+
 }

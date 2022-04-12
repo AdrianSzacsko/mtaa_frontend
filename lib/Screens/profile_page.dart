@@ -97,13 +97,13 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   ImageProvider returnImage(){
-    if (file == null) {
+    if (newFile == null) {
       return const AssetImage("assets/Images/profile-unknown.png");
     }
     else {
       //return Image.file(File(file.files.first.path.toString())).image;
       //return Image.memory(Uint8List.fromList(file.files.first.bytes!.toList())).image;
-      return file;
+      return newFile;
     }
   }
 
@@ -182,7 +182,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Navigator.pop(context, false);
                                 }
                                 else {
-                                  Profile().putProfilePic(profile_id: '1', bytes: newFileBytes);
+                                  Profile().putProfilePic(bytes: newFileBytes);
                                   Navigator.pop(context, false);
                                 }
                               },
@@ -203,6 +203,28 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: TextButton(
                               onPressed: () => Navigator.pop(context, false),
                               child: const Text("Abort",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: secondaryColor,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: TextButton(
+                              onPressed: () {
+                                Profile().deleteProfilePic();
+                                newFileBytes.clear();
+                                newFile = const AssetImage("assets/Images/profile-unknown.png");
+                                file = const AssetImage("assets/Images/profile-unknown.png");
+                                Navigator.pop(context, false);
+                              } ,
+                              child: const Text("Delete",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
