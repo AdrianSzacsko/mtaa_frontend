@@ -155,9 +155,12 @@ class _ProfilePageState extends State<ProfilePage> {
     showDialog(context: context,
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
-            return Dialog(
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
               alignment: Alignment.center,
-              child: Container(
+              content: Container(
                 margin: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -177,107 +180,92 @@ class _ProfilePageState extends State<ProfilePage> {
                         (await rootBundle.load("assets/Images/profile-unknown.png")).buffer.asUint8List()).image,*/
                       ),
                     ),
-
+                    /*
                     const Align(
                       alignment: Alignment.topCenter,
                       child: Text("Please insert an image"),
-                    ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        margin: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          color: Colors.lightBlueAccent,
-                          borderRadius: BorderRadius.circular(12),
+                    ),*/
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                          Container(
+                            margin: const EdgeInsets.all(defaultPadding / 4),
+                            child: FloatingActionButton(
+                              backgroundColor: tertiaryColor[300],
+                              onPressed: () async {
+                                final image = await FilePicker.platform.pickFiles(
+                                  withData: true,
+                                  //type: FileType.custom,
+                                  //allowedExtensions: ['jpg','png'],
+                                );
+                                if (image == null) return;
+                                newFile = Image.memory(image.files.first.bytes!).image;
+                                newFileBytes = image.files.first.bytes!;
+                                setState(() {});
+                              },
+                              child: const Icon(
+                                Icons.add_outlined,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        child: TextButton(
+                          Container(
+                              margin: const EdgeInsets.all(defaultPadding / 4),
+                              /*
+                          decoration: BoxDecoration(
+                            color: secondaryColor,
+                            borderRadius: BorderRadius.circular(12),
+                          ),*/
+                              child: FloatingActionButton(
+                                backgroundColor: secondaryColor[300],
+                                onPressed: () {
+                                  Profile().deleteProfilePic();
+                                  /*
+                              if (newFileBytes.isNotEmpty){
+                                newFileBytes.clear();
+                              }*/
 
-                        onPressed: () async {
-                          final image = await FilePicker.platform.pickFiles(
-                            withData: true,
-                            //type: FileType.custom,
-                            //allowedExtensions: ['jpg','png'],
-                          );
-                          if (image == null) return;
-                            newFile = Image.memory(image.files.first.bytes!).image;
-                            newFileBytes = image.files.first.bytes!;
-                          setState(() {});
-                          },
-                        child: const Text("Select image", style: TextStyle(color: Colors.black),),
+                                  newFile = const AssetImage("assets/Images/profile-unknown.png");
+                                  file = const AssetImage("assets/Images/profile-unknown.png");
+                                  revertState(context);
+                                } ,
+                                child: const Icon(
+                                  Icons.delete_outlined,
+                                  color: Colors.white,
+                                ),
+                              )
+                          ),
+
+                        ],
                         ),
-                      ),
-                    ),
 
-                    const SizedBox(height: 20,),
+                    const SizedBox(height: defaultPadding * 2),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          margin: const EdgeInsets.all(2),
+                          margin: const EdgeInsets.all(defaultPadding / 8),/*
                           decoration: BoxDecoration(
                             color: secondaryColor,
                             borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: TextButton(
-                              onPressed: (){
-                                if (file == newFile || newFileBytes.isEmpty) {
-                                }
-                                else {
-                                  Profile().putProfilePic(bytes: newFileBytes);
-                                }
+                          ),*/
+                          child: FloatingActionButton(
+                            backgroundColor: primaryColor[300],
+                            onPressed: (){
+                              if (file == newFile || newFileBytes.isEmpty) {
+                              }
+                              else {
+                                Profile().putProfilePic(bytes: newFileBytes);
+                              }
 
-                                revertState(context);
+                              revertState(context);
 
-                              },
-                              child: const Text("Apply",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: primaryColor,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: TextButton(
-                              onPressed: () => Navigator.pop(context, false),
-                              child: const Text("Abort",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: secondaryColor,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: TextButton(
-                              onPressed: () {
-                                Profile().deleteProfilePic();
-                                /*
-                                if (newFileBytes.isNotEmpty){
-                                  newFileBytes.clear();
-                                }*/
-
-                                newFile = const AssetImage("assets/Images/profile-unknown.png");
-                                file = const AssetImage("assets/Images/profile-unknown.png");
-                                revertState(context);
-                              } ,
-                              child: const Text("Delete",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
+                            },
+                            child: const Icon(
+                              Icons.check_outlined,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],
@@ -299,6 +287,7 @@ class _ProfilePageState extends State<ProfilePage> {
       color: primaryColor,
       all: 8,
       child: IconButton(
+        padding: EdgeInsets.zero,
         constraints: const BoxConstraints(maxHeight: 16, maxWidth: 16),
         onPressed: () {
           selectFile(context);
