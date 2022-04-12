@@ -19,7 +19,7 @@ class Search with ChangeNotifier {
 
 
     try {
-      response = await dio.get('http://10.0.2.2:8000/search?search_string=' + searchString);
+      response = await dio.get(urlKey + 'search?search_string=' + searchString);
       print(response.data);
       return response.data;
     }

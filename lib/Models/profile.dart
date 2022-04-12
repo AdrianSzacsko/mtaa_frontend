@@ -13,6 +13,8 @@ import 'dart:convert';
 import 'package:http_parser/http_parser.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../key.dart';
+
 
 class Profile with ChangeNotifier {
   Future<dynamic> getProfile(String profile_id) async {
@@ -26,7 +28,7 @@ class Profile with ChangeNotifier {
     dio.options.headers['authorization'] = "Bearer " + token;
 
     try {
-      response = await dio.get('http://10.0.2.2:8000/profile/' + profile_id);
+      response = await dio.get(urlKey + 'profile/' + profile_id);
       print(response.data);
       return response.data;
     }
@@ -66,10 +68,10 @@ class Profile with ChangeNotifier {
       //'responseType' : ResponseType.plain
     };
 
-    ImageProvider img = Image.network('http://10.0.2.2:8000/profile/' + profile_id + "/pic", headers: headersMap,).image;
+    ImageProvider img = Image.network(urlKey + 'profile/' + profile_id + "/pic", headers: headersMap,).image;
 
     try {
-      response = await dio.get('http://10.0.2.2:8000/profile/' + profile_id + "/pic");
+      response = await dio.get(urlKey + 'profile/' + profile_id + "/pic");
       print(response.data);
       return img;
     }
@@ -105,7 +107,7 @@ class Profile with ChangeNotifier {
     dio.options.headers['responseType'] = ResponseType.plain;
 
     try {
-      Response response = await dio.put('http://10.0.2.2:8000/profile/pic', data: formData);
+      Response response = await dio.put(urlKey + 'profile/pic', data: formData);
 
       print('Profile updated: ${response.data}');
 
@@ -127,7 +129,7 @@ class Profile with ChangeNotifier {
     dio.options.headers['authorization'] = "Bearer " + token;
 
     try {
-      response = await dio.put('http://10.0.2.2:8000/profile/delete_pic');
+      response = await dio.put(urlKey + 'profile/delete_pic');
       print(response.data);
       return response.data;
     }

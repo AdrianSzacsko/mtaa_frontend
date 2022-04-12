@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../key.dart';
+
 
 class SubjectClass with ChangeNotifier {
   Future<dynamic> getSubject(String subj_id) async {
@@ -16,7 +18,7 @@ class SubjectClass with ChangeNotifier {
     dio.options.headers['authorization'] = "Bearer " + token;
 
     try {
-      response = await dio.get('http://10.0.2.2:8000/subj/' + subj_id);
+      response = await dio.get(urlKey + 'subj/' + subj_id);
       print(response.data);
       return response.data;
     }
@@ -38,7 +40,7 @@ class SubjectClass with ChangeNotifier {
     dio.options.headers['authorization'] = "Bearer " + token;
 
     try {
-      response = await dio.get('http://10.0.2.2:8000/subj/' + subj_id + "/reviews");
+      response = await dio.get(urlKey + 'subj/' + subj_id + "/reviews");
       print(response.data);
       return response.data;
     }
@@ -58,7 +60,7 @@ class SubjectClass with ChangeNotifier {
     dio.options.headers['authorization'] = "Bearer " + token;
 
     try {
-      var response = await dio.post('http://10.0.2.2:8000/subj/', data: {
+      var response = await dio.post(urlKey + 'subj/', data: {
         'message': message,
         'difficulty': int.parse(difficulty),
         'usability': int.parse(usability),
@@ -86,7 +88,7 @@ class SubjectClass with ChangeNotifier {
     dio.options.headers['authorization'] = "Bearer " + token;
 
     try {
-      await dio.put('http://10.0.2.2:8000/subj/', data: {
+      await dio.put(urlKey + 'subj/', data: {
         'message': message,
         'difficulty': int.parse(difficulty),
         'usability': int.parse(usability),
@@ -108,7 +110,7 @@ class SubjectClass with ChangeNotifier {
     dio.options.headers['authorization'] = "Bearer " + token;
 
     try {
-      await dio.delete('http://10.0.2.2:8000/subj/delete_review', data: {
+      await dio.delete(urlKey + 'subj/delete_review', data: {
         "user_id": user_id,
         "subj_id": subj_id
       });
