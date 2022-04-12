@@ -42,9 +42,13 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
 
   Widget buildName(String name) => Column(
     children: [
-      Text(
-        name,
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+      Align(
+        alignment: Alignment.topCenter,
+        child: Text(
+          name,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
       ),
       const SizedBox(height: 4),
     ],
@@ -153,30 +157,44 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
                 padding: const EdgeInsets.fromLTRB(defaultPadding / 6, defaultPadding / 2,
                     defaultPadding / 6, defaultPadding / 2),
                 children: <Widget>[
-                  const SizedBox(height: defaultPadding * 2),
-                  Center(
-                    child: Stack(
+                  Padding(
+                    padding: const EdgeInsets.all(defaultPadding),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                      ),
+                    elevation:10,
+                    shadowColor: primaryColor[300],
+                    child: Column(
                       children: [
-                       buildImage(),
+                        const SizedBox(height: defaultPadding * 2),
+                        Center(
+                          child: Stack(
+                            children: [
+                              buildImage(),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: defaultPadding * 2),
+                        buildName(professor.name),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            buildButton(averageRating != 0 ? ((averageRating ~/ allReviews.length).toString()) : "50"),
+                          ],
+                        ),
+                        const SizedBox(height: defaultPadding * 2),
                       ],
                     ),
-                   ),
-                  const SizedBox(height: defaultPadding * 2),
-                  buildName(professor.name),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      buildButton(averageRating != 0 ? ((averageRating ~/ allReviews.length).toString()) : "50"),
-                    ],
+                    ),
                   ),
-                  const SizedBox(height: defaultPadding * 2),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Padding(
                         padding: EdgeInsets.fromLTRB(defaultPadding * 2,
                             defaultPadding * 2, defaultPadding * 2,
-                            defaultPadding),
+                            0),
                         child: Text(
                           'Reviews',
                           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -185,28 +203,19 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(defaultPadding * 2,
                             defaultPadding * 2, defaultPadding * 2,
-                            defaultPadding),
+                            0),
                         child: Align(
                           alignment: Alignment.bottomRight,
-                          child: SizedBox.fromSize(
-                            size: Size(56, 56), // button width and height
-                            child: ClipOval(
-                              child: Material(
-                                color: secondaryColor[300], // button color
-                                child: InkWell(
-                                  splashColor: primaryColor[300], // splash color
-                                  onTap: () {
-                                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProfessorReviewScreen(prof_id: professor.prof_id,)));
-                                  }, // button pressed
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const <Widget>[
-                                      Icon(Icons.add_outlined), // icon
-                                      //Text("Add"), // text
-                                    ],
-                                  ),
-                                ),
-                              ),
+                          child: FloatingActionButton(
+                            elevation: 10,
+                            backgroundColor: secondaryColor[300],
+                            splashColor: primaryColor[300],
+                            onPressed: (){
+                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProfessorReviewScreen(prof_id: professor.prof_id,)));
+                            },
+                            child: const Icon(
+                              Icons.add_outlined,
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -412,28 +421,42 @@ class ProfessorReview extends StatelessWidget {
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          title: Text(title),
-          content: Text(content),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          alignment: Alignment.center,
+          title: Text(title, textAlign: TextAlign.center),
+          content: Text(content, textAlign: TextAlign.center),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              style: TextButton.styleFrom(
-                  primary: mainTextColor,
-                  elevation: 5,
-                  backgroundColor: secondaryColor),
-              child: Text(textNo, style: const TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 16,
-              ),),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              style: TextButton.styleFrom(
-                  primary: mainTextColor,
-                  elevation: 5,
-                  backgroundColor: primaryColor),
-              child: Text(textYes, style: const TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 16,
-              ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, defaultPadding),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    FloatingActionButton(
+                      elevation: 10,
+                      backgroundColor: primaryColor[300],
+                      splashColor: secondaryColor[300],
+                      onPressed: () => Navigator.pop(context, true),
+                      child: const Icon(
+                        Icons.check_outlined,
+                        color: Colors.white,
+                      ),
+                    ),
+                    FloatingActionButton(
+                      elevation: 10,
+                      backgroundColor: secondaryColor[300],
+                      splashColor: primaryColor[300],
+                      onPressed: () => Navigator.pop(context, false),
+                      child: const Icon(
+                        Icons.cancel_outlined,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -481,7 +504,7 @@ class ProfessorReview extends StatelessWidget {
     return FutureBuilder<bool>(
         future: userIdMatch(user_id),
     builder: (context, snapshot) {
-      if (snapshot.data == null) return CircularProgressIndicator();
+      if (snapshot.data == null) return const CircularProgressIndicator();
 
       return Container(
           decoration: BoxDecoration(
@@ -506,69 +529,70 @@ class ProfessorReview extends StatelessWidget {
                   }
                 }
                 },
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              elevation:5,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Align(
-                        child: Image.asset('assets/Images/' + image,
-                          height: 80.0,
-                          fit: BoxFit.cover,
-                        )
-                    ),
-                    Expanded(
-                        child: Container(
-                            padding: const EdgeInsets.all(defaultPadding / 2),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                if (snapshot.data == true)
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                    child: Align(
-                                      alignment: Alignment.topRight,
-                                      child: SizedBox.fromSize(
-                                        size: Size(32, 32), // button width and height
-                                        child: ClipOval(
-                                          child: Material(
-                                            color: secondaryColor[300], // button color
-                                            child: InkWell(
-                                              splashColor: primaryColor[300], // splash color
-                                              onTap: () {
-                                                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => EditProfessorReviewScreen(prof_id: prof_id.toString(),
-                                                  message: description, rating: rating.toString())));
-                                              }, // button pressed
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: const <Widget>[
-                                                  Icon(Icons.edit_outlined), // icon
-                                                  //Text("Add"), // text
-                                                ],
-                                              ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                elevation:10,
+                shadowColor: primaryColor[300],
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(defaultPadding),
+                        child: Align(
+                            child: Image.asset('assets/Images/' + image,
+                              height: 80.0,
+                              fit: BoxFit.cover,
+                            )
+                        ),
+                      ),
+                      Expanded(
+                          child: Container(
+                              padding: const EdgeInsets.all(defaultPadding / 2),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  if (snapshot.data == true)
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                      child: Align(
+                                        alignment: Alignment.topRight,
+                                        child: SizedBox.fromSize(
+                                          size: Size(28, 28), // button width and height
+                                          child: FloatingActionButton(
+                                            elevation: 10,
+                                            backgroundColor: secondaryColor[300],
+                                            splashColor: primaryColor[300],
+                                            onPressed: (){
+                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => EditProfessorReviewScreen(prof_id: prof_id.toString(),
+                                                message: description, rating: rating.toString())));
+                                            },
+                                            child: const Icon(
+                                              Icons.edit_outlined,
+                                              color: Colors.white,
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
 
-                                Text(
-                                    name, style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16,
-                                )
-                                ),
-                                Text(description, style: const TextStyle(fontSize: 14)),
-                                _ProfessorScreenState().buildInfo(rating.toString()),
-                              ],
-                            )
-                        )
-                    )
-                  ]
-              )
+                                  Text(
+                                      name, style: const TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: 16,
+                                  )
+                                  ),
+                                  Text(description, style: const TextStyle(fontSize: 14)),
+                                  _ProfessorScreenState().buildInfo(rating.toString()),
+                                ],
+                              )
+                          )
+                      )
+                    ]
+                )
+            ),
           ),
           ),
       );
