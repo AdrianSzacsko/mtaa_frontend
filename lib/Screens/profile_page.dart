@@ -13,51 +13,6 @@ import '../Models/profile.dart';
 import '../UI/appbar.dart';
 import '../constants.dart';
 
-/*
-class UserPreferences {
-  static const myUser = User(
-    email: 'sarah.abs@gmail.com',
-    name: 'Sarah Abs',
-    comments:
-    '5',
-    reg_date: "2022-04-05",
-    study_year: "2",
-    image:
-    'https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80',
-  );
-}*/
-
-/*
-class ProfileWidget extends StatelessWidget {
-  final Image image;
-  final bool isEdit;
-  final VoidCallback onClicked;
-
-  const ProfileWidget({
-    Key? key,
-    required this.image,
-    this.isEdit = false,
-    required this.onClicked,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.primary;
-
-    return Center(
-      child: Stack(
-        children: [
-          buildImage(),
-          Positioned(
-            bottom: 0,
-            right: 4,
-            child: buildEditIcon(color),
-          ),
-        ],
-      ),
-    );
-  }
-}*/
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -66,7 +21,9 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
 
-  var file;
+  late ImageProvider file;
+  late ImageProvider newFile;
+  late Uint8List newFileBytes;
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +79,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget buildImage(User user) {
     //ImageProvider<Object> image = const AssetImage("assets/Images/profile-unknown.png");
-
+    file = user.image;
+    newFile = user.image;
 
     return ClipOval(
       child: Material(
@@ -139,13 +97,13 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   ImageProvider returnImage(){
-    if (file == null ||file.files.isEmpty) {
+    if (file == null) {
       return const AssetImage("assets/Images/profile-unknown.png");
     }
     else {
       //return Image.file(File(file.files.first.path.toString())).image;
       //return Image.memory(Uint8List.fromList(file.files.first.bytes!.toList())).image;
-      return Image.memory(file.files.first.bytes!).image;
+      return file;
     }
   }
 
@@ -198,7 +156,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             //allowedExtensions: ['jpg','png'],
                           );
                           if (image == null) return;
-                          file = image;
+                            newFile = Image.memory(image.files.first.bytes!).image;
+                            newFileBytes = image.files.first.bytes!;
                           setState(() {});
                           },
                         child: const Text("Select image", style: TextStyle(color: Colors.black),),
@@ -219,11 +178,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           child: TextButton(
                               onPressed: (){
-                                if (file == null ||file.files.isEmpty) {
+                                if (file == newFile || newFileBytes.isEmpty) {
                                   Navigator.pop(context, false);
                                 }
                                 else {
-                                  Profile().putProfilePic(profile_id: '1', bytes: file.files.first.bytes);
+                                  Profile().putProfilePic(profile_id: '1', bytes: newFileBytes);
                                   Navigator.pop(context, false);
                                 }
                               },

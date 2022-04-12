@@ -38,26 +38,17 @@ class Profile with ChangeNotifier {
   }
 
   Future<dynamic> getProfilePic(String profile_id) async {
-    Response response;
-
-    var dio = Dio();
-    //dio.options.headers['content-Type'] = 'image/jpeg';
 
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
-    dio.options.headers['authorization'] = "Bearer " + token;
-    dio.options.headers['responseType'] = ResponseType.plain;
 
     Map<String, String> headersMap = {
       'authorization' : "Bearer " + token,
       //'responseType' : ResponseType.plain
     };
 
-    ImageProvider img = Image.network('http://10.0.2.2:8000/profile/' + profile_id + "/pic", headers: headersMap,).image;
-
     try {
-      response = await dio.get('http://10.0.2.2:8000/profile/' + profile_id + "/pic");
-      print(response.data);
+      ImageProvider img = Image.network('http://10.0.2.2:8000/profile/' + profile_id + "/pic", headers: headersMap,).image;
       return img;
     }
     catch (e) {
