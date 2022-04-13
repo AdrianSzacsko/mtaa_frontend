@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/Subject.dart';
 import '../Models/profile.dart';
 import '../Models/subj.dart';
+import '../UI/loading_screen.dart';
 import '../constants.dart';
 
 import 'edit_subject_review_screen.dart';
@@ -202,7 +203,11 @@ class _SubjectScreenState extends State<SubjectScreen> {
         body: FutureBuilder(
           future: makeWidgets(subject.reviews),
           builder: (context, snapshot) {
-            if (snapshot.data == null) return CircularProgressIndicator();
+            if (snapshot.data == null) {
+              return circularLoadingScreen(true);
+            } else {
+              circularLoadingScreen(false);
+            }
 
             return ListView(
               physics: BouncingScrollPhysics(),
@@ -447,7 +452,11 @@ class SubjectReview extends StatelessWidget {
     return FutureBuilder<bool>(
       future: userIdMatch(user_id),
       builder: (context, snapshot) {
-        if (snapshot.data == null) return const CircularProgressIndicator();
+        if (snapshot.data == null) {
+          return circularLoadingScreen(true);
+        } else {
+          circularLoadingScreen(false);
+        }
 
         return Container(
           decoration: BoxDecoration(

@@ -3,6 +3,7 @@ import 'package:mtaa_frontend/Models/Professor.dart';
 import 'package:mtaa_frontend/Screens/edit_professor_review_screen.dart';
 import 'package:mtaa_frontend/Screens/professor_review_screen.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
+import 'package:mtaa_frontend/UI/loading_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/prof.dart';
@@ -150,7 +151,11 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
         body: FutureBuilder(
           future: makeWidgets(professor.reviews),
           builder: (context, snapshot) {
-            if (snapshot.data == null) return CircularProgressIndicator();
+            if (snapshot.data == null) {
+              return circularLoadingScreen(true);
+            } else {
+              circularLoadingScreen(false);
+            }
 
               return ListView(
                 physics: BouncingScrollPhysics(),
@@ -504,7 +509,11 @@ class ProfessorReview extends StatelessWidget {
     return FutureBuilder<bool>(
         future: userIdMatch(user_id),
     builder: (context, snapshot) {
-      if (snapshot.data == null) return const CircularProgressIndicator();
+      if (snapshot.data == null) {
+        return circularLoadingScreen(true);
+      } else {
+        circularLoadingScreen(false);
+      }
 
       return Container(
           decoration: BoxDecoration(
