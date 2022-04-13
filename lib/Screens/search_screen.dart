@@ -32,7 +32,8 @@ class SearchScreen extends StatefulWidget {
 }
 
 class SearchScreenState extends State<SearchScreen> {
-  bool _isloading = false;
+  bool _isloadingLine = false;
+  bool _isloadingCircle = false;
 
   ScrollController scrollController = ScrollController();
 
@@ -45,12 +46,12 @@ class SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
-    dataLoadFunction();
+    dataLoadFunctionLine();
   }
 
-  dataLoadFunction() async {
+  dataLoadFunctionLine() async {
     setState(() {
-      _isloading = true;
+      _isloadingLine = true;
     });
     print(searchController);
     //await Future.delayed(const Duration(seconds: 2));
@@ -66,7 +67,7 @@ class SearchScreenState extends State<SearchScreen> {
     print(list_of_rows);
     // list_of_rows.add(['Marko Stahovec','USER','5']);
     setState(() {
-      _isloading = false;
+      _isloadingLine = false;
     });
   }
 
@@ -112,6 +113,9 @@ class SearchScreenState extends State<SearchScreen> {
                 color: primaryColor[300]),
 
             onTap: () async {
+              setState(() {
+                _isloadingCircle = true;
+              });
               if (row[1] == "USER") {
                 var resp = await Profile().getProfile(row[2]);
                 print(resp);
@@ -213,6 +217,9 @@ class SearchScreenState extends State<SearchScreen> {
                   ),
                 );
               }
+              setState(() {
+                _isloadingCircle = false;
+              });
             }
         ),
       ),
@@ -258,7 +265,7 @@ class SearchScreenState extends State<SearchScreen> {
                         //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                         onPressed: () {
                           setState(() {
-                            dataLoadFunction();
+                            dataLoadFunctionLine();
                           });
                           print(searchController.text);
                           searchController.text = '';
@@ -281,7 +288,8 @@ class SearchScreenState extends State<SearchScreen> {
                 ],
               ),
             ),
-            linearLoadingScreen(_isloading),
+            linearLoadingScreen(_isloadingLine),
+            circularLoadingScreen(_isloadingCircle),
           ],
         ),
     );
