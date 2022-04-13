@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:core';
 import '../../Models/User.dart';
 import '../../Models/profile.dart';
+import '../../constants.dart';
 import '../getName.dart';
 import 'signaling.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
@@ -214,37 +215,45 @@ class _CallSampleState extends State<CallSample> {
 
   _buildRow(context, peer) {
     var self = (peer['id'] == _selfId);
-    return ListBody(children: <Widget>[
-      ListTile(
-        title: Text(peer['name']),
-        onTap: null,
-        trailing: SizedBox(
-            width: 100.0,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(self ? Icons.close : Icons.videocam,
-                        color: self ? Colors.grey : Colors.black),
-                    onPressed: () => _invitePeer(context, peer['id'], false),
-                    tooltip: 'Video calling',
-                  ),
-                  IconButton(
-                    icon: Icon(self ? Icons.close : Icons.screen_share,
-                        color: self ? Colors.grey : Colors.black),
-                    onPressed: () => _invitePeer(context, peer['id'], true),
-                    tooltip: 'Screen sharing',
-                  )
-                ])),
-        //subtitle: Text('[' + peer['user_agent'] + ']'),
+    return Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25),
+            ),
+      child: Padding(
+        padding: EdgeInsets.all(5),
+        child: ListTile(
+          title: Text(peer['name'],
+              style: const TextStyle(fontSize: 18.0, color: mainTextColor)
+          ),
+          onTap: null,
+          trailing: SizedBox(
+              width: 100.0,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(self ? Icons.close : Icons.videocam,
+                          color: self ? secondaryColor[300] : primaryColor[300]),
+                      onPressed: () => _invitePeer(context, peer['id'], false),
+                      tooltip: 'Video calling',
+                    ),
+                    IconButton(
+                      icon: Icon(self ? Icons.close : Icons.screen_share,
+                          color: self ? secondaryColor[300] : primaryColor[300]),
+                      onPressed: () => _invitePeer(context, peer['id'], true),
+                      tooltip: 'Screen sharing',
+                    )
+                  ])),
+          //subtitle: Text('[' + peer['user_agent'] + ']'),
+        ),
       ),
-      Divider()
-    ]);
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: myAppBar(context),
       bottomNavigationBar: myBottomAppBar(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
