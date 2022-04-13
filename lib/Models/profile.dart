@@ -140,5 +140,19 @@ class Profile with ChangeNotifier {
     return null;
   }
 
+  Future<void> deleteProfile() async {
+    var dio = Dio();
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    dio.options.headers['authorization'] = "Bearer " + token;
+
+    try {
+      await dio.delete(urlKey + 'profile/');
+    }
+    catch (e) {
+      print(e);
+    }
+  }
+
 
 }
