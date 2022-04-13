@@ -1,12 +1,14 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:mtaa_frontend/Screens/info_screen.dart';
 import 'package:mtaa_frontend/Screens/profile_screen.dart';
 //import 'package:flutter/rendering.dart';
 import 'package:mtaa_frontend/UI/inputField.dart';
 import 'package:mtaa_frontend/Screens/search_screen.dart';
 import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
 import 'package:mtaa_frontend/webrtc/call_sample/call_sample.dart';
+import 'package:video_player/video_player.dart';
 
 import '../UI/appbar.dart';
 import '../constants.dart';
@@ -133,6 +135,7 @@ addIpAddress(context){
             TextButton(
               onPressed: () {
                 //TODO add info
+                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const InfoScreen()));
               },
               child: Container(
                 alignment: Alignment.center,
