@@ -29,6 +29,7 @@ class _CallSampleState extends State<CallSample> {
   Session? _session;
 
   bool _waitAccept = false;
+  bool isMuted = false;
 
   // ignore: unused_element
   _CallSampleState();
@@ -140,18 +141,25 @@ class _CallSampleState extends State<CallSample> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("title"),
-          content: Text("accept?"),
+          title: const Text("Incoming call"),
           actions: <Widget>[
-            TextButton(
-              child: Text("reject"),
-              onPressed: () => Navigator.of(context).pop(false),
+            FloatingActionButton(
+              backgroundColor: primaryColor[300],
+              heroTag: null,
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Icon(
+                  Icons.check_outlined,
+                  color: Colors.white,
+                ),
             ),
-            TextButton(
-              child: Text("accept"),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
+            FloatingActionButton(
+              backgroundColor: secondaryColor[300],
+              heroTag: null,
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Icon(
+                Icons.cancel_outlined,
+                color: Colors.white,
+              ),
             ),
           ],
         );
@@ -164,13 +172,17 @@ class _CallSampleState extends State<CallSample> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("title"),
-          content: Text("waiting"),
+          title: Text("Calling..."),
           actions: <Widget>[
-            TextButton(
-              child: Text("cancel"),
+            FloatingActionButton(
+              backgroundColor: secondaryColor[300],
+              child: const Icon(
+                Icons.cancel_outlined,
+                color: Colors.white,
+                ),
               onPressed: () {
-                Navigator.of(context).pop(false);
+                //Navigator.of(context).pop(false);
+                print("decline");
                 _hangUp();
                 },
 
@@ -210,7 +222,7 @@ class _CallSampleState extends State<CallSample> {
   }
 
   _muteMic() {
-    _signaling?.muteMic();
+    return _signaling?.muteMic();
   }
 
   _buildRow(context, peer) {
@@ -264,18 +276,25 @@ class _CallSampleState extends State<CallSample> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     FloatingActionButton(
+                      heroTag: null,
                       child: const Icon(Icons.switch_camera),
                       onPressed: _switchCamera,
                     ),
                     FloatingActionButton(
+                      heroTag: null,
                       onPressed: _hangUp,
                       tooltip: 'Hangup',
                       child: Icon(Icons.call_end),
                       backgroundColor: Colors.pink,
                     ),
                     FloatingActionButton(
-                      child: const Icon(Icons.mic_off),
-                      onPressed: _muteMic,
+                      heroTag: null,
+                      child: isMuted ? Icon(Icons.mic_off) : Icon(Icons.mic),
+                      onPressed: () {
+                        setState(() { //TODO verify if needed
+                          isMuted = _muteMic as bool;
+                        });
+                        }
                     )
                   ]))
           : null,
