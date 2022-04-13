@@ -363,6 +363,8 @@ class SearchScreenState extends State<SearchScreen> {
             MaterialPageRoute<void>(builder: (BuildContext context) => const SignInScreen()),
             ModalRoute.withName('/'),
           );
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.clear();
         }
         return result;
       },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/profile.dart';
 import '../UI/appbar.dart';
@@ -178,7 +179,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 var res = await dialogConfirmation(context, "Log Out",
                     "Are you sure you want to log out?");
                 if (res == true) {
-                  //await Profile().deleteProfile();
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  await prefs.clear();
                   Navigator.pushAndRemoveUntil<void>(
                     context,
                     MaterialPageRoute<void>(builder: (BuildContext context) => const SignInScreen()),
@@ -193,6 +195,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 var res = await dialogConfirmation(context, "Delete account",
                   "Are you sure you want to delete your account?");
                 if (res == true) {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  await prefs.clear();
                   await Profile().deleteProfile();
                   Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const SignInScreen()));
                 }
