@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mtaa_frontend/UI/appbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:core';
+import '../../Models/User.dart';
+import '../../Models/profile.dart';
+import '../getName.dart';
 import 'signaling.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 class CallSample extends StatefulWidget {
   static String tag = 'call_sample';
   final String host;
+
   CallSample({required this.host});
 
   @override
@@ -47,7 +53,8 @@ class _CallSampleState extends State<CallSample> {
   }
 
   void _connect() async {
-    _signaling ??= Signaling(widget.host)..connect();
+      String host = await getUsernameAndPerm();
+    _signaling ??= Signaling(widget.host, host)..connect();
     _signaling?.onSignalingStateChange = (SignalingState state) {
       switch (state) {
         case SignalingState.ConnectionClosed:
@@ -209,9 +216,7 @@ class _CallSampleState extends State<CallSample> {
     var self = (peer['id'] == _selfId);
     return ListBody(children: <Widget>[
       ListTile(
-        title: Text(self
-            ? peer['name'] + ', ID: ${peer['id']} ' + ' [Your self]'
-            : peer['name'] + ', ID: ${peer['id']} '),
+        title: Text(peer['name']),
         onTap: null,
         trailing: SizedBox(
             width: 100.0,
@@ -231,7 +236,7 @@ class _CallSampleState extends State<CallSample> {
                     tooltip: 'Screen sharing',
                   )
                 ])),
-        subtitle: Text('[' + peer['user_agent'] + ']'),
+        //subtitle: Text('[' + peer['user_agent'] + ']'),
       ),
       Divider()
     ]);
@@ -240,17 +245,8 @@ class _CallSampleState extends State<CallSample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('P2P Call Sample' +
-            (_selfId != null ? ' [Your ID ($_selfId)] ' : '')),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: null,
-            tooltip: 'setup',
-          ),
-        ],
-      ),
+      appBar: myAppBar(context),
+      bottomNavigationBar: myBottomAppBar(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: _inCalling
           ? SizedBox(

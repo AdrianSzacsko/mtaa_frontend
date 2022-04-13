@@ -66,16 +66,6 @@ Widget myBottomAppBar(BuildContext context){
             var resp = await Profile().getProfile(user_id.toString());
             var resp2 = await Profile().getProfilePic(user_id.toString());
 
-            //print(resp2.runtimeType);
-            /*Uint8List(resp2);
-            //final mime = lookupMimeType('', headerBytes: resp2);
-            Latin1Encoder encoder = const Latin1Encoder();
-            var bytes = encoder.convert(resp2);
-
-            final codec = await instantiateImageCodec(bytes.buffer.asUint8List());
-            final frameInfo = await codec.getNextFrame();
-            //return frameInfo.image;*/
-
             var myUser = User(
               email: resp[0]["email"],
               name: resp[0]["name"],
@@ -83,6 +73,7 @@ Widget myBottomAppBar(BuildContext context){
               reg_date: resp[0]["reg_date"].toString(),
               study_year: resp[0]["study_year"].toString(),
               image: resp2 == null ? const AssetImage("assets/Images/profile-unknown.png") : resp2,
+              permission: resp[0]["permission"].toString().toLowerCase() == 'true' ? true : false
             );
             Navigator.push(
               context,

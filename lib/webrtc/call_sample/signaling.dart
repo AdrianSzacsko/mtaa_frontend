@@ -1,7 +1,12 @@
 import 'dart:convert';
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:mtaa_frontend/webrtc/getName.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../Models/User.dart';
+import '../../Models/profile.dart';
 import 'random_string.dart';
 
 import '../utils/device_info.dart'
@@ -34,7 +39,8 @@ class Session {
 }
 
 class Signaling {
-  Signaling(this._host);
+
+  Signaling(this._host, this.namePerm);
 
   JsonEncoder _encoder = JsonEncoder();
   JsonDecoder _decoder = JsonDecoder();
@@ -46,6 +52,7 @@ class Signaling {
   Map<String, Session> _sessions = {};
   MediaStream? _localStream;
   List<MediaStream> _remoteStreams = <MediaStream>[];
+  String namePerm;
 
   Function(SignalingState state)? onSignalingStateChange;
   Function(Session session, CallState state)? onCallStateChange;
@@ -56,6 +63,7 @@ class Signaling {
   Function(Session session, RTCDataChannel dc, RTCDataChannelMessage data)?
       onDataChannelMessage;
   Function(Session session, RTCDataChannel dc)? onDataChannel;
+
 
   String get sdpSemantics =>
       WebRTC.platformIsWindows ? 'plan-b' : 'unified-plan';
@@ -280,15 +288,19 @@ class Signaling {
       } catch (e) {}
     }
 
-    _socket?.onOpen = () {
+    _socket?.onOpen = () async{
       print('onOpen');
       onSignalingStateChange?.call(SignalingState.ConnectionOpen);
+      //print(userNamePerm);
+      //unawaited(getUsernameAndPerm());
       _send('new', {
-        'name': DeviceInfo.label,
+        'name': namePerm,
         'id': _selfId,
         'user_agent': DeviceInfo.userAgent
       });
     };
+
+
 
     _socket?.onMessage = (message) {
       print('Received data: ' + message);

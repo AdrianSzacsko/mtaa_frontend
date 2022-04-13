@@ -21,6 +21,8 @@ library random_string;
 
 import 'dart:math';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 const ASCII_START = 33;
 const ASCII_END = 126;
 const NUMERIC_START = 48;
@@ -48,6 +50,7 @@ String randomString(int length, {int from: ASCII_START, int to: ASCII_END}) {
 /// Generates a random string of [length] with only numeric characters.
 String randomNumeric(int length) =>
     randomString(length, from: NUMERIC_START, to: NUMERIC_END);
+
 /*
 /// Generates a random string of [length] with only alpha characters.
 String randomAlpha(int length) {

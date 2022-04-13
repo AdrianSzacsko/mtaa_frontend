@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:core';
 import 'dart:async';
 import 'dart:typed_data';
+import '../getName.dart';
 import 'signaling.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
@@ -40,7 +41,8 @@ class _DataChannelSampleState extends State<DataChannelSample> {
   }
 
   void _connect() async {
-    _signaling ??= Signaling(widget.host)..connect();
+    String host = await getUsernameAndPerm();
+    _signaling ??= Signaling(widget.host, host)..connect();
 
     _signaling?.onDataChannelMessage = (_, dc, RTCDataChannelMessage data) {
       setState(() {

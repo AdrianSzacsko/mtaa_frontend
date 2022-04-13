@@ -10,6 +10,7 @@ class User {
   final String reg_date;
   final String study_year;
   final ImageProvider image;
+  final bool permission;
 
   const User({
     required this.email,
@@ -18,5 +19,6 @@ class User {
     required this.reg_date,
     required this.study_year,
     required this.image,
+    required this.permission,
   });
 }

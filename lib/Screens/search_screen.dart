@@ -125,6 +125,7 @@ class SearchScreenState extends State<SearchScreen> {
                   reg_date: resp[0]["reg_date"].toString(),
                   study_year: resp[0]["study_year"].toString(),
                   image: resp2 == null ? const AssetImage("assets/Images/profile-unknown.png") : resp2,
+                  permission: resp[0]["permission"].toString().toLowerCase() == 'true' ? true : false
                 );
                 Navigator.push(
                   context,
