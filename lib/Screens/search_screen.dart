@@ -119,6 +119,7 @@ class SearchScreenState extends State<SearchScreen> {
                 var resp2 = await Profile().getProfilePic(row[2]);
 
                 var myUser = User(
+                    user_id: resp[0]["id"],
                   email: resp[0]["email"],
                   name: resp[0]["name"],
                   comments: resp[0]["comments"].toString(),
