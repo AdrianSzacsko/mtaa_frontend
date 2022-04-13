@@ -30,6 +30,7 @@ class _EditSubjectReviewScreenState extends State<EditSubjectReviewScreen> {
   late var usabilitySlider = double.parse(widget.usability);
   late var profSlider = double.parse(widget.prof_avg);
   late var reviewController = TextEditingController(text: widget.message);
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   IconData myFeedback1= Icons.star, myFeedback2= Icons.star,myFeedback3= Icons.star,
       myFeedback4= Icons.star,myFeedback5 = Icons.star;
@@ -86,11 +87,12 @@ class _EditSubjectReviewScreenState extends State<EditSubjectReviewScreen> {
     return Scaffold(
       appBar: myAppBar(context),
       bottomNavigationBar: myBottomAppBar(context),
+      backgroundColor: backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
-              //color: backgroundColor,
+            Form(
+              key: _formKey,
               child: Column(
                 children: <Widget>[
                   const SizedBox(height:defaultPadding),
@@ -103,293 +105,289 @@ class _EditSubjectReviewScreenState extends State<EditSubjectReviewScreen> {
                     ),
                   ),
                   const SizedBox(height:defaultPadding / 2),
-                  Container(
-                    child: Align(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, defaultPadding),
-                        child: Material(
-                          color: Colors.white,
-                          elevation: 14.0,
-                          borderRadius: BorderRadius.circular(24.0),
-                          shadowColor: primaryColor[300],
-                          child: Container(
-                              child: Column(children: <Widget>[
-                                /*
-                            Padding(
-                              padding: const EdgeInsets.all(defaultPadding / 4),
-                              child: Container(
-                                child:Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: StarWidget(),
-                                ),
-                              ),
-                            ),*/
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
-                                        child: Row(
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.topRight,
-                                              child: Row(children: const [
-                                                Icon(
-                                                  Icons.more_time_outlined,
-                                                  color: primaryColor,
-                                                ),
-                                                SizedBox(width: defaultPadding / 2),
-                                                Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Text("Difficulty: ",
-                                                    style: TextStyle(fontSize: 16,),
-                                                  ),
-                                                ),
-                                              ],),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
-                                        child: Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: Text(difficultySlider.toStringAsFixed(0),
-                                            style: TextStyle(fontSize: 16,),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(0),
-                                  child: Container(child: Slider(
-                                    min: 0.0,
-                                    max: 100.0,
-                                    divisions: 100,
-                                    value: difficultySlider,
-                                    activeColor: primaryColor[300],
-                                    inactiveColor: secondaryColor[300],
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        difficultySlider = newValue;
-                                      });
-                                    },
-                                  ),),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
-                                        child: Row(
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.topRight,
-                                              child: Row(children: const [
-                                                Icon(
-                                                  Icons.leaderboard_outlined,
-                                                  color: primaryColor,
-                                                ),
-                                                SizedBox(width: defaultPadding / 2),
-                                                Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Text("Usability: ",
-                                                    style: TextStyle(fontSize: 16,),
-                                                  ),
-                                                ),
-                                              ],),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
-                                        child: Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: Text(usabilitySlider.toStringAsFixed(0),
-                                            style: TextStyle(fontSize: 16,),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(0),
-                                  child: Container(child: Slider(
-                                    min: 0.0,
-                                    max: 100.0,
-                                    divisions: 100,
-                                    value: usabilitySlider,
-                                    activeColor: primaryColor[300],
-                                    inactiveColor: secondaryColor[300],
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        usabilitySlider = newValue;
-/*
-                                    if (sliderValue == 1.0 ) {
-                                      myFeedback1 = Icons.star_outlined;
-                                      myFeedbackColor1 = Colors.yellow;
-                                    }
-                                    else if (sliderValue < 1.0 ){
-                                      myFeedback1 = Icons.star;
-                                      myFeedbackColor1 = Colors.grey;
-
-                                    }
-                                    if (sliderValue == 2.0 ) {
-                                      myFeedback2 = Icons.star_outlined;
-                                      myFeedbackColor2= Colors.yellow;
-                                    }
-                                    else if (sliderValue < 2.0 ){
-                                      myFeedback2 = Icons.star;
-                                      myFeedbackColor2 = Colors.grey;
-
-                                    }
-                                    if (sliderValue == 3.0 ) {
-                                      myFeedback3 = Icons.star_outlined;
-                                      myFeedbackColor3 = Colors.yellow;
-                                    }
-                                    else if (sliderValue < 3.0 ){
-                                      myFeedback3 = Icons.star;
-                                      myFeedbackColor3 = Colors.grey;
-
-                                    }
-                                    if (sliderValue == 4.0 ) {
-                                      myFeedback4 = Icons.star_outlined;
-                                      myFeedbackColor4 = Colors.yellow;
-                                    }
-                                    else if (sliderValue < 4.0 ){
-                                      myFeedback4 = Icons.star;
-                                      myFeedbackColor4 = Colors.grey;
-
-                                    }
-                                    if (sliderValue == 5.0 ) {
-                                      myFeedback5 = Icons.star_outlined;
-                                      myFeedbackColor5 = Colors.yellow;
-                                    }
-                                    else if (sliderValue < 5.0 ){
-                                      myFeedback5 = Icons.star;
-                                      myFeedbackColor5 = Colors.grey;
-
-                                    }*/
-
-                                      });
-                                    },
-                                  ),),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
-                                        child: Row(
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.topRight,
-                                              child: Row(children: const [
-                                                Icon(
-                                                  Icons.man_outlined,
-                                                  color: primaryColor,
-                                                ),
-                                                SizedBox(width: defaultPadding / 2),
-                                                Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Text("Professors: ",
-                                                    style: TextStyle(fontSize: 16,),
-                                                  ),
-                                                ),
-                                              ],),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
-                                        child: Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: Text(profSlider.toStringAsFixed(0),
-                                            style: TextStyle(fontSize: 16,),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(0),
-                                  child: Container(child: Slider(
-                                    min: 0.0,
-                                    max: 100.0,
-                                    divisions: 100,
-                                    value: profSlider,
-                                    activeColor: primaryColor[300],
-                                    inactiveColor: secondaryColor[300],
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        profSlider = newValue;
-/*
-                                    if (sliderValue == 1.0 ) {
-                                      myFeedback1 = Icons.star_outlined;
-                                      myFeedbackColor1 = Colors.yellow;
-                                    }
-                                    else if (sliderValue < 1.0 ){
-                                      myFeedback1 = Icons.star;
-                                      myFeedbackColor1 = Colors.grey;
-
-                                    }
-                                    if (sliderValue == 2.0 ) {
-                                      myFeedback2 = Icons.star_outlined;
-                                      myFeedbackColor2= Colors.yellow;
-                                    }
-                                    else if (sliderValue < 2.0 ){
-                                      myFeedback2 = Icons.star;
-                                      myFeedbackColor2 = Colors.grey;
-
-                                    }
-                                    if (sliderValue == 3.0 ) {
-                                      myFeedback3 = Icons.star_outlined;
-                                      myFeedbackColor3 = Colors.yellow;
-                                    }
-                                    else if (sliderValue < 3.0 ){
-                                      myFeedback3 = Icons.star;
-                                      myFeedbackColor3 = Colors.grey;
-
-                                    }
-                                    if (sliderValue == 4.0 ) {
-                                      myFeedback4 = Icons.star_outlined;
-                                      myFeedbackColor4 = Colors.yellow;
-                                    }
-                                    else if (sliderValue < 4.0 ){
-                                      myFeedback4 = Icons.star;
-                                      myFeedbackColor4 = Colors.grey;
-
-                                    }
-                                    if (sliderValue == 5.0 ) {
-                                      myFeedback5 = Icons.star_outlined;
-                                      myFeedbackColor5 = Colors.yellow;
-                                    }
-                                    else if (sliderValue < 5.0 ){
-                                      myFeedback5 = Icons.star;
-                                      myFeedbackColor5 = Colors.grey;
-
-                                    }*/
-
-                                      });
-                                    },
-                                  ),),
-                                ),
-                                const SizedBox(height: defaultPadding),
-                              ],)
+                  Align(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, defaultPadding),
+                      child: Material(
+                        color: Colors.white,
+                        elevation: 14.0,
+                        borderRadius: BorderRadius.circular(24.0),
+                        shadowColor: primaryColor[300],
+                        child: Column(children: <Widget>[
+                          /*
+                          Padding(
+                        padding: const EdgeInsets.all(defaultPadding / 4),
+                        child: Container(
+                          child:Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: StarWidget(),
                           ),
                         ),
+                          ),*/
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
+                                  child: Row(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.topRight,
+                                        child: Row(children: const [
+                                          Icon(
+                                            Icons.more_time_outlined,
+                                            color: primaryColor,
+                                          ),
+                                          SizedBox(width: defaultPadding / 2),
+                                          Align(
+                                            alignment: Alignment.topLeft,
+                                            child: Text("Difficulty: ",
+                                              style: TextStyle(fontSize: 16,),
+                                            ),
+                                          ),
+                                        ],),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Text(difficultySlider.toStringAsFixed(0),
+                                      style: TextStyle(fontSize: 16,),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(0),
+                            child: Container(child: Slider(
+                              min: 0.0,
+                              max: 100.0,
+                              divisions: 100,
+                              value: difficultySlider,
+                              activeColor: primaryColor[300],
+                              inactiveColor: secondaryColor[300],
+                              onChanged: (newValue) {
+                                setState(() {
+                                  difficultySlider = newValue;
+                                });
+                              },
+                            ),),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
+                                  child: Row(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.topRight,
+                                        child: Row(children: const [
+                                          Icon(
+                                            Icons.leaderboard_outlined,
+                                            color: primaryColor,
+                                          ),
+                                          SizedBox(width: defaultPadding / 2),
+                                          Align(
+                                            alignment: Alignment.topLeft,
+                                            child: Text("Usability: ",
+                                              style: TextStyle(fontSize: 16,),
+                                            ),
+                                          ),
+                                        ],),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Text(usabilitySlider.toStringAsFixed(0),
+                                      style: TextStyle(fontSize: 16,),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(0),
+                            child: Container(child: Slider(
+                              min: 0.0,
+                              max: 100.0,
+                              divisions: 100,
+                              value: usabilitySlider,
+                              activeColor: primaryColor[300],
+                              inactiveColor: secondaryColor[300],
+                              onChanged: (newValue) {
+                                setState(() {
+                                  usabilitySlider = newValue;
+/*
+                              if (sliderValue == 1.0 ) {
+                                myFeedback1 = Icons.star_outlined;
+                                myFeedbackColor1 = Colors.yellow;
+                              }
+                              else if (sliderValue < 1.0 ){
+                                myFeedback1 = Icons.star;
+                                myFeedbackColor1 = Colors.grey;
+
+                              }
+                              if (sliderValue == 2.0 ) {
+                                myFeedback2 = Icons.star_outlined;
+                                myFeedbackColor2= Colors.yellow;
+                              }
+                              else if (sliderValue < 2.0 ){
+                                myFeedback2 = Icons.star;
+                                myFeedbackColor2 = Colors.grey;
+
+                              }
+                              if (sliderValue == 3.0 ) {
+                                myFeedback3 = Icons.star_outlined;
+                                myFeedbackColor3 = Colors.yellow;
+                              }
+                              else if (sliderValue < 3.0 ){
+                                myFeedback3 = Icons.star;
+                                myFeedbackColor3 = Colors.grey;
+
+                              }
+                              if (sliderValue == 4.0 ) {
+                                myFeedback4 = Icons.star_outlined;
+                                myFeedbackColor4 = Colors.yellow;
+                              }
+                              else if (sliderValue < 4.0 ){
+                                myFeedback4 = Icons.star;
+                                myFeedbackColor4 = Colors.grey;
+
+                              }
+                              if (sliderValue == 5.0 ) {
+                                myFeedback5 = Icons.star_outlined;
+                                myFeedbackColor5 = Colors.yellow;
+                              }
+                              else if (sliderValue < 5.0 ){
+                                myFeedback5 = Icons.star;
+                                myFeedbackColor5 = Colors.grey;
+
+                              }*/
+
+                                });
+                              },
+                            ),),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
+                                  child: Row(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.topRight,
+                                        child: Row(children: const [
+                                          Icon(
+                                            Icons.man_outlined,
+                                            color: primaryColor,
+                                          ),
+                                          SizedBox(width: defaultPadding / 2),
+                                          Align(
+                                            alignment: Alignment.topLeft,
+                                            child: Text("Professors: ",
+                                              style: TextStyle(fontSize: 16,),
+                                            ),
+                                          ),
+                                        ],),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, 0),
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Text(profSlider.toStringAsFixed(0),
+                                      style: TextStyle(fontSize: 16,),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(0),
+                            child: Container(child: Slider(
+                              min: 0.0,
+                              max: 100.0,
+                              divisions: 100,
+                              value: profSlider,
+                              activeColor: primaryColor[300],
+                              inactiveColor: secondaryColor[300],
+                              onChanged: (newValue) {
+                                setState(() {
+                                  profSlider = newValue;
+/*
+                              if (sliderValue == 1.0 ) {
+                                myFeedback1 = Icons.star_outlined;
+                                myFeedbackColor1 = Colors.yellow;
+                              }
+                              else if (sliderValue < 1.0 ){
+                                myFeedback1 = Icons.star;
+                                myFeedbackColor1 = Colors.grey;
+
+                              }
+                              if (sliderValue == 2.0 ) {
+                                myFeedback2 = Icons.star_outlined;
+                                myFeedbackColor2= Colors.yellow;
+                              }
+                              else if (sliderValue < 2.0 ){
+                                myFeedback2 = Icons.star;
+                                myFeedbackColor2 = Colors.grey;
+
+                              }
+                              if (sliderValue == 3.0 ) {
+                                myFeedback3 = Icons.star_outlined;
+                                myFeedbackColor3 = Colors.yellow;
+                              }
+                              else if (sliderValue < 3.0 ){
+                                myFeedback3 = Icons.star;
+                                myFeedbackColor3 = Colors.grey;
+
+                              }
+                              if (sliderValue == 4.0 ) {
+                                myFeedback4 = Icons.star_outlined;
+                                myFeedbackColor4 = Colors.yellow;
+                              }
+                              else if (sliderValue < 4.0 ){
+                                myFeedback4 = Icons.star;
+                                myFeedbackColor4 = Colors.grey;
+
+                              }
+                              if (sliderValue == 5.0 ) {
+                                myFeedback5 = Icons.star_outlined;
+                                myFeedbackColor5 = Colors.yellow;
+                              }
+                              else if (sliderValue < 5.0 ){
+                                myFeedback5 = Icons.star;
+                                myFeedbackColor5 = Colors.grey;
+
+                              }*/
+
+                                });
+                              },
+                            ),),
+                          ),
+                          const SizedBox(height: defaultPadding),
+                        ],),
                       ),
                     ),
                   ),
@@ -406,30 +404,28 @@ class _EditSubjectReviewScreenState extends State<EditSubjectReviewScreen> {
                           child: Column(children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding, defaultPadding, defaultPadding),
-                              child: Container(
-                                child:
-                                TextFormField(
-                                  controller: reviewController,
-                                  autocorrect: false,
-                                  enableSuggestions: false,
-                                  autofocus: false,
-                                  maxLines: null,
-                                  keyboardType: TextInputType.text,
-                                  decoration: InputDecoration(hintText: "Text",
-                                    hintStyle: const TextStyle(color: backgroundText, fontFamily: 'Roboto'),
-                                    prefixIcon: const Padding(
-                                      padding: EdgeInsets.only(top: 0), // add padding to adjust icon
-                                      child: Icon(Icons.text_snippet_outlined),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(color: primaryColor),
-                                      borderRadius: BorderRadius.circular(25.0),
-                                    ),
-                                    focusedBorder:OutlineInputBorder(
-                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
-                                      borderRadius: BorderRadius.circular(25.0),
-                                    ),),
-                                ),
+                              child: TextFormField(
+                                validator: RequiredValidator(errorText: 'Review text is required'),
+                                controller: reviewController,
+                                autocorrect: false,
+                                enableSuggestions: false,
+                                autofocus: false,
+                                maxLines: null,
+                                keyboardType: TextInputType.text,
+                                decoration: InputDecoration(hintText: "Text",
+                                  hintStyle: const TextStyle(color: backgroundText, fontFamily: 'Roboto'),
+                                  prefixIcon: const Padding(
+                                    padding: EdgeInsets.only(top: 0), // add padding to adjust icon
+                                    child: Icon(Icons.text_snippet_outlined),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(color: primaryColor),
+                                    borderRadius: BorderRadius.circular(25.0),
+                                  ),
+                                  focusedBorder:OutlineInputBorder(
+                                    borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                    borderRadius: BorderRadius.circular(25.0),
+                                  ),),
                               ),
                             ),
                             Padding(
@@ -442,15 +438,29 @@ class _EditSubjectReviewScreenState extends State<EditSubjectReviewScreen> {
                                   backgroundColor: primaryColor[300],
                                   splashColor: secondaryColor[300],
                                   onPressed: () async {
-                                    await SubjectClass().modifyReview(
-                                        reviewController.text,
-                                        difficultySlider.toStringAsFixed(0),
-                                        usabilitySlider.toStringAsFixed(0),
-                                        profSlider.toStringAsFixed(0),
-                                        widget.subj_id);
+                                    if (_formKey.currentState?.validate() ?? false) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          backgroundColor: primaryColor,
+                                          content: Text(
+                                            'Review Posted',
+                                            //textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                      await SubjectClass().modifyReview(
+                                          reviewController.text,
+                                          difficultySlider.toStringAsFixed(0),
+                                          usabilitySlider.toStringAsFixed(0),
+                                          profSlider.toStringAsFixed(0),
+                                          widget.subj_id);
 
-                                    //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
-                                    revertState(context, widget.subj_id.toString());
+                                      //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+                                      revertState(context, widget.subj_id.toString());
+                                    }
                                   },
                                   child: const Icon(
                                     Icons.check_outlined,
