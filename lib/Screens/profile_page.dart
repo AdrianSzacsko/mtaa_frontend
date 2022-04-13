@@ -53,47 +53,81 @@ class _ProfilePageState extends State<ProfilePage> {
                   return const CircularProgressIndicator();
                 return ListView(
                   physics: BouncingScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(defaultPadding / 2, defaultPadding / 2,
+                      defaultPadding / 2, defaultPadding / 2
+                  ),
                   children: [
-                    const SizedBox(height: defaultPadding * 2),
-                    Center(
-                      child: Stack(
-                        children: [
-                          buildImage(user),
-                          if (snapshot.data == true)
-                          Positioned(
-                            bottom: 0,
-                            right: 4,
-                            child: buildEditIcon(primaryColor),
+                    //const SizedBox(height: defaultPadding * 2),
+                    Padding(
+                      padding: EdgeInsets.all(defaultPadding),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        elevation:10,
+                        shadowColor: primaryColor[300],
+                        child:
+                        Column(
+                          children: [
+                        Center(
+                        child:
+                        Padding(
+                          padding: const EdgeInsets.only(top: defaultPadding * 2),
+                          child: Stack(
+                            children: [
+                              const SizedBox(height: defaultPadding * 2,),
+                              buildImage(user),
+                              if (snapshot.data == true)
+                                Positioned(
+                                  bottom: 0,
+                                  right: 4,
+                                  child: buildEditIcon(secondaryColor),
+                                ),
+                            ],
                           ),
-                        ],
+                        ),
+                          ),
+                              const SizedBox(height: defaultPadding * 2),
+                              buildName(user),
+                              const SizedBox(height: defaultPadding * 2),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  buildButton(context, user.comments, 'Comments'),
+                                  buildVerticalDivider(),
+                                  buildButton(context, user.reg_date, 'Reg. Date'),
+                                ],
+                              ),
+                               const SizedBox(height: defaultPadding),
+                          ],
+                        ),
+                    ),),
+                        //const SizedBox(height: defaultPadding * 2),
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(defaultPadding * 2,
+                              defaultPadding * 1.5, defaultPadding * 2,
+                              defaultPadding),
+                          child: Text(
+                            'Informations',
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(height: defaultPadding * 2),
-                    buildName(user),
-                    const SizedBox(height: defaultPadding * 2),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        buildButton(context, user.comments, 'Comments'),
-                        buildVerticalDivider(),
-                        buildButton(context, user.reg_date, 'Reg. Date'),
-                      ],
-                    ),
-                    const SizedBox(height: defaultPadding * 2),
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(defaultPadding * 2,
-                          defaultPadding * 2, defaultPadding * 2,
-                          defaultPadding),
-                      child: Text(
-                        'Informations',
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                      ),),
 
-                    buildInfo(user),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(defaultPadding, 0, defaultPadding, 0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    elevation:10,
+                    shadowColor: primaryColor[300],
+                    child: buildInfo(user),
+                ),
+                ),
                   ],
                 );
                 }
-              ),
+                ),
     );
   }
 
@@ -305,7 +339,7 @@ class _ProfilePageState extends State<ProfilePage> {
     color: Colors.white,
     all: 3,
     child: buildCircle(
-      color: primaryColor,
+      color: color,
       all: 8,
       child: IconButton(
         padding: EdgeInsets.zero,

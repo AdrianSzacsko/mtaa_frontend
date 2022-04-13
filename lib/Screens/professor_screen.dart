@@ -146,6 +146,7 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
     final professor = ModalRoute.of(context)!.settings.arguments as Professor;
 
     return Scaffold(
+        backgroundColor: backgroundColor,
         appBar: myAppBar(context),
         bottomNavigationBar: myBottomAppBar(context),
         body: FutureBuilder(
@@ -243,126 +244,6 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
     );
   }
 }
-/*
-    return Scaffold(
-        appBar: myAppBar(context),
-        bottomNavigationBar: myBottomAppBar(context),
-        body: ListView(
-          physics: BouncingScrollPhysics(),
-          shrinkWrap: true,
-          padding: const EdgeInsets.fromLTRB(2.0, 10.0, 2.0, 10.0),
-          children: <Widget>[
-            const SizedBox(height: defaultPadding * 2),
-            Center(
-              child: Stack(
-                children: [
-                  buildImage(),
-                ],
-              ),
-            ),
-            const SizedBox(height: defaultPadding * 2),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                buildButton("65"),
-              ],
-            ),
-            const SizedBox(height: defaultPadding * 2),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(defaultPadding * 2,
-                      defaultPadding * 2, defaultPadding * 2,
-                      defaultPadding),
-                  child: Text(
-                    'Reviews',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(defaultPadding * 2,
-                      defaultPadding * 2, defaultPadding * 2,
-                      defaultPadding),
-                  child: buildInfo("80"),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(defaultPadding * 2,
-                      defaultPadding * 2, defaultPadding * 2,
-                      defaultPadding),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: SizedBox.fromSize(
-                      size: Size(56, 56), // button width and height
-                      child: ClipOval(
-                        child: Material(
-                          color: secondaryColor[300], // button color
-                          child: InkWell(
-                            splashColor: primaryColor[300], // splash color
-                            onTap: () {}, // button pressed
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const <Widget>[
-                                Icon(Icons.add_outlined), // icon
-                                //Text("Add"), // text
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            loadData(professor.reviews),
-
-            ProfessorReview(
-                name: "Kokot",
-                description: "Zobraz sa mi",
-                price: 1000,
-                image: "puzzle.png",
-            ),
-
-            ProfessorReview(
-                name: "Pixel",
-                description: "Pixel is the most featureful phone ever",
-                price: 800,
-                image: "puzzle.png",
-            ),
-
-            ProfessorReview(
-                name: "Laptop",
-                description: "Laptop is most productive development tool",
-                price: 2000,
-                image: "puzzle.png",
-            ),
-            ProfessorReview(
-                name: "Tablet",
-                description: "Tablet is the most useful device ever for meeting",
-                price: 1500,
-                image: "puzzle.png",
-            ),
-            ProfessorReview(
-                name: "Pendrive",
-                description: "Pendrive is useful storage medium",
-                price: 100,
-                image: "puzzle.png",
-            ),
-            ProfessorReview(
-                name: "Floppy Drive",
-                description: "Floppy drive is useful rescue storage medium."
-                    "Floppy drive is useful rescue storage medium."
-                    "Floppy drive is useful rescue storage medium."
-                    "Floppy drive is useful rescue storage medium."
-                    "Floppy drive is useful rescue storage medium."
-                    "Floppy drive is useful rescue storage medium.",
-                price: 20,
-                image: "puzzle.png",
-            ),
-          ],
-        )
-    );*/
 
 class ProfessorReview extends StatelessWidget {
   Widget buildInfo(String value) => Container(
