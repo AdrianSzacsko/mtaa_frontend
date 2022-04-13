@@ -11,6 +11,7 @@ import '../Models/profile.dart';
 import '../Screens/profile_page.dart';
 import '../Screens/profile_screen.dart';
 import '../Screens/search_screen.dart';
+import '../Screens/settings_page.dart';
 import '../Screens/settings_screen.dart';
 import '../Screens/sign_in_screen.dart';
 import '../constants.dart';
@@ -53,7 +54,7 @@ Widget myBottomAppBar(BuildContext context){
           icon: const Icon(Icons.settings_outlined),
           color: primaryColor[300],
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SettingsScreen()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SettingsPage()));
           },
         ),
         IconButton(

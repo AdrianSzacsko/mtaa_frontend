@@ -26,8 +26,8 @@ class SettingsScreenState extends State<SettingsScreen> {
   static const routeName = '/settings-screen';
   var ipController = TextEditingController();
 
-addIpAddress(context){
-  showDialog(context: context,
+  addIpAddress(context){
+    showDialog(context: context,
       builder: (context) {
         return StatefulBuilder(builder: (context, setState) {
           return Dialog(
@@ -107,35 +107,66 @@ addIpAddress(context){
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: myAppBar(context),
       bottomNavigationBar: myBottomAppBar(context),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        color: backgroundColor,
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 50,
+      body: ListView(
+        physics: BouncingScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(defaultPadding / 2, defaultPadding / 2,
+            defaultPadding / 2, defaultPadding / 2
+        ),
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(defaultPadding * 2,
+                defaultPadding * 1.5, defaultPadding * 2,
+                defaultPadding),
+            child: Icon(
+              Icons.settings_outlined,
+              color: primaryColor,
+              size: 96,
             ),
-            Container(
-              alignment: Alignment.centerLeft,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(defaultPadding),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              elevation:10,
+              shadowColor: primaryColor[300],
               child: const Text(
-                "   Settings:",
+                "Settings:",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 28,
+                  fontSize: 20,
                 ),
               ),
             ),
-            const Divider(
+          ),
+          TextButton(
+            onPressed: () {
+              //TODO add info
+              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const InfoScreen()));
+            },
+            child: Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Text("Info",
+            style: TextStyle(
+              fontSize: 22,
               color: Colors.black,
-              thickness: 1,
+              ),
             ),
-            TextButton(
+          ),
+          ),
+          TextButton(
               onPressed: () {
-                //TODO add info
-                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const InfoScreen()));
+                //TODO add webrtc call screen
+                addIpAddress(context);
               },
               child: Container(
                 alignment: Alignment.center,
@@ -144,129 +175,108 @@ addIpAddress(context){
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Text("Info",
-              style: TextStyle(
-                fontSize: 22,
-                color: Colors.black,
+                child: const Text("Call Support",
+                style: TextStyle(
+                  fontSize: 22,
+                  color: Colors.black,
                 ),
               ),
             ),
-            ),
-            TextButton(
-                onPressed: () {
-                  //TODO add webrtc call screen
-                  addIpAddress(context);
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text("Call Support",
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ),
-            TextButton(
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          alignment: Alignment.center,
+          ),
+          TextButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        alignment: Alignment.center,
 
-                          //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                          elevation: 0,
-                          backgroundColor: Colors.transparent,
-                          child: Container(
+                        //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                        child: Container(
 
-                            margin: const EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(height: 10),
-                                const Text("Are you sure you want to permanently delete your account?",
-                                style: TextStyle(
-                                  fontSize: 18,
-
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.all(2),
-                                      decoration: BoxDecoration(
-                                        color: secondaryColor,
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: TextButton(
-                                          onPressed: (){
-                                              //TODO delete account
-                                            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SignInScreen()));
-                                          },
-                                          child: const Text("Yes",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                        color: primaryColor,
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: TextButton(
-                                          onPressed: () => Navigator.pop(context, false),
-                                          child: const Text("No",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 5),
-                              ],
-                            ),
+                          margin: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                        );
-                      }
-                  );
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text("Delete Account",
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.black,
-                  ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(height: 10),
+                              const Text("Are you sure you want to permanently delete your account?",
+                              style: TextStyle(
+                                fontSize: 18,
+
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      color: secondaryColor,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: TextButton(
+                                        onPressed: (){
+                                            //TODO delete account
+                                          Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SignInScreen()));
+                                        },
+                                        child: const Text("Yes",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      color: primaryColor,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: TextButton(
+                                        onPressed: () => Navigator.pop(context, false),
+                                        child: const Text("No",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 5),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                );
+              },
+              child: Container(
+                alignment: Alignment.center,
+                margin: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Text("Delete Account",
+                style: TextStyle(
+                  fontSize: 22,
+                  color: Colors.black,
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
