@@ -74,7 +74,7 @@ class SearchScreenState extends State<SearchScreen> {
   Widget buildList() {
     return Container(
       width: double.infinity,
-      height: MediaQuery.of(context).size.height -276,
+      height: MediaQuery.of(context).size.height -300,
       child: Align(
         alignment: Alignment.topCenter,
         child: ListView.builder(
@@ -243,7 +243,7 @@ class SearchScreenState extends State<SearchScreen> {
                             Icons.search_outlined,
                             color: backgroundText,
                           ),
-                          "Search..."),
+                          "Search...", context),
                     ),
                   ),
                 ),

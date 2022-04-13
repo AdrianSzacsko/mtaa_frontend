@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 
-Widget userInput(TextEditingController userInput, Widget icon, String hintText) {
+Widget userInput(TextEditingController userInput, Widget icon, String hintText, BuildContext context) {
   return Container(
     //width: 400,
     child: Material(
@@ -21,7 +21,8 @@ Widget userInput(TextEditingController userInput, Widget icon, String hintText) 
               color: Colors.white,
               borderRadius: BorderRadius.circular(25.0),
             ),
-            width: 348,
+            //width: 348,
+            width: MediaQuery.of(context).size.width - 45,
             height: 60,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
