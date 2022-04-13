@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 
 class User {
+  final int user_id;
   final String email;
   final String name;
   final String comments;
@@ -13,6 +14,7 @@ class User {
   final bool permission;
 
   const User({
+    required this.user_id,
     required this.email,
     required this.name,
     required this.comments,

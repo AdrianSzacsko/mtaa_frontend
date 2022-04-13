@@ -67,6 +67,7 @@ Widget myBottomAppBar(BuildContext context){
             var resp2 = await Profile().getProfilePic(user_id.toString());
 
             var myUser = User(
+              user_id: resp[0]["id"],
               email: resp[0]["email"],
               name: resp[0]["name"],
               comments: resp[0]["comments"].toString(),

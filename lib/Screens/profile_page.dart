@@ -26,6 +26,17 @@ class _ProfilePageState extends State<ProfilePage> {
   late ImageProvider newFile;
   late Uint8List newFileBytes;
 
+  Future<bool> userIdMatch(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final user_id = prefs.getInt('user_id') ?? '';
+
+    if (user_id == id) {
+      return true;
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     // final user = UserPreferences.myUser;
@@ -35,46 +46,54 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: backgroundColor,
           appBar: myAppBar(context),
           bottomNavigationBar: myBottomAppBar(context),
-          body: ListView(
-            physics: BouncingScrollPhysics(),
-            children: [
-              const SizedBox(height: defaultPadding * 2),
-              Center(
-                child: Stack(
+          body: FutureBuilder<bool>(
+              future: userIdMatch(user.user_id),
+              builder: (context, snapshot) {
+                if (snapshot.data == null)
+                  return const CircularProgressIndicator();
+                return ListView(
+                  physics: BouncingScrollPhysics(),
                   children: [
-                    buildImage(user),
-                    Positioned(
-                      bottom: 0,
-                      right: 4,
-                      child: buildEditIcon(primaryColor),
+                    const SizedBox(height: defaultPadding * 2),
+                    Center(
+                      child: Stack(
+                        children: [
+                          buildImage(user),
+                          if (snapshot.data == true)
+                          Positioned(
+                            bottom: 0,
+                            right: 4,
+                            child: buildEditIcon(primaryColor),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: defaultPadding * 2),
-              buildName(user),
-              const SizedBox(height: defaultPadding * 2),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  buildButton(context, user.comments, 'Comments'),
-                  buildVerticalDivider(),
-                  buildButton(context, user.reg_date, 'Reg. Date'),
-                ],
-              ),
-              const SizedBox(height: defaultPadding * 2),
-              const Padding(
-                  padding: EdgeInsets.fromLTRB(defaultPadding * 2,
-                      defaultPadding * 2, defaultPadding * 2,
-                      defaultPadding),
-                  child: Text(
-                    'Informations',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),),
+                    const SizedBox(height: defaultPadding * 2),
+                    buildName(user),
+                    const SizedBox(height: defaultPadding * 2),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        buildButton(context, user.comments, 'Comments'),
+                        buildVerticalDivider(),
+                        buildButton(context, user.reg_date, 'Reg. Date'),
+                      ],
+                    ),
+                    const SizedBox(height: defaultPadding * 2),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(defaultPadding * 2,
+                          defaultPadding * 2, defaultPadding * 2,
+                          defaultPadding),
+                      child: Text(
+                        'Informations',
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),),
 
-              buildInfo(user),
-            ],
-          ),
+                    buildInfo(user),
+                  ],
+                );
+                }
+              ),
     );
   }
 
@@ -127,6 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
             //return frameInfo.image;*/
 
     var myUser = User(
+        user_id: resp[0]["id"],
       email: resp[0]["email"],
       name: resp[0]["name"],
       comments: resp[0]["comments"].toString(),
