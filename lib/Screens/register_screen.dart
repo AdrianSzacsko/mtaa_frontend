@@ -258,7 +258,7 @@ class SignUpScreen extends StatelessWidget {
                                   const SnackBar(
                                     backgroundColor: Colors.white,
                                     content: Text(
-                                      'Validation Successful',
+                                      'Registration Successful',
                                       style: TextStyle(
                                         color: Colors.black,
                                       ),
