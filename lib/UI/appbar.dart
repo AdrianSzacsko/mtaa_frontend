@@ -29,7 +29,7 @@ PreferredSizeWidget myAppBar(BuildContext context){
         fit: BoxFit.cover,
       ),
       onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SignInScreen()));
+        //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SignInScreen()));
       },
     ),
     actions: [

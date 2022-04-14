@@ -54,21 +54,33 @@ class SearchScreenState extends State<SearchScreen> {
       _isloadingLine = true;
     });
     print(searchController);
-    //await Future.delayed(const Duration(seconds: 2));
     var resp = await Search().search(searchController.text);
-    //print(resp.runtimeType);
 
     list_of_rows.clear();
-    resp?.forEach((item){
+    resp?.data.forEach((item){
       list_of_rows.add([item["name"].toString(), item["code"].toString(), item["id"].toString()]);
       print(item);
     });
 
     print(list_of_rows);
-    // list_of_rows.add(['Marko Stahovec','USER','5']);
     setState(() {
       _isloadingLine = false;
     });
+  }
+
+  responseBar(String text, Color? color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: color,
+        content: Text(
+          text,
+          //textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
   }
 
 
@@ -339,12 +351,46 @@ class SearchScreenState extends State<SearchScreen> {
                         backgroundColor: secondaryColor[300],
                         elevation: 10,
                         //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                        onPressed: () {
+                        onPressed: () async {
                           setState(() {
-                            dataLoadFunctionLine();
+                            _isloadingLine = true;
                           });
-                          print(searchController.text);
-                          searchController.text = '';
+                          print(searchController);
+                          var response = await Search().search(searchController.text);
+
+                          if (response == null) {
+                            responseBar("There was en error during execution. Check your connection", secondaryColor);
+                          }
+                          else {
+                            if (response.statusCode == 200) {
+                              responseBar("Login successful", primaryColor);
+                              list_of_rows.clear();
+                              response.data.forEach((item){
+                                list_of_rows.add([item["name"].toString(), item["code"].toString(), item["id"].toString()]);
+                                print(item);
+                              });
+
+                              print(list_of_rows);
+                              searchController.text = '';
+                              //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+                            }
+                            else if (response.statusCode == 401) {
+                              responseBar("You are not authorized to perform this action", secondaryColor);
+                            }
+                            else if (response.statusCode == 404) {
+                              responseBar("No such profile", secondaryColor);
+                            }
+                            else if (response.statusCode! >= 500) {
+                              responseBar("There is an error on server side, sit tight...", secondaryColor);
+                            }
+                            else {
+                              responseBar("There was en error during execution. Check your connection", secondaryColor);
+                            }
+                          }
+
+                          setState(() {
+                            _isloadingLine = false;
+                          });
                         },
                         child: const Icon(
                           Icons.search_outlined,

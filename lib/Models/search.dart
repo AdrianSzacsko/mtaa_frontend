@@ -7,7 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Search with ChangeNotifier {
-  Future<List?> search(String searchString) async {
+  var response;
+  Future<Response?> search(String searchString) async {
     Response response;
 
     var dio = Dio();
@@ -21,10 +22,11 @@ class Search with ChangeNotifier {
     try {
       response = await dio.get(urlKey + 'search?search_string=' + searchString);
       print(response.data);
-      return response.data;
+      return response;
     }
-    catch (e) {
-      print(e);
+    on DioError catch (e) {
+      //print(e.response?.statusCode);
+      return e.response;
     }
 
     return null;

@@ -31,12 +31,29 @@ class SignInScreenState extends State<SignInScreen> {
     await Future.delayed(const Duration(seconds: 2));  //comment this
     //fetch data here
     //TODO add method to post login
-    Provider.of<Auth>(context, listen: false).login(emailController.text, passwordController.text);
+    var response = Provider.of<Auth>(context, listen: false).login(emailController.text, passwordController.text);
+    if (response[1] == 200) {
+
+    }
     setState(() {
       _isloading = false;
     });
   }
 
+  responseBar(String text, Color? color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: color,
+        content: Text(
+          text,
+          //textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget emailInput(TextEditingController userInput, String hintTitle, TextInputType keyboardType,
       bool obscure, IconData icon_) {
@@ -211,25 +228,42 @@ class SignInScreenState extends State<SignInScreen> {
                           elevation: 10,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                           color: primaryColor[300],
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formKey.currentState?.validate() ?? false) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  backgroundColor: primaryColor,
-                                  content: Text(
-                                    'Validation Successful',
-                                    //textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              );
                               print(emailController);
                               print(passwordController);
-                              sendLogin();
+                              setState(() {
+                                _isloading = true;
+                              });
+                              //await Future.delayed(const Duration(seconds: 2));  //comment this
+                              //fetch data here
+                              //TODO add method to post login
+                              var response = await Provider.of<Auth>(context, listen: false).login(emailController.text, passwordController.text);
+
+                              if (response == null) {
+                                responseBar("There was en error logging in. Check your connection", secondaryColor);
+                              }
+                              else {
+                                if (response.statusCode == 200) {
+                                  responseBar("Login successful", primaryColor);
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+                                }
+                                else if (response.statusCode == 403) {
+                                  responseBar("Invalid credentials. Check your email and password", secondaryColor);
+                                  //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+                                }
+                                else if (response.statusCode >= 500) {
+                                  responseBar("There is an error on server side, sit tight...", secondaryColor);
+                                }
+                                else {
+                                  responseBar("There was en error logging in. Check your connection", secondaryColor);
+                                }
+                              }
+
+                              setState(() {
+                                _isloading = false;
+                              });
                               //Provider.of<Auth>(context, listen: false).login(emailController.text, passwordController.text);
-                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
                             }
                           },
                           child: const Text("Login", style: TextStyle(color: Colors.white,

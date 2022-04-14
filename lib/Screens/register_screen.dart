@@ -8,14 +8,37 @@ import 'package:form_field_validator/form_field_validator.dart';
 
 import 'components/sign_up_form.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen();
+
+  @override
+  SignUpScreenState createState() => SignUpScreenState();
+}
+
+class SignUpScreenState extends State<SignUpScreen> {
   // It's time to validat the text field
+  bool _isloading = false;
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final firstnameController = TextEditingController();
   final lastnameController = TextEditingController();
   final passwordController = TextEditingController();
   final studyYearController = TextEditingController();
+
+  responseBar(String text, Color? color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: color,
+        content: Text(
+          text,
+          //textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
 
 
   @override
@@ -252,31 +275,41 @@ class SignUpScreen extends StatelessWidget {
                             elevation: 10,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                             color: primaryColor[300],
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState?.validate() ?? false) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    backgroundColor: primaryColor[300],
-                                    content: const Text(
-                                      'Registration Successful',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                                print(emailController);
-                                print(firstnameController);
-                                print(lastnameController);
-                                print(passwordController);
-                                print(studyYearController);
-                                Provider.of<Auth>(context, listen: false).register(emailController.text,
+                                setState(() {
+                                  _isloading = true;
+                                });
+
+                                var response = await Provider.of<Auth>(context, listen: false).register(emailController.text,
                                   firstnameController.text,
                                   lastnameController.text,
                                   int.parse(studyYearController.text),
                                   passwordController.text,
                                 );
-                                Navigator.of(context).pop();
+
+                                if (response == null) {
+                                  responseBar("There was en error logging in. Check your connection", secondaryColor);
+                                }
+                                else {
+                                  if (response.statusCode == 201) {
+                                    responseBar("Registration successful", primaryColor);
+                                    Navigator.of(context).pop();
+                                  }
+                                  else if (response.statusCode == 403) {
+                                    responseBar("Invalid credentials. Check your email and password", secondaryColor);
+                                  }
+                                  else if (response.statusCode >= 500) {
+                                    responseBar("There is an error on server side, sit tight...", secondaryColor);
+                                  }
+                                  else {
+                                    responseBar("There was en error logging in. Check your connection", secondaryColor);
+                                  }
+                                }
+
+                                setState(() {
+                                  _isloading = false;
+                                });
                               }
                             },
                             child: const Text("Register", style: TextStyle(color: Colors.white,

@@ -29,28 +29,31 @@ class Auth with ChangeNotifier {
 
 
   register(String email, String firstname, String lastname, int studyYear, String password) async {
+    var response;
     var dio = Dio();
     // dio.options.headers['Authorization'] = 'Bearer '+ token;
     // dio.options.headers['Content-Type'] = 'application/json';
     try {
-      var response = await dio.post(urlRegister + apiKey, data: {
+      response = await dio.post(urlRegister + apiKey, data: {
         'email': email,
         'first_name': firstname,
         'last_name': lastname,
         'study_year': studyYear,
         'pwd': password
       });
-      print(response.data);
-      return response.data;
+      //print(response.data);
+      return response;
     }
-    catch (e) {
-      print(e);
+    on DioError catch (e) {
+      //print(e.response?.statusCode);
+      return e.response;
     }
   }
 
 
 
   login(String email, String password)async{
+    var response;
     var dio = Dio();
     dio.options.headers['content-Type'] = "application/x-www-form-urlencoded";
     try {
@@ -61,25 +64,20 @@ class Auth with ChangeNotifier {
         'username': email,
         'password': password,
       });
-      var response = await dio.post(urlLogin + apiKey, data: formData);
-      /*
-      print("**************************************");
-      print(response.data);
-      print("**************************************");
-      print(response.data["access_token"]);
-      print("**************************************");
-      */
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString('token', response.data["access_token"]);
-      Map<String, dynamic> payload = Jwt.parseJwt(response.data["access_token"]);
-      prefs.setInt('user_id', payload["user_id"]);
+      response = await dio.post(urlLogin + apiKey, data: formData);
 
-      final t = prefs.getInt('user_id') ?? '';
-      print(t);
+      if (response.statusCode == 200) {
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setString('token', response.data["access_token"]);
+        Map<String, dynamic> payload = Jwt.parseJwt(response.data["access_token"]);
+        prefs.setInt('user_id', payload["user_id"]);
+      }
 
-      return response.data;
-    } catch (e) {
-      print(e);
+      return response;
+    }
+    on DioError catch (e) {
+      //print(e.response?.statusCode);
+      return e.response;
     }
   }
 }
