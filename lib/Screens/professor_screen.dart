@@ -441,6 +441,7 @@ class ProfessorReview extends StatelessWidget {
                           alignment: Alignment.topCenter,
                             child: CircleAvatar(
                               backgroundImage: image,
+                              //child: ,
 
                             ),
                         ),
