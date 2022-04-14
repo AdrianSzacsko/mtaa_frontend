@@ -285,6 +285,21 @@ class SearchScreenState extends State<SearchScreen> {
     );
   }
 
+  showSnackBar(String text, Color? color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: color,
+        content: Text(
+          text,
+          //textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -355,8 +370,8 @@ class SearchScreenState extends State<SearchScreen> {
         ),
       ),
       onWillPop: () async {
-        bool? result= await dialogConfirmation(context, "Exit", ""
-            "Are you sure you want to quit AcaRate?");
+        bool? result= await dialogConfirmation(context, "Log Out",
+            "Are you sure you want to log out?");
         if(result == null){
           result = false;
         }
@@ -368,6 +383,7 @@ class SearchScreenState extends State<SearchScreen> {
           );
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.clear();
+          showSnackBar("Log Out Successful", primaryColor[300]);
         }
         return result;
       },
