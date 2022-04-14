@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:mtaa_frontend/Screens/professor_screen.dart';
 import 'package:mtaa_frontend/Screens/search_screen.dart';
 import 'package:mtaa_frontend/Models/prof.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
 
+import '../Models/Professor.dart';
 import '../Models/subj.dart';
 import '../constants.dart';
 
@@ -24,6 +26,39 @@ class _ProfessorReviewScreenState extends State<ProfessorReviewScreen> {
   late var ratingSlider = 0.0;
   late var reviewController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  void revertState(BuildContext context, String prof_id) async {
+    var resp = await ProfessorClass().getProfessor(prof_id);
+    var resp2 = await ProfessorClass().getProfessorReviews(prof_id);
+
+    List<List<String>> allReviews = <List<String>>[];
+    resp2?.forEach((item) {
+      //var author = await Profile().getProfile(item["user_id"].toString());
+      allReviews.add([item["id"].toString(), item["user_id"].toString(),
+        item["message"].toString(), item["rating"].toString()]);
+      //print(item);
+    });
+
+    var professor = Professor(
+      prof_id: prof_id,
+      name: resp[0]["name"],
+      reviews: allReviews,
+    );
+
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ProfessorScreen(),
+        settings: RouteSettings(
+          arguments: professor,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +228,8 @@ class _ProfessorReviewScreenState extends State<ProfessorReviewScreen> {
                                         ratingSlider.toStringAsFixed(0),
                                         widget.prof_id);
 
-                                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+                                    //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+                                    revertState(context, widget.prof_id.toString());
                                   }
                                 },
                                 child: const Icon(

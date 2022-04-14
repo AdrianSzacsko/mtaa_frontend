@@ -50,6 +50,9 @@ class _EditProfessorReviewScreenState extends State<EditProfessorReviewScreen> {
     );
 
     Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
     Navigator.push(
       context,
       MaterialPageRoute(
