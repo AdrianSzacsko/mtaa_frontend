@@ -188,6 +188,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     MaterialPageRoute<void>(builder: (BuildContext context) => const SignInScreen()),
                     ModalRoute.withName('/'),
                   );
+                  showSnackBar("Log Out Successful", primaryColor[300]);
                 }
               }
             ),
@@ -201,6 +202,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   await prefs.clear();
                   await Profile().deleteProfile();
                   Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const SignInScreen()));
+                  showSnackBar("Account Deleted", secondaryColor[300]);
                 }
             }
 
@@ -209,6 +211,21 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
       );
+  }
+
+  showSnackBar(String text, Color? color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: color,
+        content: Text(
+          text,
+          //textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
   }
 
   showConfirmLogout(){
