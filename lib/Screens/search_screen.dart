@@ -227,41 +227,100 @@ class SearchScreenState extends State<SearchScreen> {
     );
   }
 
+  static Future<bool> dialogConfirmation(
+      BuildContext context,
+      String title,
+      String content, {
+        String textNo = 'No',
+        String textYes = 'Yes',
+      }) async {
+    return await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          alignment: Alignment.center,
+          title: Text(title, textAlign: TextAlign.center),
+          content: Text(content, textAlign: TextAlign.center),
+          actions: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, defaultPadding),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    FloatingActionButton(
+                      heroTag: null,
+                      elevation: 10,
+                      backgroundColor: primaryColor[300],
+                      splashColor: secondaryColor[300],
+                      onPressed: () => Navigator.pop(context, true),
+                      child: const Icon(
+                        Icons.check_outlined,
+                        color: Colors.white,
+                      ),
+                    ),
+                    FloatingActionButton(
+                      heroTag: null,
+                      elevation: 10,
+                      backgroundColor: secondaryColor[300],
+                      splashColor: primaryColor[300],
+                      onPressed: () => Navigator.pop(context, false),
+                      child: const Icon(
+                        Icons.cancel_outlined,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: myAppBar(context),
-      bottomNavigationBar: myBottomAppBar(context),
-      body: SingleChildScrollView(
-          child: Stack(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            color: backgroundColor,
-            child: Column(
-              children: [
-                Container(
-                  height: 100,
-                  alignment: Alignment.topCenter,
-                  padding: const EdgeInsets.all(5.0),
-                  child: Align(
-                    child: Form(
-                      child: userInput(searchController, //Calling inputField  class
-                          const Icon(
-                            Icons.search_outlined,
-                            color: backgroundText,
-                          ),
-                          "Search...", context),
+    return WillPopScope(
+      child: Scaffold(
+        appBar: myAppBar(context),
+        bottomNavigationBar: myBottomAppBar(context),
+        body: Stack(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              color: backgroundColor,
+              child: Column(
+                children: [
+                  Container(
+                    height: 100,
+                    alignment: Alignment.topCenter,
+                    padding: const EdgeInsets.all(5.0),
+                    child: Align(
+                      child: Form(
+                        child: userInput(searchController, //Calling inputField  class
+                            const Icon(
+                              Icons.search_outlined,
+                              color: backgroundText,
+                            ),
+                            "Search...", context),
+                      ),
                     ),
                   ),
-                ),
                   Container(
                     //height: 200,
                     child: Align(
                       alignment: Alignment.center,
                       //alignment: Alignment.topCenter,
                       child: FloatingActionButton(
+                        heroTag: null,
                         backgroundColor: secondaryColor[300],
                         elevation: 10,
                         //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
@@ -294,7 +353,24 @@ class SearchScreenState extends State<SearchScreen> {
             circularLoadingScreen(_isloadingCircle),
           ],
         ),
-      )
+      ),
+      onWillPop: () async {
+        bool? result= await dialogConfirmation(context, "Exit", ""
+            "Are you sure you want to quit AcaRate?");
+        if(result == null){
+          result = false;
+        }
+        else if (result == true) {
+          Navigator.pushAndRemoveUntil<void>(
+            context,
+            MaterialPageRoute<void>(builder: (BuildContext context) => const SignInScreen()),
+            ModalRoute.withName('/'),
+          );
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.clear();
+        }
+        return result;
+      },
     );
   }
 }

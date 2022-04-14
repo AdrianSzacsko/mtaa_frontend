@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:mtaa_frontend/Screens/search_screen.dart';
+import 'package:mtaa_frontend/Screens/subject_screen.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
 
+import '../Models/Subject.dart';
 import '../Models/subj.dart';
 import '../constants.dart';
 
@@ -28,6 +30,53 @@ class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
   late var profSlider = 0.0;
   late var reviewController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  void revertState(BuildContext context, String subj_id) async {
+    var resp = await SubjectClass().getSubject(subj_id);
+    print(resp);
+    List<String> allProfessors = <String>[];
+    resp?.forEach((item) {
+      allProfessors.add(item["teachers"]);
+    });
+
+    var resp2 = await SubjectClass().getSubjectReviews(subj_id);
+    //print("*********************************");
+    //print(resp2);
+    //print("*********************************");
+
+    List<List<String>> allReviews = <List<String>>[];
+    resp2?.forEach((item) {
+      allReviews.add([item["id"].toString(),
+        item["user_id"].toString(),
+        item["message"].toString(), item["difficulty"].toString(),
+        item["usability"].toString(), item["prof_avg"].toString()]);
+    });
+
+    //print(allReviews);
+
+    var subject = Subject(
+      subj_id: subj_id,
+      name: resp[0]["name"],
+      professors: allProfessors,
+      reviews: allReviews,
+    );
+
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SubjectScreen(),
+        // Pass the arguments as part of the RouteSettings. The
+        // DetailScreen reads the arguments from these settings.
+        settings: RouteSettings(
+          arguments: subject,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -329,53 +378,6 @@ class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
                               onChanged: (newValue) {
                                 setState(() {
                                   profSlider = newValue;
-/*
-                              if (sliderValue == 1.0 ) {
-                                myFeedback1 = Icons.star_outlined;
-                                myFeedbackColor1 = Colors.yellow;
-                              }
-                              else if (sliderValue < 1.0 ){
-                                myFeedback1 = Icons.star;
-                                myFeedbackColor1 = Colors.grey;
-
-                              }
-                              if (sliderValue == 2.0 ) {
-                                myFeedback2 = Icons.star_outlined;
-                                myFeedbackColor2= Colors.yellow;
-                              }
-                              else if (sliderValue < 2.0 ){
-                                myFeedback2 = Icons.star;
-                                myFeedbackColor2 = Colors.grey;
-
-                              }
-                              if (sliderValue == 3.0 ) {
-                                myFeedback3 = Icons.star_outlined;
-                                myFeedbackColor3 = Colors.yellow;
-                              }
-                              else if (sliderValue < 3.0 ){
-                                myFeedback3 = Icons.star;
-                                myFeedbackColor3 = Colors.grey;
-
-                              }
-                              if (sliderValue == 4.0 ) {
-                                myFeedback4 = Icons.star_outlined;
-                                myFeedbackColor4 = Colors.yellow;
-                              }
-                              else if (sliderValue < 4.0 ){
-                                myFeedback4 = Icons.star;
-                                myFeedbackColor4 = Colors.grey;
-
-                              }
-                              if (sliderValue == 5.0 ) {
-                                myFeedback5 = Icons.star_outlined;
-                                myFeedbackColor5 = Colors.yellow;
-                              }
-                              else if (sliderValue < 5.0 ){
-                                myFeedback5 = Icons.star;
-                                myFeedbackColor5 = Colors.grey;
-
-                              }*/
-
                                 });
                               },
                             ),),
@@ -428,6 +430,7 @@ class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
                               child: Container(child: Align(
                                 alignment: Alignment.bottomCenter,
                                 child: FloatingActionButton(
+                                  heroTag: null,
                                   elevation: 10,
                                   backgroundColor: primaryColor[300],
                                   splashColor: secondaryColor[300],
@@ -452,7 +455,9 @@ class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
                                           profSlider.toStringAsFixed(0),
                                           widget.subj_id);
 
-                                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+                                      revertState(context, widget.subj_id.toString());
+
+                                      //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
                                     }
                                   },
                                   child: const Icon(

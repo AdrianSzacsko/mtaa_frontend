@@ -50,6 +50,9 @@ class _EditProfessorReviewScreenState extends State<EditProfessorReviewScreen> {
     );
 
     Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -207,6 +210,7 @@ class _EditProfessorReviewScreenState extends State<EditProfessorReviewScreen> {
                             child: Container(child: Align(
                               alignment: Alignment.bottomCenter,
                               child: FloatingActionButton(
+                                heroTag: null,
                                 elevation: 10,
                                 backgroundColor: primaryColor[300],
                                 splashColor: secondaryColor[300],

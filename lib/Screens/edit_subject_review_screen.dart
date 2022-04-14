@@ -69,6 +69,8 @@ class _EditSubjectReviewScreenState extends State<EditSubjectReviewScreen> {
 
     Navigator.pop(context);
     Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -434,6 +436,7 @@ class _EditSubjectReviewScreenState extends State<EditSubjectReviewScreen> {
                               child: Container(child: Align(
                                 alignment: Alignment.bottomCenter,
                                 child: FloatingActionButton(
+                                  heroTag: null,
                                   elevation: 10,
                                   backgroundColor: primaryColor[300],
                                   splashColor: secondaryColor[300],

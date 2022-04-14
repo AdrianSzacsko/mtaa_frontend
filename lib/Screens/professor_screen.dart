@@ -215,6 +215,7 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
                         child: Align(
                           alignment: Alignment.bottomRight,
                           child: FloatingActionButton(
+                            heroTag: null,
                             elevation: 10,
                             backgroundColor: secondaryColor[300],
                             splashColor: primaryColor[300],
@@ -324,6 +325,7 @@ class ProfessorReview extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     FloatingActionButton(
+                      heroTag: null,
                       elevation: 10,
                       backgroundColor: primaryColor[300],
                       splashColor: secondaryColor[300],
@@ -334,6 +336,7 @@ class ProfessorReview extends StatelessWidget {
                       ),
                     ),
                     FloatingActionButton(
+                      heroTag: null,
                       elevation: 10,
                       backgroundColor: secondaryColor[300],
                       splashColor: primaryColor[300],
@@ -456,6 +459,7 @@ class ProfessorReview extends StatelessWidget {
                                         child: SizedBox.fromSize(
                                           size: Size(28, 28), // button width and height
                                           child: FloatingActionButton(
+                                            heroTag: null,
                                             elevation: 10,
                                             backgroundColor: secondaryColor[300],
                                             splashColor: primaryColor[300],

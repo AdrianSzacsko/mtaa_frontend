@@ -175,6 +175,7 @@ class _CallSampleState extends State<CallSample> {
           title: Text("Calling..."),
           actions: <Widget>[
             FloatingActionButton(
+              heroTag: null,
               backgroundColor: secondaryColor[300],
               child: const Icon(
                 Icons.cancel_outlined,

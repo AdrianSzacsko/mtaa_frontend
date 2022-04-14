@@ -267,6 +267,7 @@ class _SubjectScreenState extends State<SubjectScreen> {
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: FloatingActionButton(
+                          heroTag: null,
                           elevation: 10,
                           backgroundColor: secondaryColor[300],
                           splashColor: primaryColor[300],
@@ -373,6 +374,7 @@ class SubjectReview extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     FloatingActionButton(
+                      heroTag: null,
                       elevation: 10,
                       backgroundColor: primaryColor[300],
                       splashColor: secondaryColor[300],
@@ -383,6 +385,7 @@ class SubjectReview extends StatelessWidget {
                       ),
                     ),
                     FloatingActionButton(
+                      heroTag: null,
                       elevation: 10,
                       backgroundColor: secondaryColor[300],
                       splashColor: primaryColor[300],
@@ -516,6 +519,7 @@ class SubjectReview extends StatelessWidget {
                                           child: SizedBox.fromSize(
                                             size: Size(28, 28), // button width and height
                                             child: FloatingActionButton(
+                                              heroTag: null,
                                               elevation: 10,
                                               backgroundColor: secondaryColor[300],
                                               splashColor: primaryColor[300],

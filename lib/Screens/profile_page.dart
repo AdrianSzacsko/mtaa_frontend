@@ -246,6 +246,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Container(
                             margin: const EdgeInsets.all(defaultPadding / 4),
                             child: FloatingActionButton(
+                              heroTag: null,
                               backgroundColor: tertiaryColor[300],
                               onPressed: () async {
                                 final image = await FilePicker.platform.pickFiles(
@@ -272,6 +273,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             borderRadius: BorderRadius.circular(12),
                           ),*/
                               child: FloatingActionButton(
+                                heroTag: null,
                                 backgroundColor: secondaryColor[300],
                                 onPressed: () {
                                   Profile().deleteProfilePic();
@@ -306,6 +308,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             borderRadius: BorderRadius.circular(12),
                           ),*/
                           child: FloatingActionButton(
+                            heroTag: null,
                             backgroundColor: primaryColor[300],
                             onPressed: (){
                               if (file == newFile || newFileBytes.isEmpty) {

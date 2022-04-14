@@ -255,9 +255,9 @@ class SignUpScreen extends StatelessWidget {
                             onPressed: () {
                               if (_formKey.currentState?.validate() ?? false) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    backgroundColor: Colors.white,
-                                    content: Text(
+                                  SnackBar(
+                                    backgroundColor: primaryColor[300],
+                                    content: const Text(
                                       'Registration Successful',
                                       style: TextStyle(
                                         color: Colors.black,
@@ -276,7 +276,7 @@ class SignUpScreen extends StatelessWidget {
                                   int.parse(studyYearController.text),
                                   passwordController.text,
                                 );
-                                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SignUpScreen()));
+                                Navigator.of(context).pop();
                               }
                             },
                             child: const Text("Register", style: TextStyle(color: Colors.white,
