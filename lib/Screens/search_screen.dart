@@ -232,7 +232,8 @@ class SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: myAppBar(context),
       bottomNavigationBar: myBottomAppBar(context),
-      body: Stack(
+      body: SingleChildScrollView(
+          child: Stack(
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
@@ -293,6 +294,7 @@ class SearchScreenState extends State<SearchScreen> {
             circularLoadingScreen(_isloadingCircle),
           ],
         ),
+      )
     );
   }
 }

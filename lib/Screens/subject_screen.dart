@@ -166,6 +166,7 @@ class _SubjectScreenState extends State<SubjectScreen> {
     //List<Widget> widgets = List<Widget>.empty(growable: true);
     for (var item in reviews) {
       var author = await Profile().getProfile(item[1].toString());
+      var img = await Profile().getProfilePic(item[1].toString());
       //var pic = await Profile().getProfilePic(item[0].toString());
       averageDifficulty = averageDifficulty + int.parse(item[3]);
       averageUsability = averageUsability + int.parse(item[4]);
@@ -183,7 +184,7 @@ class _SubjectScreenState extends State<SubjectScreen> {
         difficulty: int.parse(item[3]),
         usability: int.parse(item[4]),
         prof_avg: int.parse(item[5]),
-        image: "puzzle.png",
+        image: img == null ? const AssetImage("assets/Images/profile-unknown.png") : img,
       ));
     }
     print(allReviews);
@@ -343,7 +344,7 @@ class SubjectReview extends StatelessWidget {
   final int difficulty;
   final int usability;
   final int prof_avg;
-  final String image;
+  final ImageProvider image;
 
   static Future<bool> dialogConfirmation(
       BuildContext context,
@@ -495,15 +496,15 @@ class SubjectReview extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(defaultPadding),
                           child: Align(
-                              child: Image.asset('assets/Images/' + image,
-                                height: 80.0,
-                                fit: BoxFit.cover,
-                              )
+                            alignment: Alignment.topCenter,
+                            child: CircleAvatar(
+                              backgroundImage: image,
+                            ),
                           ),
                         ),
                         Expanded(
                             child: Container(
-                                padding: const EdgeInsets.all(defaultPadding / 2),
+                                padding: const EdgeInsets.fromLTRB(0,defaultPadding / 2,defaultPadding / 2,defaultPadding / 2),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[

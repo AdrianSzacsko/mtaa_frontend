@@ -25,7 +25,7 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
   num averageRating = 0;
 
   Widget buildImage() {
-    const image = const NetworkImage('https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80');
+    const image = AssetImage("assets/Images/profile-unknown.png");
 
     return ClipOval(
       child: Material(
@@ -119,6 +119,8 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
     //List<Widget> widgets = List<Widget>.empty(growable: true);
     for (var item in reviews) {
       var author = await Profile().getProfile(item[1].toString());
+      var img = await Profile().getProfilePic(item[1].toString());
+      //TODO add endpoint
       //var pic = await Profile().getProfilePic(item[0].toString());
       averageRating = averageRating + int.parse(item[3]);
       //print("9999999999999999999999999999999999");
@@ -132,7 +134,7 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
         name: author[0]["name"],
         description: item[2],
         rating: int.parse(item[3]),
-        image: "puzzle.png",
+        image: img == null ? const AssetImage("assets/Images/profile-unknown.png") : img,
       ));
     }
     print(allReviews);
@@ -293,7 +295,7 @@ class ProfessorReview extends StatelessWidget {
   final String name;
   final String description;
   final int rating;
-  final String image;
+  final ImageProvider image;
 
   static Future<bool> dialogConfirmation(
       BuildContext context,
@@ -433,15 +435,16 @@ class ProfessorReview extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(defaultPadding),
                         child: Align(
-                            child: Image.asset('assets/Images/' + image,
-                              height: 80.0,
-                              fit: BoxFit.cover,
-                            )
+                          alignment: Alignment.topCenter,
+                            child: CircleAvatar(
+                              backgroundImage: image,
+
+                            ),
                         ),
                       ),
                       Expanded(
                           child: Container(
-                              padding: const EdgeInsets.all(defaultPadding / 2),
+                              padding: const EdgeInsets.fromLTRB(0,defaultPadding / 2,defaultPadding / 2,defaultPadding / 2),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
