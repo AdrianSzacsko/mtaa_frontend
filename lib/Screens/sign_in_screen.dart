@@ -250,6 +250,7 @@ class SignInScreenState extends State<SignInScreen> {
                                 }
                                 else if (response.statusCode == 403) {
                                   responseBar("Invalid credentials. Check your email and password", secondaryColor);
+                                  //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
                                 }
                                 else if (response.statusCode >= 500) {
                                   responseBar("There is an error on server side, sit tight...", secondaryColor);

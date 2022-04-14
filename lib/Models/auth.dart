@@ -41,11 +41,11 @@ class Auth with ChangeNotifier {
         'study_year': studyYear,
         'pwd': password
       });
-      print(response.data);
+      //print(response.data);
       return response;
     }
     on DioError catch (e) {
-      print(e.response?.statusCode);
+      //print(e.response?.statusCode);
       return e.response;
     }
   }
@@ -76,7 +76,7 @@ class Auth with ChangeNotifier {
       return response;
     }
     on DioError catch (e) {
-      print(e.response?.statusCode);
+      //print(e.response?.statusCode);
       return e.response;
     }
   }
