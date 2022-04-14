@@ -254,6 +254,7 @@ class SearchScreenState extends State<SearchScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     FloatingActionButton(
+                      heroTag: null,
                       elevation: 10,
                       backgroundColor: primaryColor[300],
                       splashColor: secondaryColor[300],
@@ -264,6 +265,7 @@ class SearchScreenState extends State<SearchScreen> {
                       ),
                     ),
                     FloatingActionButton(
+                      heroTag: null,
                       elevation: 10,
                       backgroundColor: secondaryColor[300],
                       splashColor: primaryColor[300],
@@ -318,6 +320,7 @@ class SearchScreenState extends State<SearchScreen> {
                       alignment: Alignment.center,
                       //alignment: Alignment.topCenter,
                       child: FloatingActionButton(
+                        heroTag: null,
                         backgroundColor: secondaryColor[300],
                         elevation: 10,
                         //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),

@@ -90,6 +90,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           FloatingActionButton(
+                            heroTag: null,
                             backgroundColor: primaryColor[300],
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CallSample(host: ipController.text)));
@@ -101,6 +102,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                           ),
                           FloatingActionButton(
+                            heroTag: null,
                             backgroundColor: secondaryColor[300],
                             onPressed: () => Navigator.pop(context, false),
                             child: const Icon(
@@ -261,6 +263,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     FloatingActionButton(
+                      heroTag: null,
                       elevation: 10,
                       backgroundColor: primaryColor[300],
                       splashColor: secondaryColor[300],
@@ -271,6 +274,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                     FloatingActionButton(
+                      heroTag: null,
                       elevation: 10,
                       backgroundColor: secondaryColor[300],
                       splashColor: primaryColor[300],

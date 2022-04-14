@@ -428,6 +428,7 @@ class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
                               child: Container(child: Align(
                                 alignment: Alignment.bottomCenter,
                                 child: FloatingActionButton(
+                                  heroTag: null,
                                   elevation: 10,
                                   backgroundColor: primaryColor[300],
                                   splashColor: secondaryColor[300],

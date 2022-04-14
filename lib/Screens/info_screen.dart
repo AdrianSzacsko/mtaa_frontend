@@ -54,6 +54,7 @@ class InfoScreenState extends State<InfoScreen> {
           : Container(),
     ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         onPressed: () {
           /*setState(() {
             _controller.play();

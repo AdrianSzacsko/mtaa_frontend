@@ -74,6 +74,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       FloatingActionButton(
+                        heroTag: null,
                         backgroundColor: primaryColor[300],
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CallSample(host: ipController.text)));
@@ -85,6 +86,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ),
                       FloatingActionButton(
+                        heroTag: null,
                         backgroundColor: secondaryColor[300],
                         onPressed: () => Navigator.pop(context, false),
                         child: const Icon(

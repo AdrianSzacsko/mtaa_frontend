@@ -154,6 +154,7 @@ class _DataChannelSampleState extends State<DataChannelSample> {
       ),
       floatingActionButton: _inCalling
           ? FloatingActionButton(
+              heroTag: null,
               onPressed: _hangUp,
               tooltip: 'Hangup',
               child: Icon(Icons.call_end),
