@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mtaa_frontend/Screens/profile_page.dart';
 import 'package:mtaa_frontend/Screens/subject_review_screen.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/Subject.dart';
+import '../Models/User.dart';
 import '../Models/profile.dart';
 import '../Models/subj.dart';
 import '../UI/loading_screen.dart';
@@ -325,6 +327,17 @@ class SubjectReview extends StatelessWidget {
     ),
   );
 
+  setLoadingScreenNavigator(context) async {
+    //TODO loadingscreen
+    circularLoadingScreen(true);
+    await Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProfilePage(),
+      settings: RouteSettings(
+        arguments: await getUserProfile(user_id),
+      ),
+    ));
+    circularLoadingScreen(false);
+  }
+
   Future<bool> userIdMatch(int id) async {
     final prefs = await SharedPreferences.getInstance();
     final user_id = prefs.getInt('user_id') ?? '';
@@ -451,6 +464,23 @@ class SubjectReview extends StatelessWidget {
   }
 
 
+  getUserProfile(userId) async {
+    var resp = await Profile().getProfile(userId.toString());
+    var resp2 = await Profile().getProfilePic(userId.toString());
+
+    var myUser = User(
+        user_id: resp[0]["id"],
+        email: resp[0]["email"],
+        name: resp[0]["name"],
+        comments: resp[0]["comments"].toString(),
+        reg_date: resp[0]["reg_date"].toString(),
+        study_year: resp[0]["study_year"].toString(),
+        image: resp2 == null ? const AssetImage("assets/Images/profile-unknown.png") : resp2,
+        permission: resp[0]["permission"].toString().toLowerCase() == 'true' ? true : false
+    );
+    return myUser;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
@@ -502,6 +532,14 @@ class SubjectReview extends StatelessWidget {
                             alignment: Alignment.topCenter,
                             child: CircleAvatar(
                               backgroundImage: image,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: const CircleBorder(),
+                                    primary: Colors.transparent
+                                ),
+                                onPressed: () {setLoadingScreenNavigator(context);},
+                                child: null,
+                              ),
                             ),
                           ),
                         ),

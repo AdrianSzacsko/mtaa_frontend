@@ -6,6 +6,7 @@ import 'package:mtaa_frontend/UI/appbar.dart';
 import 'package:mtaa_frontend/UI/loading_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Models/User.dart';
 import '../Models/prof.dart';
 import '../Models/profile.dart';
 import '../constants.dart';
@@ -120,7 +121,6 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
     for (var item in reviews) {
       var author = await Profile().getProfile(item[1].toString());
       var img = await Profile().getProfilePic(item[1].toString());
-      //TODO add endpoint
       //var pic = await Profile().getProfilePic(item[0].toString());
       averageRating = averageRating + int.parse(item[3]);
       //print("9999999999999999999999999999999999");
@@ -278,6 +278,18 @@ class ProfessorReview extends StatelessWidget {
     ),
   );
 
+  setLoadingScreenNavigator(context) async {
+    //TODO loadingscreen
+    circularLoadingScreen(true);
+    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProfilePage(),
+      settings: RouteSettings(
+        arguments: await getUserProfile(user_id),
+      ),
+    ));
+    circularLoadingScreen(false);
+  }
+
+
   Future<bool> userIdMatch(int id) async {
     final prefs = await SharedPreferences.getInstance();
     final user_id = prefs.getInt('user_id') ?? '';
@@ -390,6 +402,25 @@ class ProfessorReview extends StatelessWidget {
     );
   }
 
+  getUserProfile(userId) async {
+    var resp = await Profile().getProfile(userId.toString());
+    var resp2 = await Profile().getProfilePic(userId.toString());
+
+    var myUser = User(
+        user_id: resp[0]["id"],
+        email: resp[0]["email"],
+        name: resp[0]["name"],
+        comments: resp[0]["comments"].toString(),
+        reg_date: resp[0]["reg_date"].toString(),
+        study_year: resp[0]["study_year"].toString(),
+        image: resp2 == null ? const AssetImage("assets/Images/profile-unknown.png") : resp2,
+        permission: resp[0]["permission"].toString().toLowerCase() == 'true' ? true : false
+    );
+    return myUser;
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
@@ -441,8 +472,14 @@ class ProfessorReview extends StatelessWidget {
                           alignment: Alignment.topCenter,
                             child: CircleAvatar(
                               backgroundImage: image,
-                              //child: ,
-
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: const CircleBorder(),
+                                  primary: Colors.transparent
+                                ),
+                                onPressed: () {setLoadingScreenNavigator(context);},
+                                child: null,
+                              ),
                             ),
                         ),
                       ),
@@ -495,6 +532,7 @@ class ProfessorReview extends StatelessWidget {
           ),
       );
     }
+
     );
   }
 }
