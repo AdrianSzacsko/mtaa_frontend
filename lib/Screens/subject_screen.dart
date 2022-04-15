@@ -8,6 +8,7 @@ import '../Models/Subject.dart';
 import '../Models/User.dart';
 import '../Models/profile.dart';
 import '../Models/subj.dart';
+import '../Responses/Subject/respGetSubject.dart';
 import '../Responses/User/respGetMyUser.dart';
 import '../UI/loading_screen.dart';
 import '../constants.dart';
@@ -425,47 +426,22 @@ class SubjectReview extends StatelessWidget {
 
 
   void revertState(BuildContext context, String subj_id) async {
-    var resp = await SubjectClass().getSubject(subj_id);
-    print(resp);
-    List<String> allProfessors = <String>[];
-    resp?.forEach((item) {
-      allProfessors.add(item["teachers"]);
-    });
+    var subject = await respGetSubject(subj_id, context);
 
-    var resp2 = await SubjectClass().getSubjectReviews(subj_id);
-    //print("*********************************");
-    //print(resp2);
-    //print("*********************************");
-
-    List<List<String>> allReviews = <List<String>>[];
-    resp2?.forEach((item) {
-      allReviews.add([item["id"].toString(),
-        item["user_id"].toString(),
-        item["message"].toString(), item["difficulty"].toString(),
-        item["usability"].toString(), item["prof_avg"].toString()]);
-    });
-
-    //print(allReviews);
-
-    var subject = Subject(
-      subj_id: subj_id,
-      name: resp[0]["name"],
-      professors: allProfessors,
-      reviews: allReviews,
-    );
-
-    Navigator.pop(context);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SubjectScreen(),
-        // Pass the arguments as part of the RouteSettings. The
-        // DetailScreen reads the arguments from these settings.
-        settings: RouteSettings(
-          arguments: subject,
+    if (subject != null) {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SubjectScreen(),
+          // Pass the arguments as part of the RouteSettings. The
+          // DetailScreen reads the arguments from these settings.
+          settings: RouteSettings(
+            arguments: subject,
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
 

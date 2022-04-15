@@ -89,7 +89,7 @@ class ProfessorClass with ChangeNotifier {
     }
   }
 
-  Future<dynamic> deleteReview(String user_id, String prof_id) async {
+  Future<dynamic?> deleteReview(String user_id, String prof_id) async {
     var dio = Dio();
     dio.options.headers['content-Type'] = 'application/json';
 

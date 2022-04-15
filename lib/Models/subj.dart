@@ -19,11 +19,10 @@ class SubjectClass with ChangeNotifier {
 
     try {
       response = await dio.get(urlKey + 'subj/' + subj_id);
-      print(response.data);
-      return response.data;
+      return response;
     }
-    catch (e) {
-      print(e);
+    on DioError catch (e) {
+      return e.response;
     }
 
     return null;
@@ -41,11 +40,10 @@ class SubjectClass with ChangeNotifier {
 
     try {
       response = await dio.get(urlKey + 'subj/' + subj_id + "/reviews");
-      print(response.data);
-      return response.data;
+      return response;
     }
-    catch (e) {
-      print(e);
+    on DioError catch (e) {
+      return e.response;
     }
   }
 

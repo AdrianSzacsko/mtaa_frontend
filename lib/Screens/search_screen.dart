@@ -22,6 +22,7 @@ import '../Models/search.dart';
 import '../Models/User.dart';
 import '../Models/subj.dart';
 import '../Responses/Professor/respGetProfessor.dart';
+import '../Responses/Subject/respGetSubject.dart';
 import '../Responses/User/respGetMyUser.dart';
 import '../UI/appbar.dart';
 import '../constants.dart';
@@ -165,46 +166,21 @@ class SearchScreenState extends State<SearchScreen> {
                 }
               }
               else {
-                var resp = await SubjectClass().getSubject(row[2]);
-                print(resp);
-                List<String> allProfessors = <String>[];
-                resp?.forEach((item) {
-                  allProfessors.add(item["teachers"]);
-                });
+                var subject = await respGetSubject(row[2], context);
 
-                var resp2 = await SubjectClass().getSubjectReviews(row[2]);
-                print("*********************************");
-                print(resp2);
-                print("*********************************");
-
-                List<List<String>> allReviews = <List<String>>[];
-                resp2?.forEach((item) {
-                  allReviews.add([item["id"].toString(),
-                    item["user_id"].toString(),
-                    item["message"].toString(), item["difficulty"].toString(),
-                    item["usability"].toString(), item["prof_avg"].toString()]);
-                });
-
-                print(allReviews);
-
-                var subject = Subject(
-                  subj_id: row[2],
-                  name: resp[0]["name"],
-                  professors: allProfessors,
-                  reviews: allReviews,
-                );
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SubjectScreen(),
-                    // Pass the arguments as part of the RouteSettings. The
-                    // DetailScreen reads the arguments from these settings.
-                    settings: RouteSettings(
-                      arguments: subject,
+                if (subject != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SubjectScreen(),
+                      // Pass the arguments as part of the RouteSettings. The
+                      // DetailScreen reads the arguments from these settings.
+                      settings: RouteSettings(
+                        arguments: subject,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }
               }
               setState(() {
                 _isloadingCircle = false;

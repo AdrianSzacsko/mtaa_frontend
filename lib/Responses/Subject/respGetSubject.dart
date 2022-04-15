@@ -1,50 +1,62 @@
 
 import '../../Models/Professor.dart';
+import '../../Models/Subject.dart';
 import '../../Models/User.dart';
 import '../../Models/prof.dart';
 import '../../Models/profile.dart';
+import '../../Models/subj.dart';
 import '../../UI/responseBar.dart';
 import '../../constants.dart';
 import 'package:flutter/material.dart';
 
-respGetProfessor(String prof_id, context) async {
-  var resp = await ProfessorClass().getProfessor(prof_id);
+respGetSubject(String subj_id, context) async {
+  var resp = await SubjectClass().getSubject(subj_id);
   if (resp == null) {
     responseBar("There was en error during execution. Check your connection.",
         secondaryColor, context);
   }
   else {
     if (resp.statusCode == 200) {
-      var resp2 = await ProfessorClass().getProfessorReviews(prof_id);
+      var resp2 = await SubjectClass().getSubjectReviews(subj_id);
 
       if (resp2 == null) {
         responseBar(
-            "There was en error fetching professor reviews.", secondaryColor,
+            "There was en error fetching subject reviews.", secondaryColor,
             context);
       }
       else {
         if (resp2.statusCode == 200) {
+          List<String> allProfessors = <String>[];
+          resp.data?.forEach((item) {
+            allProfessors.add(item["teachers"]);
+          });
 
           List<List<String>> allReviews = <List<String>>[];
           resp2.data?.forEach((item) {
-            allReviews.add([item["id"].toString(), item["user_id"].toString(),
-              item["message"].toString(), item["rating"].toString()]);
+            allReviews.add([item["id"].toString(),
+              item["user_id"].toString(),
+              item["message"].toString(), item["difficulty"].toString(),
+              item["usability"].toString(), item["prof_avg"].toString()]);
           });
 
-          var professor = Professor(
-            prof_id: prof_id,
+          var subject = Subject(
+            subj_id: subj_id,
             name: resp.data[0]["name"],
+            professors: allProfessors,
             reviews: allReviews,
           );
-          return professor;
+
+          return subject;
         }
         else if (resp2.statusCode == 404) {
-          var professor = Professor(
-            prof_id: prof_id,
+          var subject = Subject(
+            subj_id: subj_id,
             name: resp.data[0]["name"],
+            professors: <String>[],
             reviews: <List<String>>[],
           );
-          return professor;
+
+          return subject;
         }
         else if (resp2.statusCode == 401) {
           responseBar(resp2.data["detail"], secondaryColor, context);
@@ -56,7 +68,7 @@ respGetProfessor(String prof_id, context) async {
         }
         else {
           responseBar(
-              "There was en error fetching professor reviews.", secondaryColor,
+              "There was en error fetching subject reviews.", secondaryColor,
               context);
         }
       }

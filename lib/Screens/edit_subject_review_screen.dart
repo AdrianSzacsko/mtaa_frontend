@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:mtaa_frontend/Responses/Subject/respGetSubject.dart';
 import 'package:mtaa_frontend/Screens/search_screen.dart';
 import 'package:mtaa_frontend/Screens/subject_screen.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
@@ -38,50 +39,25 @@ class _EditSubjectReviewScreenState extends State<EditSubjectReviewScreen> {
       myFeedbackColor4 = Colors.grey,myFeedbackColor5 = Colors.grey;
 
   void revertState(BuildContext context, String subj_id) async {
-    var resp = await SubjectClass().getSubject(subj_id);
-    print(resp);
-    List<String> allProfessors = <String>[];
-    resp?.forEach((item) {
-      allProfessors.add(item["teachers"]);
-    });
+    var subject = await respGetSubject(subj_id, context);
 
-    var resp2 = await SubjectClass().getSubjectReviews(subj_id);
-    //print("*********************************");
-    //print(resp2);
-    //print("*********************************");
-
-    List<List<String>> allReviews = <List<String>>[];
-    resp2?.forEach((item) {
-      allReviews.add([item["id"].toString(),
-        item["user_id"].toString(),
-        item["message"].toString(), item["difficulty"].toString(),
-        item["usability"].toString(), item["prof_avg"].toString()]);
-    });
-
-    //print(allReviews);
-
-    var subject = Subject(
-      subj_id: subj_id,
-      name: resp[0]["name"],
-      professors: allProfessors,
-      reviews: allReviews,
-    );
-
-    Navigator.pop(context);
-    Navigator.pop(context);
-    Navigator.pop(context);
-    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SubjectScreen(),
-        // Pass the arguments as part of the RouteSettings. The
-        // DetailScreen reads the arguments from these settings.
-        settings: RouteSettings(
-          arguments: subject,
+    if (subject != null) {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SubjectScreen(),
+          // Pass the arguments as part of the RouteSettings. The
+          // DetailScreen reads the arguments from these settings.
+          settings: RouteSettings(
+            arguments: subject,
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   @override
