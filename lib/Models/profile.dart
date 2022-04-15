@@ -77,9 +77,7 @@ class Profile with ChangeNotifier {
     }
   }
 
-    putProfilePic({
-      required Uint8List bytes,
-  }) async {
+    putProfilePic({required Uint8List bytes,}) async {
     var dio = Dio();
 
     final mime = lookupMimeType('', headerBytes: bytes);

@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mime/mime.dart';
+import 'package:mtaa_frontend/Responses/respDeletePic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/User.dart';
@@ -257,8 +258,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: FloatingActionButton(
                                 heroTag: null,
                                 backgroundColor: secondaryColor[300],
-                                onPressed: () {
-                                  Profile().deleteProfilePic();
+                                onPressed: () async {
+                                  await respDeletePic(context);
                                   /*
                               if (newFileBytes.isNotEmpty){
                                 newFileBytes.clear();
