@@ -120,7 +120,7 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
   Future<List<Widget>> makeWidgets(List<List<String>> reviews) async {
     //List<Widget> widgets = List<Widget>.empty(growable: true);
     for (var item in reviews) {
-      var myUser = await respMyUser(int.parse(item[1]), context);
+      var myUser = await respGetMyUser(int.parse(item[1]), context);
 
       if (myUser == null) {
         continue;
@@ -281,7 +281,7 @@ class ProfessorReview extends StatelessWidget {
   setLoadingScreenNavigator(context) async {
     //TODO loadingscreen
     circularLoadingScreen(true);
-    var myUser = await respMyUser(user_id, context);
+    var myUser = await respGetMyUser(user_id, context);
 
     if (myUser != null) {
       Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProfilePage(),

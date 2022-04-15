@@ -8,7 +8,7 @@ getUsernameAndPerm(context) async {
   final prefs = await SharedPreferences.getInstance();
   final user_id = prefs.getInt('user_id') ?? 0;
 
-  var myUser = await respMyUser(user_id, context);
+  var myUser = await respGetMyUser(user_id, context);
 
   if (myUser != null) {
     String name = myUser.name.toString();

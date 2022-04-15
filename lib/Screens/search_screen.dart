@@ -130,7 +130,7 @@ class SearchScreenState extends State<SearchScreen> {
                 _isloadingCircle = true;
               });
               if (row[1] == "USER") {
-                var myUser = await respMyUser(int.parse(row[2]), context);
+                var myUser = await respGetMyUser(int.parse(row[2]), context);
 
                 if (myUser != null) {
                   Navigator.push(

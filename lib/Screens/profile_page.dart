@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/User.dart';
 import '../Models/profile.dart';
 import '../Responses/respGetMyUser.dart';
+import '../Responses/respPutMyUserPic.dart';
 import '../UI/appbar.dart';
 import '../constants.dart';
 
@@ -167,7 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final prefs = await SharedPreferences.getInstance();
     final user_id = prefs.getInt('user_id') ?? 0;
 
-    var myUser = await respMyUser(user_id, context);
+    var myUser = await respGetMyUser(user_id, context);
 
     if (myUser != null) {
       Navigator.pop(context, false);
@@ -291,11 +292,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: FloatingActionButton(
                             heroTag: null,
                             backgroundColor: primaryColor[300],
-                            onPressed: (){
+                            onPressed: () async {
                               if (file == newFile || newFileBytes.isEmpty) {
                               }
                               else {
-                                Profile().putProfilePic(bytes: newFileBytes);
+                                await respPutMyUserPic(newFileBytes, context);
                               }
 
                               revertState(context);

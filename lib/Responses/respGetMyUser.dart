@@ -6,7 +6,7 @@ import '../UI/responseBar.dart';
 import '../constants.dart';
 import 'package:flutter/material.dart';
 
-respMyUser(int user_id, context) async {
+respGetMyUser(int user_id, context) async {
   var resp = await Profile().getProfile(user_id.toString());
 
   if (resp == null) {
