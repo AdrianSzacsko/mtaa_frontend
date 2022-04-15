@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mtaa_frontend/Responses/respDeleteMyUser.dart';
 import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
+import 'package:mtaa_frontend/UI/responseBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/profile.dart';
@@ -188,7 +190,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     MaterialPageRoute<void>(builder: (BuildContext context) => const SignInScreen()),
                     ModalRoute.withName('/'),
                   );
-                  showSnackBar("Log Out Successful", primaryColor[300]);
+                  responseBar("Log Out Successful", primaryColor[300], context);
                 }
               }
             ),
@@ -198,34 +200,19 @@ class _SettingsPageState extends State<SettingsPage> {
                 var res = await dialogConfirmation(context, "Delete account",
                   "Are you sure you want to delete your account?");
                 if (res == true) {
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                  await prefs.clear();
-                  await Profile().deleteProfile();
-                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const SignInScreen()));
-                  showSnackBar("Account Deleted", secondaryColor[300]);
+                  bool response = await respDeleteMyUser(context);
+                  if (response){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const SignInScreen()));
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    await prefs.clear();
+                  }
                 }
-            }
-
+              }
             ),
             const SizedBox(height: defaultPadding / 1.75),
           ],
         ),
       );
-  }
-
-  showSnackBar(String text, Color? color) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: color,
-        content: Text(
-          text,
-          //textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
   }
 
   showConfirmLogout(){
