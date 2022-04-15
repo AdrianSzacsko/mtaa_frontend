@@ -18,7 +18,7 @@ import '../key.dart';
 
 class Profile with ChangeNotifier {
   Future<dynamic> getProfile(String profile_id) async {
-    Response response;
+    var response;
 
     var dio = Dio();
     dio.options.headers['content-Type'] = 'application/json';
@@ -29,14 +29,12 @@ class Profile with ChangeNotifier {
 
     try {
       response = await dio.get(urlKey + 'profile/' + profile_id);
-      print(response.data);
-      return response.data;
-    }
-    catch (e) {
-      print(e);
+      return response;
     }
 
-    return null;
+    on DioError catch (e) {
+      return e.response;
+    }
   }
 
   check_exception(stream){
@@ -52,8 +50,8 @@ class Profile with ChangeNotifier {
     return val;
   }
 
-  Future<dynamic> getProfilePic(String profile_id) async {
-    Response response;
+  getProfilePic(String profile_id) async {
+    var response;
 
     var dio = Dio();
     //dio.options.headers['content-Type'] = 'image/jpeg';
@@ -72,14 +70,11 @@ class Profile with ChangeNotifier {
 
     try {
       response = await dio.get(urlKey + 'profile/' + profile_id + "/pic");
-      print(response.data);
-      return img;
+      return [response, img];
     }
-    catch (e) {
-      print(e);
+    on DioError catch (e) {
+      return [e.response, img];
     }
-
-    return null;
   }
 
     Future<dynamic> putProfilePic({

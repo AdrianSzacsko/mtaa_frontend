@@ -289,7 +289,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                 );
 
                                 if (response == null) {
-                                  responseBar("There was en error logging in. Check your connection", secondaryColor);
+                                  responseBar("There was en error logging in. Check your connection.", secondaryColor);
                                 }
                                 else {
                                   if (response.statusCode == 201) {
@@ -297,13 +297,13 @@ class SignUpScreenState extends State<SignUpScreen> {
                                     Navigator.of(context).pop();
                                   }
                                   else if (response.statusCode == 403) {
-                                    responseBar("Invalid credentials. Check your email and password", secondaryColor);
+                                    responseBar("Invalid credentials. " + response.data["detail"], secondaryColor);
                                   }
                                   else if (response.statusCode >= 500) {
                                     responseBar("There is an error on server side, sit tight...", secondaryColor);
                                   }
                                   else {
-                                    responseBar("There was en error logging in. Check your connection", secondaryColor);
+                                    responseBar("There was en error logging in.", secondaryColor);
                                   }
                                 }
 

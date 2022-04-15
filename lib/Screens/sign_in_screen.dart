@@ -241,7 +241,7 @@ class SignInScreenState extends State<SignInScreen> {
                               var response = await Provider.of<Auth>(context, listen: false).login(emailController.text, passwordController.text);
 
                               if (response == null) {
-                                responseBar("There was en error logging in. Check your connection", secondaryColor);
+                                responseBar("There was en error logging in. Check your connection.", secondaryColor);
                               }
                               else {
                                 if (response.statusCode == 200) {
@@ -249,14 +249,14 @@ class SignInScreenState extends State<SignInScreen> {
                                   Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
                                 }
                                 else if (response.statusCode == 403) {
-                                  responseBar("Invalid credentials. Check your email and password", secondaryColor);
+                                  responseBar("Invalid credentials. Check your email and password.", secondaryColor);
                                   //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
                                 }
                                 else if (response.statusCode >= 500) {
                                   responseBar("There is an error on server side, sit tight...", secondaryColor);
                                 }
                                 else {
-                                  responseBar("There was en error logging in. Check your connection", secondaryColor);
+                                  responseBar("There was en error logging in. Check your connection.", secondaryColor);
                                 }
                               }
 

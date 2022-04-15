@@ -359,7 +359,7 @@ class SearchScreenState extends State<SearchScreen> {
                           var response = await Search().search(searchController.text);
 
                           if (response == null) {
-                            responseBar("There was en error during execution. Check your connection", secondaryColor);
+                            responseBar("There was en error during execution. Check your connection.", secondaryColor);
                           }
                           else {
                             if (response.statusCode == 200) {
@@ -375,16 +375,16 @@ class SearchScreenState extends State<SearchScreen> {
                               //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
                             }
                             else if (response.statusCode == 401) {
-                              responseBar("You are not authorized to perform this action", secondaryColor);
+                              responseBar("You are not authorized to perform this action.", secondaryColor);
                             }
                             else if (response.statusCode == 404) {
-                              responseBar("No such profile", secondaryColor);
+                              responseBar("No such profile.", secondaryColor);
                             }
                             else if (response.statusCode! >= 500) {
                               responseBar("There is an error on server side, sit tight...", secondaryColor);
                             }
                             else {
-                              responseBar("There was en error during execution. Check your connection", secondaryColor);
+                              responseBar("There was en error during execution.", secondaryColor);
                             }
                           }
 

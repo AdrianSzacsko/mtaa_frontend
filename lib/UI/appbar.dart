@@ -45,6 +45,22 @@ PreferredSizeWidget myAppBar(BuildContext context){
 }
 
 Widget myBottomAppBar(BuildContext context){
+
+  responseBar(String text, Color? color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: color,
+        content: Text(
+          text,
+          //textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
   return BottomAppBar(
     color: Colors.white,
     child: Row(
@@ -65,29 +81,63 @@ Widget myBottomAppBar(BuildContext context){
             final user_id = prefs.getInt('user_id') ?? '';
 
             var resp = await Profile().getProfile(user_id.toString());
-            var resp2 = await Profile().getProfilePic(user_id.toString());
 
-            var myUser = User(
-              user_id: resp[0]["id"],
-              email: resp[0]["email"],
-              name: resp[0]["name"],
-              comments: resp[0]["comments"].toString(),
-              reg_date: resp[0]["reg_date"].toString(),
-              study_year: resp[0]["study_year"].toString(),
-              image: resp2 == null ? const AssetImage("assets/Images/profile-unknown.png") : resp2,
-              permission: resp[0]["permission"].toString().toLowerCase() == 'true' ? true : false
-            );
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProfilePage(),
-                // Pass the arguments as part of the RouteSettings. The
-                // DetailScreen reads the arguments from these settings.
-                settings: RouteSettings(
-                  arguments: myUser,
-                ),
-              ),
-            );
+            if (resp == null) {
+              responseBar("There was en error during execution. Check your connection.", secondaryColor);
+            }
+            else {
+              if (resp.statusCode == 200) {
+                //responseBar("Registration successful", primaryColor);
+                var resp2 = await Profile().getProfilePic(user_id.toString());
+
+                if (resp2 == null) {
+                  responseBar("There was en error fetching profile picture.", secondaryColor);
+                }
+                else {
+                  if (resp2[0].statusCode == 200 || resp2[0].statusCode == 404) {
+                    var myUser = User(
+                        user_id: resp.data[0]["id"],
+                        email: resp.data[0]["email"],
+                        name: resp.data[0]["name"],
+                        comments: resp.data[0]["comments"].toString(),
+                        reg_date: resp.data[0]["reg_date"].toString(),
+                        study_year: resp.data[0]["study_year"].toString(),
+                        image: resp2[1] ?? const AssetImage("assets/Images/profile-unknown.png"),
+                        permission: resp.data[0]["permission"].toString().toLowerCase() == 'true' ? true : false
+                    );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfilePage(),
+                        // Pass the arguments as part of the RouteSettings. The
+                        // DetailScreen reads the arguments from these settings.
+                        settings: RouteSettings(
+                          arguments: myUser,
+                        ),
+                      ),
+                    );
+                  }
+                  else if (resp2[0].statusCode == 401) {
+                    responseBar(resp2[0].data["detail"], secondaryColor);
+                  }
+                  else if (resp2[0].statusCode >= 500) {
+                    responseBar("There is an error on server side, sit tight...", secondaryColor);
+                  }
+                  else {
+                    responseBar("There was en error fetching profile picture.", secondaryColor);
+                  }
+                }
+              }
+              else if (resp.statusCode == 401 || resp.statusCode == 404) {
+                responseBar(resp.data["detail"], secondaryColor);
+              }
+              else if (resp.statusCode >= 500) {
+                responseBar("There is an error on server side, sit tight...", secondaryColor);
+              }
+              else {
+                responseBar("There was en error during execution.", secondaryColor);
+              }
+            }
           },
         ),
       ],
