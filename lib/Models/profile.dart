@@ -77,7 +77,7 @@ class Profile with ChangeNotifier {
     }
   }
 
-    Future<dynamic> putProfilePic({
+    putProfilePic({
       required Uint8List bytes,
   }) async {
     var dio = Dio();
@@ -103,7 +103,6 @@ class Profile with ChangeNotifier {
 
     try {
       Response response = await dio.put(urlKey + 'profile/pic', data: formData);
-
       //print('Profile updated: ${response.data}');
       return response;
 
