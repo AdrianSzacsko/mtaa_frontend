@@ -8,7 +8,7 @@ import '../Models/Subject.dart';
 import '../Models/User.dart';
 import '../Models/profile.dart';
 import '../Models/subj.dart';
-import '../Responses/respGetMyUser.dart';
+import '../Responses/User/respGetMyUser.dart';
 import '../UI/loading_screen.dart';
 import '../constants.dart';
 

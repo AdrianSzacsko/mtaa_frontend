@@ -7,13 +7,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mime/mime.dart';
-import 'package:mtaa_frontend/Responses/respDeletePic.dart';
+import 'package:mtaa_frontend/Responses/User/respDeletePic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/User.dart';
 import '../Models/profile.dart';
-import '../Responses/respGetMyUser.dart';
-import '../Responses/respPutMyUserPic.dart';
+import '../Responses/User/respGetMyUser.dart';
+import '../Responses/User/respPutMyUserPic.dart';
 import '../UI/appbar.dart';
 import '../constants.dart';
 

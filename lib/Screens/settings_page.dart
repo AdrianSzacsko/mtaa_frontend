@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mtaa_frontend/Responses/respDeleteMyUser.dart';
+import 'package:mtaa_frontend/Responses/User/respDeleteMyUser.dart';
 import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
 import 'package:mtaa_frontend/UI/responseBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';

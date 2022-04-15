@@ -18,11 +18,10 @@ class ProfessorClass with ChangeNotifier {
 
     try {
       response = await dio.get(urlKey + 'prof/' + prof_id);
-      print(response.data);
-      return response.data;
+      return response;
     }
-    catch (e) {
-      print(e);
+    on DioError catch (e) {
+      return e.response;
     }
 
     return null;
@@ -42,10 +41,10 @@ class ProfessorClass with ChangeNotifier {
       response =
       await dio.get(urlKey + 'prof/' + prof_id + "/reviews");
       print(response.data);
-      return response.data;
+      return response;
     }
-    catch (e) {
-      print(e);
+    on DioError catch (e) {
+      return e.response;
     }
   }
 
@@ -62,14 +61,10 @@ class ProfessorClass with ChangeNotifier {
         'rating': int.parse(rating),
         'prof_id': int.parse(prof_id)
       });
-      print("");
-      print("Review added.");
-      print("");
-      print(response.data);
-      return response.data;
+      return response;
     }
-    catch (e) {
-      print(e);
+    on DioError catch (e) {
+      return e.response;
     }
   }
 
@@ -82,18 +77,19 @@ class ProfessorClass with ChangeNotifier {
     dio.options.headers['authorization'] = "Bearer " + token;
 
     try {
-      await dio.put(urlKey + 'prof/', data: {
+      Response response = await dio.put(urlKey + 'prof/', data: {
         'message': message,
         'rating': int.parse(rating),
         'prof_id': int.parse(prof_id)
       });
+      return response;
     }
-    catch (e) {
-      print(e);
+    on DioError catch (e) {
+      return e.response;
     }
   }
 
-  Future<void> deleteReview(String user_id, String prof_id) async {
+  Future<dynamic> deleteReview(String user_id, String prof_id) async {
     var dio = Dio();
     dio.options.headers['content-Type'] = 'application/json';
 
@@ -102,14 +98,14 @@ class ProfessorClass with ChangeNotifier {
     dio.options.headers['authorization'] = "Bearer " + token;
 
     try {
-      await dio.delete(urlKey + 'prof/delete_review', data: {
-        "user_id": user_id,
-        "prof_id": prof_id
+      Response response = await dio.delete(urlKey + 'prof/delete_review', queryParameters: {
+        "uid": user_id,
+        "pid": prof_id
       });
-      print('Review deleted.');
+      return response;
     }
-    catch (e) {
-      print(e);
+    on DioError catch (e) {
+      return e.response;
     }
   }
 }

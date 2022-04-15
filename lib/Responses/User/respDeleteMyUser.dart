@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:mtaa_frontend/UI/responseBar.dart';
 
-import '../Models/profile.dart';
-import '../constants.dart';
+import '../../Models/profile.dart';
+import '../../constants.dart';
 
 respDeleteMyUser(context) async {
   Response response = await Profile().deleteProfile();

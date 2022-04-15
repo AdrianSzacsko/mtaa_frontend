@@ -21,7 +21,8 @@ import '../Models/profile.dart';
 import '../Models/search.dart';
 import '../Models/User.dart';
 import '../Models/subj.dart';
-import '../Responses/respGetMyUser.dart';
+import '../Responses/Professor/respGetProfessor.dart';
+import '../Responses/User/respGetMyUser.dart';
 import '../UI/appbar.dart';
 import '../constants.dart';
 
@@ -148,36 +149,20 @@ class SearchScreenState extends State<SearchScreen> {
 
               }
               else if (row[1] == "PROF") {
-                var resp = await ProfessorClass().getProfessor(row[2]);
-                print(resp);
-                var resp2 = await ProfessorClass().getProfessorReviews(row[2]);
-
-                List<List<String>> allReviews = <List<String>>[];
-                resp2?.forEach((item) {
-                  //var author = await Profile().getProfile(item["user_id"].toString());
-                  allReviews.add([item["id"].toString(), item["user_id"].toString(),
-                    item["message"].toString(), item["rating"].toString()]);
-                  //print(item);
-                });
-
-
-                var professor = Professor(
-                  prof_id: row[2],
-                  name: resp[0]["name"],
-                  reviews: allReviews,
-                );
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ProfessorScreen(),
-                    // Pass the arguments as part of the RouteSettings. The
-                    // DetailScreen reads the arguments from these settings.
-                    settings: RouteSettings(
-                      arguments: professor,
+                var professor = await respGetProfessor(row[2], context);
+                if (professor != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProfessorScreen(),
+                      // Pass the arguments as part of the RouteSettings. The
+                      // DetailScreen reads the arguments from these settings.
+                      settings: RouteSettings(
+                        arguments: professor,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }
               }
               else {
                 var resp = await SubjectClass().getSubject(row[2]);

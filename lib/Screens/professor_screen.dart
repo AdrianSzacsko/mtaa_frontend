@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mtaa_frontend/Models/Professor.dart';
+import 'package:mtaa_frontend/Responses/Professor/respDeleteProfessorReview.dart';
+import 'package:mtaa_frontend/Responses/Professor/respGetProfessor.dart';
 import 'package:mtaa_frontend/Screens/edit_professor_review_screen.dart';
 import 'package:mtaa_frontend/Screens/professor_review_screen.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
@@ -9,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/User.dart';
 import '../Models/prof.dart';
 import '../Models/profile.dart';
-import '../Responses/respGetMyUser.dart';
+import '../Responses/User/respGetMyUser.dart';
 import '../constants.dart';
 import '../Screens/profile_page.dart';
 
@@ -374,37 +376,22 @@ class ProfessorReview extends StatelessWidget {
   }
 
   void revertState(BuildContext context, String prof_id) async {
-    var resp = await ProfessorClass().getProfessor(prof_id);
-    print(resp);
+    var professor = await respGetProfessor(prof_id, context);
 
-    var resp2 = await ProfessorClass().getProfessorReviews(prof_id);
-
-    List<List<String>> allReviews = <List<String>>[];
-    resp2?.forEach((item) {
-      //var author = await Profile().getProfile(item["user_id"].toString());
-      allReviews.add([item["id"].toString(), item["user_id"].toString(),
-        item["message"].toString(), item["rating"].toString()]);
-      //print(item);
-    });
-
-    var professor = Professor(
-      prof_id: prof_id,
-      name: resp[0]["name"],
-      reviews: allReviews,
-    );
-
-    Navigator.pop(context);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const ProfessorScreen(),
-        // Pass the arguments as part of the RouteSettings. The
-        // DetailScreen reads the arguments from these settings.
-        settings: RouteSettings(
-          arguments: professor,
+    if (professor != null) {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ProfessorScreen(),
+          // Pass the arguments as part of the RouteSettings. The
+          // DetailScreen reads the arguments from these settings.
+          settings: RouteSettings(
+            arguments: professor,
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
 
@@ -437,8 +424,10 @@ class ProfessorReview extends StatelessWidget {
                   var res = await dialogConfirmation(context, "Delete review",
                     "Are you sure you want to delete your review?");
                   if (res == true) {
-                    await ProfessorClass().deleteReview(user_id.toString(), prof_id.toString());
-                    revertState(context, prof_id.toString());
+                    var resp = await respDeleteProfessorReview(user_id.toString(), prof_id.toString(), context);
+                    if (resp) {
+                      revertState(context, prof_id.toString());
+                    }
                   }
                 }
                 },

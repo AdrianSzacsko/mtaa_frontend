@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/User.dart';
 import '../Models/profile.dart';
-import '../Responses/respGetMyUser.dart';
+import '../Responses/User/respGetMyUser.dart';
 
 getUsernameAndPerm(context) async {
   final prefs = await SharedPreferences.getInstance();

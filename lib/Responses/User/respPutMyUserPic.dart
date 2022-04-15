@@ -1,7 +1,7 @@
 import 'dart:typed_data';
-import '../Models/profile.dart';
-import '../UI/responseBar.dart';
-import '../constants.dart';
+import '../../Models/profile.dart';
+import '../../UI/responseBar.dart';
+import '../../constants.dart';
 
 
 respPutMyUserPic(Uint8List newFileBytes, context) async {

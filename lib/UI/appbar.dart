@@ -4,7 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
-import 'package:mtaa_frontend/Responses/respGetMyUser.dart';
+import 'package:mtaa_frontend/Responses/User/respGetMyUser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/User.dart';
