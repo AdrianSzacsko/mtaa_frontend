@@ -41,7 +41,7 @@ class _DataChannelSampleState extends State<DataChannelSample> {
   }
 
   void _connect() async {
-    String host = await getUsernameAndPerm();
+    String host = await getUsernameAndPerm(context);
     _signaling ??= Signaling(widget.host, host)..connect();
 
     _signaling?.onDataChannelMessage = (_, dc, RTCDataChannelMessage data) {

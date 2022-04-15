@@ -8,6 +8,7 @@ import '../Models/Subject.dart';
 import '../Models/User.dart';
 import '../Models/profile.dart';
 import '../Models/subj.dart';
+import '../Responses/respGetMyUser.dart';
 import '../UI/loading_screen.dart';
 import '../constants.dart';
 
@@ -167,26 +168,25 @@ class _SubjectScreenState extends State<SubjectScreen> {
   Future<List<Widget>> makeWidgets(List<List<String>> reviews) async {
     //List<Widget> widgets = List<Widget>.empty(growable: true);
     for (var item in reviews) {
-      var author = await Profile().getProfile(item[1].toString());
-      var img = await Profile().getProfilePic(item[1].toString());
+      var myUser = await respMyUser(int.parse(item[1]), context);
+
+      if (myUser == null) {
+        continue;
+      }
       //var pic = await Profile().getProfilePic(item[0].toString());
       averageDifficulty = averageDifficulty + int.parse(item[3]);
       averageUsability = averageUsability + int.parse(item[4]);
       averageProf = averageProf + int.parse(item[5]);
-      //print("9999999999999999999999999999999999");
-      print(item);
-      //print("8888888888888888888888888888888888");
-      print(author);
-      //print("7777777777777777777777777777777777");
+
       allReviews.add(SubjectReview(
         subj_id: int.parse(item[0]),
         user_id: int.parse(item[1]),
-        name: author[0]["name"],
+        name: myUser.name,
         description: item[2],
         difficulty: int.parse(item[3]),
         usability: int.parse(item[4]),
         prof_avg: int.parse(item[5]),
-        image: img == null ? const AssetImage("assets/Images/profile-unknown.png") : img,
+        image: myUser.image ?? const AssetImage("assets/Images/profile-unknown.png"),
       ));
     }
     print(allReviews);
@@ -330,11 +330,16 @@ class SubjectReview extends StatelessWidget {
   setLoadingScreenNavigator(context) async {
     //TODO loadingscreen
     circularLoadingScreen(true);
-    await Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProfilePage(),
-      settings: RouteSettings(
-        arguments: await getUserProfile(user_id),
-      ),
-    ));
+    var myUser = await respMyUser(user_id, context);
+
+    if (myUser != null) {
+      await Navigator.of(context).push(
+          MaterialPageRoute(builder: (ctx) => ProfilePage(),
+            settings: RouteSettings(
+              arguments: myUser,
+            ),
+          ));
+    }
     circularLoadingScreen(false);
   }
 
@@ -463,23 +468,6 @@ class SubjectReview extends StatelessWidget {
     );
   }
 
-
-  getUserProfile(userId) async {
-    var resp = await Profile().getProfile(userId.toString());
-    var resp2 = await Profile().getProfilePic(userId.toString());
-
-    var myUser = User(
-        user_id: resp[0]["id"],
-        email: resp[0]["email"],
-        name: resp[0]["name"],
-        comments: resp[0]["comments"].toString(),
-        reg_date: resp[0]["reg_date"].toString(),
-        study_year: resp[0]["study_year"].toString(),
-        image: resp2 == null ? const AssetImage("assets/Images/profile-unknown.png") : resp2,
-        permission: resp[0]["permission"].toString().toLowerCase() == 'true' ? true : false
-    );
-    return myUser;
-  }
 
   @override
   Widget build(BuildContext context) {

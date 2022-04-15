@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/User.dart';
 import '../Models/profile.dart';
+import '../Responses/respGetMyUser.dart';
 import '../UI/appbar.dart';
 import '../constants.dart';
 
@@ -164,45 +165,25 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void revertState(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
-    final user_id = prefs.getInt('user_id') ?? '';
+    final user_id = prefs.getInt('user_id') ?? 0;
 
-    var resp = await Profile().getProfile(user_id.toString());
-    var resp2 = await Profile().getProfilePic(user_id.toString());
+    var myUser = await respMyUser(user_id, context);
 
-    //print(resp2.runtimeType);
-    /*Uint8List(resp2);
-            //final mime = lookupMimeType('', headerBytes: resp2);
-            Latin1Encoder encoder = const Latin1Encoder();
-            var bytes = encoder.convert(resp2);
-
-            final codec = await instantiateImageCodec(bytes.buffer.asUint8List());
-            final frameInfo = await codec.getNextFrame();
-            //return frameInfo.image;*/
-
-    var myUser = User(
-        user_id: resp[0]["id"],
-      email: resp[0]["email"],
-      name: resp[0]["name"],
-      comments: resp[0]["comments"].toString(),
-      reg_date: resp[0]["reg_date"].toString(),
-      study_year: resp[0]["study_year"].toString(),
-      image: resp2 == null ? const AssetImage("assets/Images/profile-unknown.png") : resp2,
-      permission: resp[0]["permission"].toString().toLowerCase() == 'true' ? true : false
-    );
-
-    Navigator.pop(context, false);
-    Navigator.pop(context, false);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ProfilePage(),
-        // Pass the arguments as part of the RouteSettings. The
-        // DetailScreen reads the arguments from these settings.
-        settings: RouteSettings(
-          arguments: myUser,
+    if (myUser != null) {
+      Navigator.pop(context, false);
+      Navigator.pop(context, false);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfilePage(),
+          // Pass the arguments as part of the RouteSettings. The
+          // DetailScreen reads the arguments from these settings.
+          settings: RouteSettings(
+            arguments: myUser,
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
 

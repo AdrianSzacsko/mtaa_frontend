@@ -2,14 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/User.dart';
 import '../Models/profile.dart';
+import '../Responses/respGetMyUser.dart';
 
-getUsernameAndPerm() async {
+getUsernameAndPerm(context) async {
   final prefs = await SharedPreferences.getInstance();
-  final user_id = prefs.getInt('user_id') ?? '';
+  final user_id = prefs.getInt('user_id') ?? 0;
 
-  var resp = await Profile().getProfile(user_id.toString());
-  String name = resp[0]["name"].toString();
-  String perm = resp[0]["permission"].toString().toLowerCase() == 'true' ?
-  ' [Admin]' : '';
-  return name + perm;
+  var myUser = await respMyUser(user_id, context);
+
+  if (myUser != null) {
+    String name = myUser.name.toString();
+    String perm = myUser.permission.toString().toLowerCase() == 'true' ?
+    ' [Admin]' : '';
+    return name + perm;
+  }
+  return '';
 }

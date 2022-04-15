@@ -73,7 +73,7 @@ class Profile with ChangeNotifier {
       return [response, img];
     }
     on DioError catch (e) {
-      return [e.response, img];
+      return [e.response, null];
     }
   }
 
@@ -104,13 +104,13 @@ class Profile with ChangeNotifier {
     try {
       Response response = await dio.put(urlKey + 'profile/pic', data: formData);
 
-      print('Profile updated: ${response.data}');
+      //print('Profile updated: ${response.data}');
+      return response;
 
-    } catch (e) {
-      print('Error updating profile: $e');
+    } on DioError catch (e) {
+      //print('Error updating profile: $e');
+      return e.response;
     }
-
-    return null;
   }
 
   Future<dynamic> deleteProfilePic() async {
@@ -125,27 +125,25 @@ class Profile with ChangeNotifier {
 
     try {
       response = await dio.put(urlKey + 'profile/delete_pic');
-      print(response.data);
-      return response.data;
+      return response;
     }
-    catch (e) {
-      print(e);
+    on DioError catch (e) {
+      return e.response;
     }
-
-    return null;
   }
 
-  Future<void> deleteProfile() async {
+  Future<dynamic> deleteProfile() async {
     var dio = Dio();
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
     dio.options.headers['authorization'] = "Bearer " + token;
 
     try {
-      await dio.delete(urlKey + 'profile/');
+      Response response = await dio.delete(urlKey + 'profile/');
+      return response;
     }
-    catch (e) {
-      print(e);
+    on DioError catch (e) {
+      return e.response;
     }
   }
 

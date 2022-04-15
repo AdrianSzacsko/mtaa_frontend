@@ -55,7 +55,7 @@ class _CallSampleState extends State<CallSample> {
   }
 
   void _connect() async {
-      String host = await getUsernameAndPerm();
+      String host = await getUsernameAndPerm(context);
     _signaling ??= Signaling(widget.host, host)..connect();
     _signaling?.onSignalingStateChange = (SignalingState state) {
       switch (state) {

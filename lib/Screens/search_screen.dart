@@ -21,6 +21,7 @@ import '../Models/profile.dart';
 import '../Models/search.dart';
 import '../Models/User.dart';
 import '../Models/subj.dart';
+import '../Responses/respGetMyUser.dart';
 import '../UI/appbar.dart';
 import '../constants.dart';
 
@@ -129,32 +130,22 @@ class SearchScreenState extends State<SearchScreen> {
                 _isloadingCircle = true;
               });
               if (row[1] == "USER") {
-                var resp = await Profile().getProfile(row[2]);
-                print(resp);
+                var myUser = await respMyUser(int.parse(row[2]), context);
 
-                var resp2 = await Profile().getProfilePic(row[2]);
-
-                var myUser = User(
-                    user_id: resp[0]["id"],
-                  email: resp[0]["email"],
-                  name: resp[0]["name"],
-                  comments: resp[0]["comments"].toString(),
-                  reg_date: resp[0]["reg_date"].toString(),
-                  study_year: resp[0]["study_year"].toString(),
-                  image: resp2 == null ? const AssetImage("assets/Images/profile-unknown.png") : resp2,
-                  permission: resp[0]["permission"].toString().toLowerCase() == 'true' ? true : false
-                );
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfilePage(),
-                    // Pass the arguments as part of the RouteSettings. The
-                    // DetailScreen reads the arguments from these settings.
-                    settings: RouteSettings(
-                      arguments: myUser,
+                if (myUser != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfilePage(),
+                      // Pass the arguments as part of the RouteSettings. The
+                      // DetailScreen reads the arguments from these settings.
+                      settings: RouteSettings(
+                        arguments: myUser,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }
+
               }
               else if (row[1] == "PROF") {
                 var resp = await ProfessorClass().getProfessor(row[2]);
