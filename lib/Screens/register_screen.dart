@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -45,7 +46,7 @@ class SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     // But still same problem, let's fixed it
     return Scaffold(
-      //resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -85,14 +86,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                               fit: BoxFit.cover,
                             )
                         ),
-                        /*
-                    Text(
-                      "Create Account",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline5!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),*/
                         const SizedBox(height: defaultPadding * 2),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,8 +124,24 @@ class SignUpScreenState extends State<SignUpScreen> {
                                     focusedBorder:OutlineInputBorder(
                                       borderSide: const BorderSide(color: secondaryColor, width: 2.0),
                                       borderRadius: BorderRadius.circular(25.0),
-                                    ),),
-                                  // Let's save our email
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    disabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: primaryColor),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -165,7 +174,24 @@ class SignUpScreenState extends State<SignUpScreen> {
                                     focusedBorder:OutlineInputBorder(
                                       borderSide: const BorderSide(color: secondaryColor, width: 2.0),
                                       borderRadius: BorderRadius.circular(25.0),
-                                    ),),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    disabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: primaryColor),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -199,7 +225,24 @@ class SignUpScreenState extends State<SignUpScreen> {
                                     focusedBorder:OutlineInputBorder(
                                       borderSide: const BorderSide(color: secondaryColor, width: 2.0),
                                       borderRadius: BorderRadius.circular(25.0),
-                                    ),),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    disabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: primaryColor),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -234,7 +277,24 @@ class SignUpScreenState extends State<SignUpScreen> {
                                     focusedBorder:OutlineInputBorder(
                                       borderSide: const BorderSide(color: secondaryColor, width: 2.0),
                                       borderRadius: BorderRadius.circular(25.0),
-                                    ),),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    disabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: primaryColor),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -253,6 +313,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                   enableSuggestions: false,
                                   autofocus: false,
                                   keyboardType: TextInputType.number,
+                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                   decoration: InputDecoration(hintText: "1",
                                     hintStyle: const TextStyle(color: backgroundText),
                                     prefixIcon: const Padding(
@@ -266,7 +327,24 @@ class SignUpScreenState extends State<SignUpScreen> {
                                     focusedBorder:OutlineInputBorder(
                                       borderSide: const BorderSide(color: secondaryColor, width: 2.0),
                                       borderRadius: BorderRadius.circular(25.0),
-                                    ),),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    disabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: primaryColor),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),

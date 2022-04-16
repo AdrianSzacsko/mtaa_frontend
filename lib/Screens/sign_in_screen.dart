@@ -28,13 +28,10 @@ class SignInScreenState extends State<SignInScreen> {
     setState(() {
       _isloading = true;
     });
-    await Future.delayed(const Duration(seconds: 2));  //comment this
+    //await Future.delayed(const Duration(seconds: 2));  //comment this
     //fetch data here
     //TODO add method to post login
     var response = Provider.of<Auth>(context, listen: false).login(emailController.text, passwordController.text);
-    if (response[1] == 200) {
-
-    }
     setState(() {
       _isloading = false;
     });
@@ -113,7 +110,6 @@ class SignInScreenState extends State<SignInScreen> {
             ),
           ),
           Padding(
-            // padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
             child: SafeArea(
               child: SingleChildScrollView(
@@ -132,24 +128,6 @@ class SignInScreenState extends State<SignInScreen> {
                             fit: BoxFit.cover,
                           )
                       ),
-                      /*
-                    Row(
-                      children: [
-                        Text("Don't have an account?"),
-                        TextButton(
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SignUpScreen(),
-                            ),
-                          ),
-                          child: const Text(
-                            "Sign Up!",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),*/
                       const SizedBox(height: defaultPadding * 4),
                       //const SizedBox(height:defaultPadding * 4),
                       // TextFieldName(text: "Email"),
@@ -165,6 +143,7 @@ class SignInScreenState extends State<SignInScreen> {
                                   errorText:
                                   "Please enter a valid email address"),
                             ]),
+                            onEditingComplete: () => FocusScope.of(context).nextFocus(),
                             controller: emailController,
                             autocorrect: false,
                             enableSuggestions: false,
@@ -184,7 +163,24 @@ class SignInScreenState extends State<SignInScreen> {
                               focusedBorder:OutlineInputBorder(
                                 borderSide: const BorderSide(color: secondaryColor, width: 2.0),
                                 borderRadius: BorderRadius.circular(25.0),
-                              ),),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              disabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: primaryColor),
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -216,7 +212,24 @@ class SignInScreenState extends State<SignInScreen> {
                               focusedBorder:OutlineInputBorder(
                                 borderSide: const BorderSide(color: secondaryColor, width: 2.0),
                                 borderRadius: BorderRadius.circular(25.0),
-                              ),),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              disabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: primaryColor),
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -235,9 +248,6 @@ class SignInScreenState extends State<SignInScreen> {
                               setState(() {
                                 _isloading = true;
                               });
-                              //await Future.delayed(const Duration(seconds: 2));  //comment this
-                              //fetch data here
-                              //TODO add method to post login
                               var response = await Provider.of<Auth>(context, listen: false).login(emailController.text, passwordController.text);
 
                               if (response == null) {
