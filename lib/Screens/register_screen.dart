@@ -45,7 +45,7 @@ class SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     // But still same problem, let's fixed it
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      //resizeToAvoidBottomInset: false,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -70,6 +70,7 @@ class SignUpScreenState extends State<SignUpScreen> {
             child: Center(
               child: SafeArea(
                 child: SingleChildScrollView(
+                  reverse: true,
                   padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                   child: Form(
                     key: _formKey,
@@ -102,7 +103,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                               decoration: BoxDecoration(
                                   color: Colors.white, borderRadius: BorderRadius.circular(30)),
                               child: Padding(
-                                padding: const EdgeInsets.only(top: defaultPadding),
+                                padding: const EdgeInsets.only(top: defaultPadding / 1.5),
                                 child: TextFormField(
                                   validator: MultiValidator([
                                     RequiredValidator(errorText: "Required"),
@@ -110,6 +111,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                         errorText:
                                         "Please enter a valid email address"),
                                   ]),
+                                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
                                   controller: emailController,
                                   autocorrect: false,
                                   enableSuggestions: false,
@@ -140,9 +142,10 @@ class SignUpScreenState extends State<SignUpScreen> {
                               decoration: BoxDecoration(
                                   color: Colors.white, borderRadius: BorderRadius.circular(30)),
                               child: Padding(
-                                padding: const EdgeInsets.only(top: defaultPadding),
+                                padding: const EdgeInsets.only(top: defaultPadding / 1.5),
                                 child: TextFormField(
                                   validator: RequiredValidator(errorText: "First name is required"),
+                                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
                                   controller: firstnameController,
                                   autocorrect: false,
                                   enableSuggestions: false,
@@ -173,9 +176,10 @@ class SignUpScreenState extends State<SignUpScreen> {
                               decoration: BoxDecoration(
                                   color: Colors.white, borderRadius: BorderRadius.circular(30)),
                               child: Padding(
-                                padding: const EdgeInsets.only(top: defaultPadding),
+                                padding: const EdgeInsets.only(top: defaultPadding / 1.5),
                                 child: TextFormField(
                                   validator: RequiredValidator(errorText: "Last name is required"),
+                                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
                                   controller: lastnameController,
                                   autocorrect: false,
                                   enableSuggestions: false,
@@ -206,9 +210,10 @@ class SignUpScreenState extends State<SignUpScreen> {
                               decoration: BoxDecoration(
                                   color: Colors.white, borderRadius: BorderRadius.circular(30)),
                               child: Padding(
-                                padding: const EdgeInsets.only(top: defaultPadding),
+                                padding: const EdgeInsets.only(top: defaultPadding / 1.5),
                                 child: TextFormField(
                                   validator: RequiredValidator(errorText: "Password is required"),
+                                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
                                   controller: passwordController,
                                   autocorrect: false,
                                   enableSuggestions: false,
@@ -240,7 +245,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                               decoration: BoxDecoration(
                                   color: Colors.white, borderRadius: BorderRadius.circular(30)),
                               child: Padding(
-                                padding: const EdgeInsets.only(top: defaultPadding),
+                                padding: const EdgeInsets.only(top: defaultPadding / 1.5),
                                 child: TextFormField(
                                   validator: RequiredValidator(errorText: "Study year is required"),
                                   controller: studyYearController,
