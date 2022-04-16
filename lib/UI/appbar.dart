@@ -25,7 +25,10 @@ PreferredSizeWidget myAppBar(BuildContext context){
     ),
     backgroundColor: Colors.white,
     centerTitle: true,
-    title: IconButton(
+    title: Image.asset('assets/Images/puzzle.png',
+      fit: BoxFit.scaleDown,
+    ),
+    /*IconButton(
       icon: Image.asset('assets/Images/puzzle.png',
         height: 80.0,
         fit: BoxFit.cover,
@@ -33,7 +36,7 @@ PreferredSizeWidget myAppBar(BuildContext context){
       onPressed: () {
         //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SignInScreen()));
       },
-    ),
+    ),*/
     actions: [
       IconButton(
         icon: Icon(Icons.search_outlined,
