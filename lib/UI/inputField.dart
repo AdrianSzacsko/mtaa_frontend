@@ -28,8 +28,8 @@ Widget userInput(TextEditingController userInput, BuildContext context) {
                    autofocus: false,
                    keyboardType: TextInputType.emailAddress,
                    obscureText: false,
-                   decoration: InputDecoration(hintText: "Search...",
-                     hintStyle: const TextStyle(color: backgroundText, fontFamily: 'RobotoMono', fontSize: 18),
+                   decoration: InputDecoration(hintText: "Search for any subject, professor, user...",
+                     hintStyle: const TextStyle(color: backgroundText, fontFamily: 'RobotoMono', fontSize: 16),
                      prefixIcon: const Padding(
                        padding: EdgeInsets.only(top: 0), // add padding to adjust icon
                        child: Icon(Icons.search_outlined),
