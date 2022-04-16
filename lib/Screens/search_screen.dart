@@ -45,6 +45,8 @@ class SearchScreenState extends State<SearchScreen> {
   //List<String> row = <String>['name','code','id'];
   List<List<String>> list_of_rows = <List<String>>[];
 
+  bool _isinitstate = true;
+
 
   @override
   void initState() {
@@ -57,7 +59,14 @@ class SearchScreenState extends State<SearchScreen> {
       _isloadingLine = true;
     });
     print(searchController);
-    var resp = await Search().search(searchController.text);
+    var resp;
+    if (_isinitstate){
+      resp = await Search().search("default_value");
+      _isinitstate = false;
+    }
+    else {
+      resp = await Search().search(searchController.text);
+    }
 
     list_of_rows.clear();
     resp?.data.forEach((item){
