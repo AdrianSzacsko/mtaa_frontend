@@ -26,7 +26,8 @@ PreferredSizeWidget myAppBar(BuildContext context){
     backgroundColor: Colors.white,
     centerTitle: true,
     title: Image.asset('assets/Images/puzzle.png',
-      fit: BoxFit.scaleDown,
+      height: 40.0,
+      fit: BoxFit.cover,
     ),
     /*IconButton(
       icon: Image.asset('assets/Images/puzzle.png',
