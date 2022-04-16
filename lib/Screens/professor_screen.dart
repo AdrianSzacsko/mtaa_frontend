@@ -446,17 +446,14 @@ class ProfessorReview extends StatelessWidget {
                         padding: const EdgeInsets.all(defaultPadding),
                         child: Align(
                           alignment: Alignment.topCenter,
+                          child: GestureDetector(
+                            onTap: () {
+                              setLoadingScreenNavigator(context);
+                            },
                             child: CircleAvatar(
                               backgroundImage: image,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: const CircleBorder(),
-                                  primary: Colors.transparent
-                                ),
-                                onPressed: () {setLoadingScreenNavigator(context);},
-                                child: null,
-                              ),
                             ),
+                          ),
                         ),
                       ),
                       Expanded(
