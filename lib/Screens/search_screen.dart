@@ -315,7 +315,7 @@ class SearchScreenState extends State<SearchScreen> {
                           }
                           else {
                             if (response.statusCode == 200) {
-                              responseBar("Login successful", primaryColor);
+                              //responseBar("Login successful", primaryColor);
                               list_of_rows.clear();
                               response.data.forEach((item){
                                 list_of_rows.add([item["name"].toString(), item["code"].toString(), item["id"].toString()]);
