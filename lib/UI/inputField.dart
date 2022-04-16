@@ -1,52 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import '../constants.dart';
 
 
-Widget userInput(TextEditingController userInput, Widget icon, String hintText, BuildContext context) {
-  return Container(
-    //width: 400,
-    child: Material(
-      elevation: 5.0,
-      borderRadius: BorderRadius.all(Radius.circular(25.0)),
-      color: Colors.white,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: icon,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(25.0),
+Widget userInput(TextEditingController userInput, BuildContext context) {
+  return Material(
+    //elevation: 10,
+    //borderRadius: const BorderRadius.all(Radius.circular(25.0)),
+    //color: Colors.white,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.all(defaultPadding / 2),
+            child: Form(
+             child: Container(
+               decoration: BoxDecoration(
+                   color: Colors.white, borderRadius: BorderRadius.circular(30)),
+               child: Padding(
+                 padding: const EdgeInsets.only(left: defaultPadding,
+                     top: defaultPadding, right: defaultPadding),
+                 child: TextFormField(
+                   onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                   controller: userInput,
+                   autocorrect: false,
+                   enableSuggestions: false,
+                   autofocus: false,
+                   keyboardType: TextInputType.emailAddress,
+                   obscureText: false,
+                   decoration: InputDecoration(hintText: "Search...",
+                     hintStyle: const TextStyle(color: backgroundText, fontFamily: 'RobotoMono', fontSize: 18),
+                     prefixIcon: const Padding(
+                       padding: EdgeInsets.only(top: 0), // add padding to adjust icon
+                       child: Icon(Icons.search_outlined),
+                     ),
+                     enabledBorder: OutlineInputBorder(
+                       borderSide: const BorderSide(color: primaryColor),
+                       borderRadius: BorderRadius.circular(25.0),
+                     ),
+                     focusedBorder:OutlineInputBorder(
+                       borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                       borderRadius: BorderRadius.circular(25.0),
+                     ),
+                     errorBorder: OutlineInputBorder(
+                       borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                       borderRadius: BorderRadius.circular(25.0),
+                     ),
+                     disabledBorder: OutlineInputBorder(
+                       borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                       borderRadius: BorderRadius.circular(25.0),
+                     ),
+                     border: OutlineInputBorder(
+                       borderSide: const BorderSide(color: primaryColor),
+                       borderRadius: BorderRadius.circular(25.0),
+                     ),
+                     focusedErrorBorder: OutlineInputBorder(
+                       borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                       borderRadius: BorderRadius.circular(25.0),
+                     ),
+                   ),
+                 ),
+               ),
+             ),
             ),
-            //width: 348,
-            width: MediaQuery.of(context).size.width - 45,
-            height: 60,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Form(
-                child: TextField(
-                  //TestField
-                  controller: userInput,
-
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: hintText,
-                    fillColor: Colors.white,
-                    filled: true,
-                  ),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ),
           ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }

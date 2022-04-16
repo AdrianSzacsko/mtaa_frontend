@@ -138,7 +138,7 @@ class SignInScreenState extends State<SignInScreen> {
                           padding: const EdgeInsets.only(left: 25.0, top: 15, right: 25),
                           child: TextFormField(
                             validator: MultiValidator([
-                              RequiredValidator(errorText: "Required"),
+                              RequiredValidator(errorText: "Email is required"),
                               EmailValidator(
                                   errorText:
                                   "Please enter a valid email address"),

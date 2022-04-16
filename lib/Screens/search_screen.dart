@@ -88,23 +88,30 @@ class SearchScreenState extends State<SearchScreen> {
 
 
   Widget buildList() {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: MediaQuery.of(context).size.height -300,
       child: Align(
         alignment: Alignment.topCenter,
-        child: ListView.builder(
-          scrollDirection: Axis.vertical,
-          controller: scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          shrinkWrap: true,
-          padding: const EdgeInsets.all(defaultPadding),
-          key: UniqueKey(),
-          itemCount: list_of_rows.length,
-          itemBuilder: (context, item) {
+        child: Padding(
+          padding: const EdgeInsets.all(defaultPadding / 2),
+          child: ListView.separated(
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(height: defaultPadding / 4);
+            },
+            scrollDirection: Axis.vertical,
+            controller: scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            shrinkWrap: true,
+            padding: const EdgeInsets.fromLTRB(defaultPadding, defaultPadding * 1.5,
+                defaultPadding, defaultPadding * 1.5),
+            key: UniqueKey(),
+            itemCount: list_of_rows.length,
+            itemBuilder: (context, item) {
 
-            return _buildRow(list_of_rows[item]);
-          },
+              return _buildRow(list_of_rows[item], item);
+            },
+          ),
         ),
       )
 
@@ -113,19 +120,21 @@ class SearchScreenState extends State<SearchScreen> {
 
   BouncingScrollPhysics bouncingScrollPhysics = BouncingScrollPhysics();
 
-  Widget _buildRow(List<String> row) {
+  Widget _buildRow(List<String> row, int index) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(25),
       ),
+      elevation: 10,
+      shadowColor: index % 2 == 1 ? primaryColor[300] : secondaryColor[300],
       child: Padding (
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(defaultPadding / 4),
         child: ListTile(
-            title: Text(row[0], style: TextStyle(fontSize: 18.0, color: mainTextColor)),
+            title: Text(row[0], style: const TextStyle(fontSize: 18.0, color: mainTextColor)),
             trailing: Icon(row[1] == 'PROF' ? Icons.work_rounded :
             row[1] == 'USER' ? Icons.account_circle_rounded :
             Icons.article_rounded,
-                color: primaryColor[300]),
+                color: index % 2 == 1 ? primaryColor[300] : secondaryColor[300]),
 
             onTap: () async {
               setState(() {
@@ -270,30 +279,23 @@ class SearchScreenState extends State<SearchScreen> {
       child: Scaffold(
         appBar: myAppBar(context),
         bottomNavigationBar: myBottomAppBar(context),
-        body: SingleChildScrollView(
+        resizeToAvoidBottomInset : false,
+        body: SafeArea(
           child: Stack(
-          alignment: _isloadingCircle? Alignment.center : Alignment.topCenter,
+            fit: StackFit.expand,
+          //alignment: _isloadingCircle? Alignment.center : Alignment.topCenter,
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              color: backgroundColor,
+              //color: backgroundColor,
               child: Column(
                 children: [
                   Container(
                     height: 100,
                     alignment: Alignment.topCenter,
                     padding: const EdgeInsets.all(5.0),
-                    child: Align(
-                      child: Form(
-                        child: userInput(searchController, //Calling inputField  class
-                            const Icon(
-                              Icons.search_outlined,
-                              color: backgroundText,
-                            ),
-                            "Search...", context),
-                      ),
-                    ),
+                    child: userInput(searchController, context),
                   ),
                   Container(
                     //height: 200,
