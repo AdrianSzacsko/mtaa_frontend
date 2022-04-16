@@ -15,6 +15,7 @@ import '../Models/profile.dart';
 import '../Responses/User/respGetMyUser.dart';
 import '../Responses/User/respPutMyUserPic.dart';
 import '../UI/appbar.dart';
+import '../UI/responseBar.dart';
 import '../constants.dart';
 
 
@@ -62,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     //const SizedBox(height: defaultPadding * 2),
                     Padding(
-                      padding: EdgeInsets.all(defaultPadding),
+                      padding: const EdgeInsets.all(defaultPadding),
                       child: Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25.0),
@@ -92,7 +93,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                               const SizedBox(height: defaultPadding * 2),
                               buildName(user),
-                              const SizedBox(height: defaultPadding * 2),
+                              const SizedBox(height: defaultPadding),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -386,58 +387,55 @@ class _ProfilePageState extends State<ProfilePage> {
     children: [
       Text(
         user.name,
+        textAlign: TextAlign.center,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
       ),
-      const SizedBox(height: 4),
-      /*
-      Text(
+      const SizedBox(height: defaultPadding / 3),
+
+      SelectableText (
         user.email,
-        style: TextStyle(color: Colors.grey),
-      )*/
+        onTap: () {
+          Clipboard.setData(ClipboardData(text: user.email));
+          responseBar("Email copied", primaryColor[300], context);
+        },
+
+        style: const TextStyle(color: Colors.grey),
+      )
     ],
   );
 
-  Widget information(String type, String text, IconData icon) => Container(
-      child: Column(
+  Widget information(String type, String text, IconData icon) => Column(
+  children: [
+    Row(
       children: [
-        Row(
-          children: [
-            const SizedBox(width: 20,),
-            Icon(
-              icon,
-              color: primaryColor,
-            ),
-            const SizedBox(width: 20,),
-            Text(type,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(width: 20,),
-            Text(text,
-              style: TextStyle(fontSize: 16),
-            ),
-          ],
+        const SizedBox(width: 20,),
+        Icon(
+          icon,
+          color: primaryColor,
         ),
-        const SizedBox(height: 15,),
+        const SizedBox(width: 20,),
+        Text(type,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(width: 20,),
+        Text(text,
+          overflow: TextOverflow.ellipsis,
+          softWrap: true,
+          style: const TextStyle(fontSize: 16),
+        ),
       ],
     ),
-  );
+    const SizedBox(height: 15,),
+  ],
+    );
 
   Widget buildInfo(User user) => Container(
-    decoration: const BoxDecoration(
-      /*
-      borderRadius: BorderRadius.circular(25.0),
-      border: Border.all(
-        color: primaryColor,
-      ),
-
-       */
-    ),
     padding: const EdgeInsets.symmetric(),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 16),
-        information("Email:", user.email, Icons.mail_rounded),
+        //information("Email:", user.email, Icons.mail_rounded),
         information("Study year:", user.study_year, Icons.book_outlined),
         information("Register date:", user.reg_date, Icons.vpn_key_rounded),
       ],
