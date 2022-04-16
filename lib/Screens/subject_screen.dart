@@ -514,6 +514,7 @@ class SubjectReviewState extends State<SubjectReview> {
                                 backgroundImage: widget.image,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
+                                    elevation: 0,
                                       shape: const CircleBorder(),
                                       primary: Colors.transparent
                                   ),

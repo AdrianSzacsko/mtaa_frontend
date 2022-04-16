@@ -464,8 +464,9 @@ class ProfessorReviewState extends State<ProfessorReview> {
                               backgroundImage: widget.image,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
+                                  elevation: 0,
                                   shape: const CircleBorder(),
-                                  primary: Colors.transparent
+                                  primary: Colors.transparent,
                                 ),
                                 onPressed: () {setLoadingScreenNavigator(context);},
                                 child: null,
