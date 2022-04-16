@@ -298,8 +298,25 @@ class _SubjectScreenState extends State<SubjectScreen> {
   }
 }
 
+class SubjectReview extends StatefulWidget {
+  final int subj_id;
+  final int user_id;
+  final String name;
+  final String description;
+  final int difficulty;
+  final int usability;
+  final int prof_avg;
+  final ImageProvider image;
+  const SubjectReview({Key? key, required this.subj_id, required this.user_id, required this.name, required this.description,
+    required this.difficulty, required this.usability, required this.prof_avg, required this.image}) : super(key: key);
 
-class SubjectReview extends StatelessWidget {
+  @override
+  SubjectReviewState createState() => SubjectReviewState();
+}
+
+
+class SubjectReviewState extends State<SubjectReview> {
+  var _isloading = false;
   Widget buildInfo(String value) => Container(
     padding: const EdgeInsets.symmetric(),
     child: Column(
@@ -331,19 +348,23 @@ class SubjectReview extends StatelessWidget {
 
   setLoadingScreenNavigator(context) async {
     //TODO loadingscreen
-    circularLoadingScreen(true);
-    var myUser = await respGetMyUser(user_id, context);
+    setState(() {
+      _isloading = true;
+    });
+    var myUser = await respGetMyUser(widget.user_id, context);
 
     if (myUser != null) {
-      await Navigator.of(context).push(
-          MaterialPageRoute(builder: (ctx) => ProfilePage(),
-            settings: RouteSettings(
-              arguments: myUser,
-            ),
-          ));
+      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProfilePage(),
+        settings: RouteSettings(
+          arguments: myUser,
+        ),
+      ));
     }
-    circularLoadingScreen(false);
+    setState(() {
+      _isloading = false;
+    });
   }
+
 
   Future<bool> userIdMatch(int id) async {
     final prefs = await SharedPreferences.getInstance();
@@ -355,17 +376,6 @@ class SubjectReview extends StatelessWidget {
 
     return false;
   }
-
-  SubjectReview({required this.subj_id, required this.user_id, required this.name, required this.description,
-    required this.difficulty, required this.usability, required this.prof_avg, required this.image});
-  final int subj_id;
-  final int user_id;
-  final String name;
-  final String description;
-  final int difficulty;
-  final int usability;
-  final int prof_avg;
-  final ImageProvider image;
 
   static Future<bool> dialogConfirmation(
       BuildContext context,
@@ -449,7 +459,7 @@ class SubjectReview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
-      future: userIdMatch(user_id),
+      future: userIdMatch(widget.user_id),
       builder: (context, snapshot) {
         if (snapshot.data == null) {
           return circularLoadingScreen(true);
@@ -470,14 +480,14 @@ class SubjectReview extends StatelessWidget {
           ),
           child: GestureDetector(
             onLongPress: () async {
-              bool areIdsMatching = await userIdMatch(user_id);
+              bool areIdsMatching = await userIdMatch(widget.user_id);
               if (areIdsMatching == true) {
                 var res = await dialogConfirmation(context, "Delete review",
                     "Are you sure you want to delete your review?");
                 if (res == true) {
-                  var resp = await respDeleteSubjectReview(user_id.toString(), subj_id.toString(), context);
+                  var resp = await respDeleteSubjectReview(widget.user_id.toString(), widget.subj_id.toString(), context);
                   if (resp) {
-                    revertState(context, subj_id.toString());
+                    revertState(context, widget.subj_id.toString());
                   }
                 }
               }
@@ -490,70 +500,75 @@ class SubjectReview extends StatelessWidget {
                   ),
                   elevation:10,
                   shadowColor: primaryColor[300],
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(defaultPadding),
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: CircleAvatar(
-                              backgroundImage: image,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: const CircleBorder(),
-                                    primary: Colors.transparent
+                  child: Stack (
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(defaultPadding),
+                            child: Align(
+                              alignment: Alignment.topCenter,
+                              child: CircleAvatar(
+                                backgroundImage: widget.image,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: const CircleBorder(),
+                                      primary: Colors.transparent
+                                  ),
+                                  onPressed: () {setLoadingScreenNavigator(context);},
+                                  child: null,
                                 ),
-                                onPressed: () {setLoadingScreenNavigator(context);},
-                                child: null,
                               ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                            child: Container(
-                                padding: const EdgeInsets.fromLTRB(0,defaultPadding / 2,defaultPadding / 2,defaultPadding / 2),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    if (snapshot.data == true)
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                        child: Align(
-                                          alignment: Alignment.topRight,
-                                          child: SizedBox.fromSize(
-                                            size: Size(28, 28), // button width and height
-                                            child: FloatingActionButton(
-                                              heroTag: null,
-                                              elevation: 10,
-                                              backgroundColor: secondaryColor[300],
-                                              splashColor: primaryColor[300],
-                                              onPressed: (){
-                                                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => EditSubjectReviewScreen(subj_id: subj_id.toString(),
-                                                  message: description, difficulty: difficulty.toString(), usability: usability.toString(),
-                                                  prof_avg: prof_avg.toString(),)));
-                                              },
-                                              child: const Icon(
-                                                Icons.edit_outlined,
-                                                color: Colors.white,
+                          Expanded(
+                              child: Container(
+                                  padding: const EdgeInsets.fromLTRB(0,defaultPadding / 2,defaultPadding / 2,defaultPadding / 2),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      if (snapshot.data == true)
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                          child: Align(
+                                            alignment: Alignment.topRight,
+                                            child: SizedBox.fromSize(
+                                              size: Size(28, 28), // button width and height
+                                              child: FloatingActionButton(
+                                                heroTag: null,
+                                                elevation: 10,
+                                                backgroundColor: secondaryColor[300],
+                                                splashColor: primaryColor[300],
+                                                onPressed: (){
+                                                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => EditSubjectReviewScreen(subj_id: widget.subj_id.toString(),
+                                                    message: widget.description, difficulty: widget.difficulty.toString(), usability: widget.usability.toString(),
+                                                    prof_avg: widget.prof_avg.toString(),)));
+                                                },
+                                                child: const Icon(
+                                                  Icons.edit_outlined,
+                                                  color: Colors.white,
+                                                ),
                                               ),
-                                            ),
                                             ),
                                           ),
                                         ),
-                                    Text(
-                                        name, style: const TextStyle(
-                                      fontWeight: FontWeight.bold, fontSize: 16,
-                                    )
-                                    ),
-                                    Text(description, style: const TextStyle(fontSize: 14)),
-                                    _SubjectScreenState().buildInfo(difficulty.toString(),
-                                        usability.toString(),prof_avg.toString()),
-                                  ],
-                                )
-                            )
-                        ),
-                      ]
+                                      Text(
+                                          widget.name, style: const TextStyle(
+                                        fontWeight: FontWeight.bold, fontSize: 16,
+                                      )
+                                      ),
+                                      Text(widget.description, style: const TextStyle(fontSize: 14)),
+                                      _SubjectScreenState().buildInfo(widget.difficulty.toString(),
+                                          widget.usability.toString(),widget.prof_avg.toString()),
+                                    ],
+                                  ),
+                              ),
+                          ),
+                        ]
+                      ),
+                      circularLoadingScreen(_isloading),
+                    ],
                   )
               ),
             ),

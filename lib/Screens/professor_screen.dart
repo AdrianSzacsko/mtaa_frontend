@@ -250,7 +250,24 @@ class _ProfessorScreenState extends State<ProfessorScreen> {
   }
 }
 
-class ProfessorReview extends StatelessWidget {
+class ProfessorReview extends StatefulWidget {
+  final int prof_id;
+  final int user_id;
+  final String name;
+  final String description;
+  final int rating;
+  final ImageProvider image;
+  const ProfessorReview({Key? key, required this.prof_id, required this.user_id, required this.name,
+    required this.description, required this.rating, required this.image}) : super(key: key);
+  @override
+  ProfessorReviewState createState() => ProfessorReviewState();
+}
+
+
+
+class ProfessorReviewState extends State<ProfessorReview> {
+  var _isloading = false;
+
   Widget buildInfo(String value) => Container(
     padding: const EdgeInsets.symmetric(),
     child: Column(
@@ -282,8 +299,10 @@ class ProfessorReview extends StatelessWidget {
 
   setLoadingScreenNavigator(context) async {
     //TODO loadingscreen
-    circularLoadingScreen(true);
-    var myUser = await respGetMyUser(user_id, context);
+    setState(() {
+      _isloading = true;
+    });
+    var myUser = await respGetMyUser(widget.user_id, context);
 
     if (myUser != null) {
       Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProfilePage(),
@@ -292,8 +311,9 @@ class ProfessorReview extends StatelessWidget {
         ),
       ));
     }
-
-    circularLoadingScreen(false);
+    setState(() {
+      _isloading = false;
+    });
   }
 
 
@@ -307,15 +327,6 @@ class ProfessorReview extends StatelessWidget {
 
     return false;
   }
-
-  ProfessorReview({required this.prof_id, required this.user_id, required this.name,
-    required this.description, required this.rating, required this.image});
-  final int prof_id;
-  final int user_id;
-  final String name;
-  final String description;
-  final int rating;
-  final ImageProvider image;
 
   static Future<bool> dialogConfirmation(
       BuildContext context,
@@ -398,7 +409,7 @@ class ProfessorReview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
-        future: userIdMatch(user_id),
+        future: userIdMatch(widget.user_id),
     builder: (context, snapshot) {
       if (snapshot.data == null) {
         return circularLoadingScreen(true);
@@ -419,14 +430,14 @@ class ProfessorReview extends StatelessWidget {
           ),
           child: GestureDetector(
             onLongPress: () async {
-              bool areIdsMatching = await userIdMatch(user_id);
+              bool areIdsMatching = await userIdMatch(widget.user_id);
                 if (areIdsMatching == true) {
                   var res = await dialogConfirmation(context, "Delete review",
                     "Are you sure you want to delete your review?");
                   if (res == true) {
-                    var resp = await respDeleteProfessorReview(user_id.toString(), prof_id.toString(), context);
+                    var resp = await respDeleteProfessorReview(widget.user_id.toString(), widget.prof_id.toString(), context);
                     if (resp) {
-                      revertState(context, prof_id.toString());
+                      revertState(context, widget.prof_id.toString());
                     }
                   }
                 }
@@ -439,7 +450,8 @@ class ProfessorReview extends StatelessWidget {
                 ),
                 elevation:10,
                 shadowColor: primaryColor[300],
-                child: Row(
+                child: Stack(children: [
+                    Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Padding(
@@ -447,7 +459,7 @@ class ProfessorReview extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.topCenter,
                             child: CircleAvatar(
-                              backgroundImage: image,
+                              backgroundImage: widget.image,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   shape: const CircleBorder(),
@@ -478,8 +490,8 @@ class ProfessorReview extends StatelessWidget {
                                             backgroundColor: secondaryColor[300],
                                             splashColor: primaryColor[300],
                                             onPressed: (){
-                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => EditProfessorReviewScreen(prof_id: prof_id.toString(),
-                                                message: description, rating: rating.toString())));
+                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => EditProfessorReviewScreen(prof_id: widget.prof_id.toString(),
+                                                message: widget.description, rating: widget.rating.toString())));
                                             },
                                             child: const Icon(
                                               Icons.edit_outlined,
@@ -491,21 +503,24 @@ class ProfessorReview extends StatelessWidget {
                                     ),
 
                                   Text(
-                                      name, style: const TextStyle(
+                                      widget.name, style: const TextStyle(
                                       fontWeight: FontWeight.bold, fontSize: 16,
                                   )
                                   ),
-                                  Text(description, style: const TextStyle(fontSize: 14)),
-                                  _ProfessorScreenState().buildInfo(rating.toString()),
+                                  Text(widget.description, style: const TextStyle(fontSize: 14)),
+                                  _ProfessorScreenState().buildInfo(widget.rating.toString()),
                                 ],
-                              )
-                          )
-                      )
+                              ),
+                          ),
+                      ),
                     ]
-                )
+                  ),
+                  circularLoadingScreen(_isloading),
+                ]
+              ),
             ),
           ),
-          ),
+        ),
       );
     }
 

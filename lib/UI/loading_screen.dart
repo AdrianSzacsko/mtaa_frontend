@@ -21,3 +21,16 @@ Widget circularLoadingScreen(bool _isloading) {
     ),
   ): const SizedBox.shrink();
 }
+
+Widget circularLoadingScreenReview(bool _isloading) {
+  return _isloading ? (Container(
+    alignment: Alignment.center,
+    constraints: const BoxConstraints(
+      maxHeight: double.infinity
+    ),
+    child: const CircularProgressIndicator(
+      color: secondaryColor,
+      backgroundColor: primaryColor,
+    ),
+  )): const SizedBox.shrink();
+}
