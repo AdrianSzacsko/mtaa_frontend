@@ -302,7 +302,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                     Navigator.of(context).pop();
                                   }
                                   else if (response.statusCode == 403) {
-                                    responseBar("Invalid credentials. " + response.data["detail"], secondaryColor);
+                                    responseBar(response.data["detail"], secondaryColor);
                                   }
                                   else if (response.statusCode >= 500) {
                                     responseBar("There is an error on server side, sit tight...", secondaryColor);
