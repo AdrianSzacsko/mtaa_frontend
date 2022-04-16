@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:mtaa_frontend/Responses/Subject/respPostSubjectReview.dart';
 import 'package:mtaa_frontend/Screens/search_screen.dart';
 import 'package:mtaa_frontend/Screens/subject_screen.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
@@ -251,52 +252,6 @@ class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
                               onChanged: (newValue) {
                                 setState(() {
                                   usabilitySlider = newValue;
-/*
-                              if (sliderValue == 1.0 ) {
-                                myFeedback1 = Icons.star_outlined;
-                                myFeedbackColor1 = Colors.yellow;
-                              }
-                              else if (sliderValue < 1.0 ){
-                                myFeedback1 = Icons.star;
-                                myFeedbackColor1 = Colors.grey;
-
-                              }
-                              if (sliderValue == 2.0 ) {
-                                myFeedback2 = Icons.star_outlined;
-                                myFeedbackColor2= Colors.yellow;
-                              }
-                              else if (sliderValue < 2.0 ){
-                                myFeedback2 = Icons.star;
-                                myFeedbackColor2 = Colors.grey;
-
-                              }
-                              if (sliderValue == 3.0 ) {
-                                myFeedback3 = Icons.star_outlined;
-                                myFeedbackColor3 = Colors.yellow;
-                              }
-                              else if (sliderValue < 3.0 ){
-                                myFeedback3 = Icons.star;
-                                myFeedbackColor3 = Colors.grey;
-
-                              }
-                              if (sliderValue == 4.0 ) {
-                                myFeedback4 = Icons.star_outlined;
-                                myFeedbackColor4 = Colors.yellow;
-                              }
-                              else if (sliderValue < 4.0 ){
-                                myFeedback4 = Icons.star;
-                                myFeedbackColor4 = Colors.grey;
-
-                              }
-                              if (sliderValue == 5.0 ) {
-                                myFeedback5 = Icons.star_outlined;
-                                myFeedbackColor5 = Colors.yellow;
-                              }
-                              else if (sliderValue < 5.0 ){
-                                myFeedback5 = Icons.star;
-                                myFeedbackColor5 = Colors.grey;
-
-                              }*/
 
                                 });
                               },
@@ -412,26 +367,14 @@ class _SubjectReviewScreenState extends State<SubjectReviewScreen> {
                                   splashColor: secondaryColor[300],
                                   onPressed: () async {
                                     if (_formKey.currentState?.validate() ?? false) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          backgroundColor: primaryColor,
-                                          content: Text(
-                                            'Review Posted',
-                                            //textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                      await SubjectClass().postReview(
-                                          reviewController.text,
+                                      bool result = await respPostSubjectReview(reviewController.text,
                                           difficultySlider.toStringAsFixed(0),
                                           usabilitySlider.toStringAsFixed(0),
                                           profSlider.toStringAsFixed(0),
-                                          widget.subj_id);
-
-                                      revertState(context, widget.subj_id.toString());
+                                          widget.subj_id, context);
+                                      if (result) {
+                                        revertState(context, widget.subj_id.toString());
+                                      }
 
                                       //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
                                     }

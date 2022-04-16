@@ -1,13 +1,14 @@
+import 'package:mtaa_frontend/Models/subj.dart';
+
 import '../../Models/prof.dart';
 import '../../UI/responseBar.dart';
 import '../../constants.dart';
 
-respPostProfessorReview(String text, String rating, String prof_id, context) async {
-  var resp = await ProfessorClass().postReview(
-      text,
-      rating,
-      prof_id
-  );
+respPostSubjectReview(String text, String difficulty, String usability,
+                      String prof_avg, String subj_id, context) async {
+  var resp = await SubjectClass().postReview(text, difficulty, usability,
+      prof_avg, subj_id);
+
   if (resp == null) {
     responseBar(
         "There was en error posting the review.", secondaryColor,
@@ -46,4 +47,5 @@ respPostProfessorReview(String text, String rating, String prof_id, context) asy
       return false;
     }
   }
+
 }

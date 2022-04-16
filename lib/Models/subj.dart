@@ -65,14 +65,11 @@ class SubjectClass with ChangeNotifier {
         'prof_avg': int.parse(prof_avg),
         'subj_id': int.parse(subj_id)
       });
-      print("");
-      print("Review added.");
-      print("");
       print(response.data);
-      return response.data;
+      return response;
     }
-    catch (e) {
-      print(e);
+    on DioError catch (e) {
+      return e.response;
     }
   }
 
