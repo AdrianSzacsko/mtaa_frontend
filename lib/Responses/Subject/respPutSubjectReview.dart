@@ -1,22 +1,22 @@
-import '../../Models/prof.dart';
+import 'package:mtaa_frontend/Models/subj.dart';
+
 import '../../UI/responseBar.dart';
 import '../../constants.dart';
 
-respDeleteProfessorReview(String user_id, String prof_id, context) async {
-  var resp = await ProfessorClass().deleteReview(
-      user_id,
-      prof_id
-  );
-  //print(resp);
+respPutSubjectReview(String text, String difficulty, String usability,
+                  String prof_avg, String subj_id, context) async {
+
+  var resp = await SubjectClass().modifyReview(text, difficulty,
+      usability, prof_avg, subj_id);
   if (resp == null) {
     responseBar(
-        "There was en error deleting the review.", secondaryColor,
+        "There was en error modifying the review.", secondaryColor,
         context);
     return false;
   }
   else {
     if (resp.statusCode == 200) {
-      responseBar("Review deleted", primaryColor, context);
+      responseBar("Review modified", primaryColor, context);
       return true;
     }
     else if (resp.statusCode == 403) {
@@ -35,7 +35,7 @@ respDeleteProfessorReview(String user_id, String prof_id, context) async {
     }
     else {
       responseBar(
-          "There was en error deleting the review.", secondaryColor,
+          "There was en error modifying the review.", secondaryColor,
           context);
       return false;
     }

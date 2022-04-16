@@ -8,6 +8,7 @@ import '../Models/Subject.dart';
 import '../Models/User.dart';
 import '../Models/profile.dart';
 import '../Models/subj.dart';
+import '../Responses/Subject/respDeleteSubjectReview.dart';
 import '../Responses/Subject/respGetSubject.dart';
 import '../Responses/User/respGetMyUser.dart';
 import '../UI/loading_screen.dart';
@@ -474,8 +475,10 @@ class SubjectReview extends StatelessWidget {
                 var res = await dialogConfirmation(context, "Delete review",
                     "Are you sure you want to delete your review?");
                 if (res == true) {
-                  await SubjectClass().deleteReview(user_id.toString(), subj_id.toString());
-                  revertState(context, subj_id.toString());
+                  var resp = await respDeleteSubjectReview(user_id.toString(), subj_id.toString(), context);
+                  if (resp) {
+                    revertState(context, subj_id.toString());
+                  }
                 }
               }
             },

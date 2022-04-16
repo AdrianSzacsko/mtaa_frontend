@@ -40,7 +40,6 @@ class ProfessorClass with ChangeNotifier {
     try {
       response =
       await dio.get(urlKey + 'prof/' + prof_id + "/reviews");
-      print(response.data);
       return response;
     }
     on DioError catch (e) {
@@ -89,7 +88,7 @@ class ProfessorClass with ChangeNotifier {
     }
   }
 
-  Future<dynamic?> deleteReview(String user_id, String prof_id) async {
+  Future<dynamic> deleteReview(String user_id, String prof_id) async {
     var dio = Dio();
     dio.options.headers['content-Type'] = 'application/json';
 

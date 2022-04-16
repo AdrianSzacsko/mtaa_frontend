@@ -83,20 +83,22 @@ class SubjectClass with ChangeNotifier {
     dio.options.headers['authorization'] = "Bearer " + token;
 
     try {
-      await dio.put(urlKey + 'subj/', data: {
+      Response response = await dio.put(urlKey + 'subj/', data: {
         'message': message,
         'difficulty': int.parse(difficulty),
         'usability': int.parse(usability),
         'prof_avg': int.parse(prof_avg),
         'subj_id': int.parse(subj_id)
       });
+      return response;
     }
-    catch (e) {
-      print(e);
+    on DioError catch (e) {
+      return e.response;
     }
   }
 
-  Future<void> deleteReview(String user_id, String subj_id) async {
+  Future deleteReview(String user_id, String subj_id) async {
+    var response;
     var dio = Dio();
     dio.options.headers['content-Type'] = 'application/json';
 
@@ -105,14 +107,14 @@ class SubjectClass with ChangeNotifier {
     dio.options.headers['authorization'] = "Bearer " + token;
 
     try {
-      await dio.delete(urlKey + 'subj/delete_review', data: {
-        "user_id": user_id,
-        "subj_id": subj_id
+      response = await dio.delete(urlKey + 'subj/delete_review', queryParameters: {
+        "uid": user_id,
+        "sid": subj_id
       });
-      print('Review deleted.');
+      return response;
     }
-    catch (e) {
-      print(e);
+    on DioError catch (e) {
+      return e.response;
     }
   }
 }

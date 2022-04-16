@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:mtaa_frontend/Responses/Subject/respGetSubject.dart';
+import 'package:mtaa_frontend/Responses/Subject/respPutSubjectReview.dart';
 import 'package:mtaa_frontend/Screens/search_screen.dart';
 import 'package:mtaa_frontend/Screens/subject_screen.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
@@ -418,27 +419,17 @@ class _EditSubjectReviewScreenState extends State<EditSubjectReviewScreen> {
                                   splashColor: secondaryColor[300],
                                   onPressed: () async {
                                     if (_formKey.currentState?.validate() ?? false) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          backgroundColor: primaryColor,
-                                          content: Text(
-                                            'Review Posted',
-                                            //textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                      await SubjectClass().modifyReview(
+                                       bool result = await respPutSubjectReview(
                                           reviewController.text,
                                           difficultySlider.toStringAsFixed(0),
                                           usabilitySlider.toStringAsFixed(0),
                                           profSlider.toStringAsFixed(0),
-                                          widget.subj_id);
+                                          widget.subj_id,
+                                          context);
 
-                                      //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
-                                      revertState(context, widget.subj_id.toString());
+                                      if (result) {
+                                        revertState(context, widget.subj_id.toString());
+                                      }
                                     }
                                   },
                                   child: const Icon(

@@ -1,13 +1,12 @@
-import '../../Models/prof.dart';
+import '../../Models/subj.dart';
 import '../../UI/responseBar.dart';
 import '../../constants.dart';
 
-respDeleteProfessorReview(String user_id, String prof_id, context) async {
-  var resp = await ProfessorClass().deleteReview(
+respDeleteSubjectReview(String user_id, String subj_id, context) async {
+  var resp = await SubjectClass().deleteReview(
       user_id,
-      prof_id
+      subj_id
   );
-  //print(resp);
   if (resp == null) {
     responseBar(
         "There was en error deleting the review.", secondaryColor,
