@@ -270,8 +270,9 @@ class SearchScreenState extends State<SearchScreen> {
       child: Scaffold(
         appBar: myAppBar(context),
         bottomNavigationBar: myBottomAppBar(context),
-        body: SingleChildScrollView( child: Stack(
-          alignment: Alignment.center,
+        body: SingleChildScrollView(
+          child: Stack(
+          alignment: _isloadingCircle? Alignment.center : Alignment.topCenter,
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
