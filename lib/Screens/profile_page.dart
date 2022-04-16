@@ -386,6 +386,7 @@ class _ProfilePageState extends State<ProfilePage> {
     children: [
       Text(
         user.name,
+        textAlign: TextAlign.center,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
       ),
       const SizedBox(height: 4),
@@ -397,41 +398,31 @@ class _ProfilePageState extends State<ProfilePage> {
     ],
   );
 
-  Widget information(String type, String text, IconData icon) => Container(
-      child: Column(
+  Widget information(String type, String text, IconData icon) => Column(
+  children: [
+    Row(
       children: [
-        Row(
-          children: [
-            const SizedBox(width: 20,),
-            Icon(
-              icon,
-              color: primaryColor,
-            ),
-            const SizedBox(width: 20,),
-            Text(type,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(width: 20,),
-            Text(text,
-              style: TextStyle(fontSize: 16),
-            ),
-          ],
+        const SizedBox(width: 20,),
+        Icon(
+          icon,
+          color: primaryColor,
         ),
-        const SizedBox(height: 15,),
+        const SizedBox(width: 20,),
+        Text(type,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(width: 20,),
+        Text(text,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontSize: 16),
+        ),
       ],
     ),
-  );
+    const SizedBox(height: 15,),
+  ],
+    );
 
   Widget buildInfo(User user) => Container(
-    decoration: const BoxDecoration(
-      /*
-      borderRadius: BorderRadius.circular(25.0),
-      border: Border.all(
-        color: primaryColor,
-      ),
-
-       */
-    ),
     padding: const EdgeInsets.symmetric(),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
