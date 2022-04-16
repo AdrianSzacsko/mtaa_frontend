@@ -450,7 +450,9 @@ class ProfessorReviewState extends State<ProfessorReview> {
                 ),
                 elevation:10,
                 shadowColor: primaryColor[300],
-                child: Stack(children: [
+                child: Stack(
+                  alignment: Alignment.center,
+                    children: [
                     Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[

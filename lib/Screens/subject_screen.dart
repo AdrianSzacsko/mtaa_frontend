@@ -501,6 +501,7 @@ class SubjectReviewState extends State<SubjectReview> {
                   elevation:10,
                   shadowColor: primaryColor[300],
                   child: Stack (
+                    alignment: Alignment.center,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

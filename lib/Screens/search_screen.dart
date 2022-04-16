@@ -271,6 +271,7 @@ class SearchScreenState extends State<SearchScreen> {
         appBar: myAppBar(context),
         bottomNavigationBar: myBottomAppBar(context),
         body: SingleChildScrollView( child: Stack(
+          alignment: Alignment.center,
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
