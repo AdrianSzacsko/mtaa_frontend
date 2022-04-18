@@ -91,6 +91,7 @@ class _CallSampleState extends State<CallSample> {
           }
           break;
         case CallState.CallStateBye:
+          print("Mywaitaccept: "+_waitAccept.toString());
           if (_waitAccept) {
             FlutterRingtonePlayer.stop();
             print('peer reject');
@@ -146,6 +147,7 @@ class _CallSampleState extends State<CallSample> {
 
   Future<bool?> _showAcceptDialog() {
     return showDialog<bool?>(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -177,6 +179,7 @@ class _CallSampleState extends State<CallSample> {
 
   Future<bool?> _showInviteDialog() {
     return showDialog<bool?>(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
