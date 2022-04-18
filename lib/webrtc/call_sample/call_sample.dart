@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:mtaa_frontend/UI/appbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:core';
@@ -74,8 +75,10 @@ class _CallSampleState extends State<CallSample> {
           });
           break;
         case CallState.CallStateRinging:
+          FlutterRingtonePlayer.playRingtone(looping: true);
           bool? accept = await _showAcceptDialog();
           if (accept!) {
+            FlutterRingtonePlayer.stop();
             _accept();
             setState(() {
               isMuted = false;
@@ -83,11 +86,13 @@ class _CallSampleState extends State<CallSample> {
             });
           }
           else {
+            FlutterRingtonePlayer.stop();
             _reject();
           }
           break;
         case CallState.CallStateBye:
           if (_waitAccept) {
+            FlutterRingtonePlayer.stop();
             print('peer reject');
             _waitAccept = false;
             Navigator.of(context).pop(false);
@@ -101,10 +106,12 @@ class _CallSampleState extends State<CallSample> {
           break;
         case CallState.CallStateInvite:
           _waitAccept = true;
-          _showInvateDialog();
+          FlutterRingtonePlayer.playNotification(looping: true);
+          _showInviteDialog();
           break;
         case CallState.CallStateConnected:
           if (_waitAccept) {
+            FlutterRingtonePlayer.stop();
             _waitAccept = false;
             Navigator.of(context).pop(false);
           }
@@ -113,7 +120,7 @@ class _CallSampleState extends State<CallSample> {
           });
 
           break;
-        case CallState.CallStateRinging:
+        //case CallState.CallStateRinging:
       }
     };
 
@@ -168,7 +175,7 @@ class _CallSampleState extends State<CallSample> {
     );
   }
 
-  Future<bool?> _showInvateDialog() {
+  Future<bool?> _showInviteDialog() {
     return showDialog<bool?>(
       context: context,
       builder: (context) {
@@ -183,6 +190,7 @@ class _CallSampleState extends State<CallSample> {
                 color: Colors.white,
                 ),
               onPressed: () {
+                FlutterRingtonePlayer.stop();
                 //Navigator.of(context).pop(false);
                 print("decline");
                 _hangUp();
