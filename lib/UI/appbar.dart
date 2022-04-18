@@ -50,6 +50,39 @@ PreferredSizeWidget myAppBar(BuildContext context){
   );
 }
 
+PreferredSizeWidget myCallAppBar(BuildContext context){
+  return AppBar(
+    automaticallyImplyLeading: false,
+    iconTheme: IconThemeData(
+      color: primaryColor[300], //change your color here
+    ),
+    backgroundColor: Colors.white,
+    centerTitle: true,
+    title: Image.asset('assets/Images/puzzle.png',
+      height: 40.0,
+      fit: BoxFit.cover,
+    ),
+    /*IconButton(
+      icon: Image.asset('assets/Images/puzzle.png',
+        height: 80.0,
+        fit: BoxFit.cover,
+      ),
+      onPressed: () {
+        //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SignInScreen()));
+      },
+    ),*/
+    actions: [
+      IconButton(
+        icon: Icon(Icons.search_outlined,
+            color: primaryColor[300]),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+        },
+      ),
+    ],
+  );
+}
+
 Widget myBottomAppBar(BuildContext context){
 
   return BottomAppBar(

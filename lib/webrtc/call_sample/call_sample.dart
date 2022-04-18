@@ -31,6 +31,7 @@ class _CallSampleState extends State<CallSample> {
 
   bool _waitAccept = false;
   bool isMuted = false;
+  bool _isDialogOpen = false;
 
   // ignore: unused_element
   _CallSampleState();
@@ -76,9 +77,11 @@ class _CallSampleState extends State<CallSample> {
           break;
         case CallState.CallStateRinging:
           FlutterRingtonePlayer.playRingtone(looping: true);
+          _isDialogOpen = true;
           bool? accept = await _showAcceptDialog();
           if (accept!) {
             FlutterRingtonePlayer.stop();
+            _isDialogOpen = false;
             _accept();
             setState(() {
               isMuted = false;
@@ -87,15 +90,19 @@ class _CallSampleState extends State<CallSample> {
           }
           else {
             FlutterRingtonePlayer.stop();
+            _isDialogOpen = false;
             _reject();
           }
           break;
         case CallState.CallStateBye:
           print("Mywaitaccept: "+_waitAccept.toString());
-          if (_waitAccept) {
+          if (_waitAccept || _isDialogOpen == true) {
             FlutterRingtonePlayer.stop();
+            _isDialogOpen = false;
             print('peer reject');
             _waitAccept = false;
+            print("asdf1");
+            print(Navigator.of(context));
             Navigator.of(context).pop(false);
           }
           setState(() {
@@ -107,12 +114,14 @@ class _CallSampleState extends State<CallSample> {
           break;
         case CallState.CallStateInvite:
           _waitAccept = true;
+          _isDialogOpen = true;
           FlutterRingtonePlayer.playNotification(looping: true);
           _showInviteDialog();
           break;
         case CallState.CallStateConnected:
           if (_waitAccept) {
             FlutterRingtonePlayer.stop();
+            _isDialogOpen = false;
             _waitAccept = false;
             Navigator.of(context).pop(false);
           }
@@ -279,7 +288,7 @@ class _CallSampleState extends State<CallSample> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: myAppBar(context),
+      appBar: myCallAppBar(context),
       bottomNavigationBar: myBottomAppBar(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: _inCalling
