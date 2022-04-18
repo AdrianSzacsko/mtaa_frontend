@@ -261,23 +261,20 @@ class _CallSampleState extends State<CallSample> {
           ),
           onTap: null,
           trailing: SizedBox(
-              width: 100.0,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    IconButton(
+              width: 30.0,
+              child: IconButton(
                       icon: Icon(self ? Icons.close : Icons.videocam,
                           color: self ? secondaryColor[300] : primaryColor[300]),
                       onPressed: () => _invitePeer(context, peer['id'], false),
                       tooltip: 'Video calling',
                     ),
-                    IconButton(
+                    /*IconButton(
                       icon: Icon(self ? Icons.close : Icons.screen_share,
                           color: self ? secondaryColor[300] : primaryColor[300]),
                       onPressed: () => _invitePeer(context, peer['id'], true),
                       tooltip: 'Screen sharing',
-                    )
-                  ])),
+                    )*/
+                  ),
           //subtitle: Text('[' + peer['user_agent'] + ']'),
         ),
       ),

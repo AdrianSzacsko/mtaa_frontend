@@ -99,7 +99,7 @@ class SearchScreenState extends State<SearchScreen> {
   Widget buildList() {
     return SizedBox(
       width: double.infinity,
-      height: MediaQuery.of(context).size.height -300,
+      height: MediaQuery.of(context).size.height -313,
       child: Align(
         alignment: Alignment.topCenter,
         child: Padding(
