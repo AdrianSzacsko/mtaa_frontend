@@ -78,6 +78,7 @@ class _CallSampleState extends State<CallSample> {
           if (accept!) {
             _accept();
             setState(() {
+              isMuted = false;
               _inCalling = true;
             });
           }
@@ -292,8 +293,9 @@ class _CallSampleState extends State<CallSample> {
                       heroTag: null,
                       child: isMuted ? Icon(Icons.mic_off) : Icon(Icons.mic),
                       onPressed: () {
-                        setState(() { //TODO verify if needed
-                          isMuted = _muteMic as bool;
+                        isMuted = !_muteMic();
+                        setState(() {
+                          //isMuted = _muteMic();
                         });
                         }
                     )
