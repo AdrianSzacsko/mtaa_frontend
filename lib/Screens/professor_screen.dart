@@ -298,7 +298,6 @@ class ProfessorReviewState extends State<ProfessorReview> {
   );
 
   setLoadingScreenNavigator(context) async {
-    //TODO loadingscreen
     setState(() {
       _isloading = true;
     });
