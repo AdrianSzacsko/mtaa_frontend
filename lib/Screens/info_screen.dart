@@ -109,28 +109,6 @@ class InfoScreenState extends State<InfoScreen> {
               ],
             ),
           ),
-          /*Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25.0),
-            ),
-          elevation:10,
-          shadowColor: secondaryColor[300],
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-            padding: EdgeInsets.only(left: defaultPadding * 2, top: defaultPadding),
-            child: Column(
-              children: const [
-                Text("Special thanks to...",
-                  style: TextStyle(fontSize: 15,
-                      fontWeight: FontWeight.bold),
-                ),
-                Text("Ing. Marek Galinski, PhD.")
-              ],
-            ),
-            ),
-          ),
-          ),*/
         ],
       ),
 
