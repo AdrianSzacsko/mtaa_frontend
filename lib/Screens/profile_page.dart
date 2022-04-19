@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mime/mime.dart';
 import 'package:mtaa_frontend/Responses/User/respDeletePic.dart';
+import 'package:mtaa_frontend/UI/loading_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/User.dart';
@@ -29,6 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late ImageProvider file;
   late ImageProvider newFile;
   late Uint8List newFileBytes;
+  var isLoading = false;
 
   Future<bool> userIdMatch(int id) async {
     final prefs = await SharedPreferences.getInstance();
@@ -61,6 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       defaultPadding / 2, defaultPadding / 2
                   ),
                   children: [
+                    linearLoadingScreen(isLoading),
                     //const SizedBox(height: defaultPadding * 2),
                     Padding(
                       padding: const EdgeInsets.all(defaultPadding),
@@ -169,8 +172,13 @@ class _ProfilePageState extends State<ProfilePage> {
   void revertState(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     final user_id = prefs.getInt('user_id') ?? 0;
-
+    setState(() {
+      isLoading = true;
+    });
     var myUser = await respGetMyUser(user_id, context);
+    setState(() {
+      isLoading = false;
+    });
 
     if (myUser != null) {
       Navigator.pop(context, false);
@@ -235,8 +243,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               onPressed: () async {
                                 final image = await FilePicker.platform.pickFiles(
                                   withData: true,
-                                  //type: FileType.custom,
-                                  //allowedExtensions: ['jpg','png'],
+                                  type: FileType.custom,
+                                  allowedExtensions: ['jpg','png'],
                                 );
                                 if (image == null) return;
                                 newFile = Image.memory(image.files.first.bytes!).image;
