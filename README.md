@@ -1,16 +1,17 @@
-# mtaa_frontend
+## MTAA projekt - Acarate
 
-A new Flutter project for subject MTAA.
+### Marko Stahovec, Adrian Szacsko
 
-## Getting Started
+Prednášajúci: Ing. Marek Galinski, PhD., prof. Ing. Ivan Kotuliak, PhD.
 
-This project is a starting point for a Flutter application.
+Cvičiaci: Ing. Marek Galinski, PhD.
 
-A few resources to get you started if this is your first Flutter project:
+Cvičenie: Streda 12:00
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+---
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Webrtc was implemented with the help of https://github.com/flutter-webrtc/flutter-webrtc-demo,
+which was lightly edited to suit our needs.
+
+Webrtc server was provided by https://github.com/flutter-webrtc/flutter-webrtc-server
+
