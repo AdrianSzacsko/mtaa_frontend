@@ -25,6 +25,7 @@ class SignUpScreenState extends State<SignUpScreen> {
   final lastnameController = TextEditingController();
   final passwordController = TextEditingController();
   final studyYearController = TextEditingController();
+  final passwordConfirmController = TextEditingController();
 
   responseBar(String text, Color? color) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -96,7 +97,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                               decoration: BoxDecoration(
                                   color: Colors.white, borderRadius: BorderRadius.circular(30)),
                               child: Padding(
-                                padding: const EdgeInsets.only(top: defaultPadding / 1.5),
+                                padding: const EdgeInsets.only(top: defaultPadding / 2),
                                 child: TextFormField(
                                   validator: MultiValidator([
                                     RequiredValidator(errorText: "Required"),
@@ -151,7 +152,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                               decoration: BoxDecoration(
                                   color: Colors.white, borderRadius: BorderRadius.circular(30)),
                               child: Padding(
-                                padding: const EdgeInsets.only(top: defaultPadding / 1.5),
+                                padding: const EdgeInsets.only(top: defaultPadding / 2),
                                 child: TextFormField(
                                   validator: RequiredValidator(errorText: "First name is required"),
                                   onEditingComplete: () => FocusScope.of(context).nextFocus(),
@@ -202,7 +203,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                               decoration: BoxDecoration(
                                   color: Colors.white, borderRadius: BorderRadius.circular(30)),
                               child: Padding(
-                                padding: const EdgeInsets.only(top: defaultPadding / 1.5),
+                                padding: const EdgeInsets.only(top: defaultPadding / 2),
                                 child: TextFormField(
                                   validator: RequiredValidator(errorText: "Last name is required"),
                                   onEditingComplete: () => FocusScope.of(context).nextFocus(),
@@ -253,7 +254,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                               decoration: BoxDecoration(
                                   color: Colors.white, borderRadius: BorderRadius.circular(30)),
                               child: Padding(
-                                padding: const EdgeInsets.only(top: defaultPadding / 1.5),
+                                padding: const EdgeInsets.only(top: defaultPadding / 2),
                                 child: TextFormField(
                                   validator: RequiredValidator(errorText: "Password is required"),
                                   onEditingComplete: () => FocusScope.of(context).nextFocus(),
@@ -299,13 +300,69 @@ class SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
 
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white, borderRadius: BorderRadius.circular(30)),
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: defaultPadding / 2),
+                                child: TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Confirm Password is required.";
+                                    }
+                                    else if (passwordConfirmController.text != passwordController.text) {
+                                      return "Passwords do not match.";
+                                    }
+                                  },
+                                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                  controller: passwordConfirmController,
+                                  autocorrect: false,
+                                  enableSuggestions: false,
+                                  autofocus: false,
+                                  keyboardType: TextInputType.text,
+                                  obscureText: true,
+                                  decoration: InputDecoration(hintText: "Confirm Password",
+                                    hintStyle: const TextStyle(color: backgroundText),
+                                    prefixIcon: const Padding(
+                                      padding: EdgeInsets.only(top: 0), // add padding to adjust icon
+                                      child: Icon(Icons.check_outlined),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: primaryColor),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    focusedBorder:OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    disabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: primaryColor),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
                             // const SizedBox(height: defaultPadding),
 
                             Container(
                               decoration: BoxDecoration(
                                   color: Colors.white, borderRadius: BorderRadius.circular(30)),
                               child: Padding(
-                                padding: const EdgeInsets.only(top: defaultPadding / 1.5),
+                                padding: const EdgeInsets.only(top: defaultPadding / 2),
                                 child: TextFormField(
                                   validator: RequiredValidator(errorText: "Study year is required"),
                                   controller: studyYearController,
