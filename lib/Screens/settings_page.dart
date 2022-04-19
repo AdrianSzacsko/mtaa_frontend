@@ -24,6 +24,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   IconData leadingIcon = Icons.settings_outlined;
   var ipController = TextEditingController();
+  bool isIpValid = false;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +43,23 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         )
     );
+  }
+
+  bool validateIpAddress(String text) {
+    final ip = RegExp(r'^(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))$');
+    if (text.isEmpty) {
+      setState(() {
+        isIpValid = false;
+      });
+      return false;
+    }
+    if (ip.hasMatch(text)) {
+      setState(() {
+        isIpValid = true;
+      });
+      return true;
+    }
+    return false;
   }
 
   addIpAddress(context){
@@ -64,7 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     children: [
                       Align(
                         alignment: Alignment.topCenter,
-                        child: TextField(
+                        child: TextFormField(
                           controller: ipController,
                           autocorrect: false,
                           enableSuggestions: false,
@@ -72,6 +90,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           maxLines: null,
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(hintText: "Server IP Address",
+                            errorText: isIpValid ? 'IP' : null,
                             hintStyle: const TextStyle(color: backgroundText, fontFamily: 'Roboto'),
                             prefixIcon: const Padding(
                               padding: EdgeInsets.only(top: 0), // add padding to adjust icon
@@ -84,7 +103,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             focusedBorder:OutlineInputBorder(
                               borderSide: const BorderSide(color: secondaryColor, width: 2.0),
                               borderRadius: BorderRadius.circular(25.0),
-                            ),),
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 20,),
@@ -95,7 +115,16 @@ class _SettingsPageState extends State<SettingsPage> {
                             heroTag: null,
                             backgroundColor: primaryColor[300],
                             onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CallSample(host: ipController.text)));
+                              validateIpAddress(ipController.text);
+
+                              if (isIpValid) {
+                                isIpValid = false;
+                                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CallSample(host: ipController.text)));
+                              }
+                              else {
+                                isIpValid = false;
+                                responseBar("Invalid IP address", secondaryColor[300], context);
+                              }
                             },
 
                             child: const Icon(
