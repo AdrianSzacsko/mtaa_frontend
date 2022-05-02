@@ -58,30 +58,20 @@ class SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
-    //dataLoadFunctionLine();
+    dataLoadFunctionLine();
   }
 
   dataLoadFunctionLine() async {
     setState(() {
       _isloadingLine = true;
     });
-    print(searchController);
-    var resp;
     if (_isinitstate){
-      resp = await Search().search("default_value");
+      sendData("default_value");
       _isinitstate = false;
     }
     else {
-      resp = await Search().search(searchController.text);
+      sendData(searchController.text);
     }
-
-    list_of_rows.clear();
-    resp?.data.forEach((item){
-      list_of_rows.add([item["name"].toString(), item["code"].toString(), item["id"].toString()]);
-      print(item);
-    });
-
-    print(list_of_rows);
     setState(() {
       _isloadingLine = false;
     });
@@ -323,7 +313,9 @@ class SearchScreenState extends State<SearchScreen> {
                         backgroundColor: secondaryColor[300],
                         elevation: 10,
                         //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                        onPressed: sendData,
+                        onPressed: (){
+                          sendData(searchController.text);
+                        },
                         /*onPressed: () async {
                           setState(() {
                             _isloadingLine = true;
@@ -427,9 +419,8 @@ class SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  void sendData() {
-    print("sending");
-      channel.sink.add(searchController.text);
+  void sendData(String search_text) {
+      channel.sink.add(search_text);
   }
 
   @override
