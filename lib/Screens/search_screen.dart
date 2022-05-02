@@ -13,7 +13,9 @@ import 'package:mtaa_frontend/UI/inputField.dart';
 import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
 import 'package:mtaa_frontend/Screens/settings_screen.dart';
 import 'package:mtaa_frontend/UI/loading_screen.dart';
+import 'package:mtaa_frontend/key.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../Models/Subject.dart';
 import '../Models/prof.dart';
@@ -27,9 +29,12 @@ import '../Responses/User/respGetMyUser.dart';
 import '../UI/appbar.dart';
 import '../constants.dart';
 
+
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/status.dart' as status;
+
 class SearchScreen extends StatefulWidget {
   //SearchScreen({Key key}) : super(key: key);
-
   @override
   SearchScreenState createState() => SearchScreenState();
 }
@@ -47,11 +52,13 @@ class SearchScreenState extends State<SearchScreen> {
 
   bool _isinitstate = true;
 
+  final channel = IOWebSocketChannel.connect(Uri.parse(urlwbkey + "search/wb"));
+
 
   @override
   void initState() {
     super.initState();
-    dataLoadFunctionLine();
+    //dataLoadFunctionLine();
   }
 
   dataLoadFunctionLine() async {
@@ -316,7 +323,8 @@ class SearchScreenState extends State<SearchScreen> {
                         backgroundColor: secondaryColor[300],
                         elevation: 10,
                         //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                        onPressed: () async {
+                        onPressed: sendData,
+                        /*onPressed: () async {
                           setState(() {
                             _isloadingLine = true;
                           });
@@ -356,7 +364,7 @@ class SearchScreenState extends State<SearchScreen> {
                           setState(() {
                             _isloadingLine = false;
                           });
-                        },
+                        },*/
                         child: const Icon(
                           Icons.search_outlined,
                           color: Colors.white,
@@ -369,7 +377,24 @@ class SearchScreenState extends State<SearchScreen> {
                     alignment: Alignment.center,
                     child: Align(
                       alignment: Alignment.center,
-                      child: buildList(),
+                      child: StreamBuilder(
+                        stream: channel.stream,
+                        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                          if (snapshot.data != null) {
+                            list_of_rows.clear();
+                            //print(jsonDecode(snapshot.data));
+                            var list = json.decode(json.decode(snapshot.data.toString()));
+                            list.forEach((item){
+                              list_of_rows.add([item["name"].toString(), item["code"].toString(), item["id"].toString()]);
+                              //print(item);
+                            });
+                          }
+                          print("building list");
+                          return buildList();
+                        },
+
+                      ),
+                      //buildList(),
                     ),
                   ),
                 ],
@@ -401,4 +426,16 @@ class SearchScreenState extends State<SearchScreen> {
       },
     );
   }
+
+  void sendData() {
+    print("sending");
+      channel.sink.add(searchController.text);
+  }
+
+  @override
+  void dispose() {
+    channel.sink.close();
+    super.dispose();
+  }
+
 }

@@ -4,6 +4,9 @@ import 'package:http/http.dart' as http;
 import '../key.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/status.dart' as status;
+
 
 
 class Search with ChangeNotifier {
