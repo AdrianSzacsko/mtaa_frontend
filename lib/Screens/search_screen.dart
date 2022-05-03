@@ -4,6 +4,7 @@ import 'dart:ffi';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mtaa_frontend/Models/Professor.dart';
+import 'package:mtaa_frontend/Screens/components/autoReconnectWebsocket.dart';
 import 'package:mtaa_frontend/Screens/professor_screen.dart';
 import 'package:mtaa_frontend/Screens/profile_page.dart';
 import 'package:mtaa_frontend/Screens/profile_screen.dart';
@@ -51,8 +52,7 @@ class SearchScreenState extends State<SearchScreen> {
   List<List<String>> list_of_rows = <List<String>>[];
 
   bool _isinitstate = true;
-
-  final channel = IOWebSocketChannel.connect(Uri.parse(urlwbkey + "search/wb"));
+  var channel = AutoReconnectWebSocket(Uri.parse(urlwbkey + "search/wb"));
 
 
   @override
@@ -314,7 +314,7 @@ class SearchScreenState extends State<SearchScreen> {
                         elevation: 10,
                         //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                         onPressed: (){
-                          sendData(searchController.text);
+                          dataLoadFunctionLine();
                         },
                         /*onPressed: () async {
                           setState(() {
@@ -375,11 +375,7 @@ class SearchScreenState extends State<SearchScreen> {
                           if (snapshot.data != null) {
                             list_of_rows.clear();
                             //print(jsonDecode(snapshot.data));
-                            var list = json.decode(json.decode(snapshot.data.toString()));
-                            list.forEach((item){
-                              list_of_rows.add([item["name"].toString(), item["code"].toString(), item["id"].toString()]);
-                              //print(item);
-                            });
+                            getList(snapshot.data);
                           }
                           print("building list");
                           return buildList();
@@ -418,6 +414,24 @@ class SearchScreenState extends State<SearchScreen> {
       },
     );
   }
+
+  getList(data){
+    var list = (json.decode(data.toString()));
+    var status = int.parse(list["status_code"].toString());
+    print(status);
+    if (status == 200){
+      var message = json.decode(list["message"]);
+      message.forEach((item){
+        list_of_rows.add([item["name"].toString(), item["code"].toString(), item["id"].toString()]);
+        //print(item);
+      });
+    }
+    else {
+      var message = list["message"];
+      //showSnackBar(message.toString(), primaryColor);
+    }
+  }
+
 
   void sendData(String search_text) {
       channel.sink.add(search_text);
