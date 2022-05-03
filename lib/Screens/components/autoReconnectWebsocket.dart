@@ -1,11 +1,13 @@
 //autoreconnecting implemented from: https://stackoverflow.com/questions/55503083/flutter-websockets-autoreconnect-how-to-implement
 
 import 'dart:async';
+import 'dart:io';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-class AutoReconnectWebSocket {
+class AutoReconnectWebSocket{
   final Uri _endpoint;
   final int delay;
   final StreamController<dynamic> _recipientCtrl = StreamController<dynamic>();
@@ -24,8 +26,14 @@ class AutoReconnectWebSocket {
     _connect();
   }
 
-  void _connect() {
-    webSocketChannel = IOWebSocketChannel.connect(_endpoint);
+  getToken() async {
+    return await SharedPreferences.getInstance();
+  }
+
+  Future<void> _connect() async {
+    var prefs = await getToken();
+    final token = prefs.getString('token') ?? '';
+    webSocketChannel = IOWebSocketChannel.connect(_endpoint, headers: {HttpHeaders.authorizationHeader: ("Bearer " + token)});
     webSocketChannel!.stream.listen((event) {
       _recipientCtrl.add(event);
     }, onError: (e) async {

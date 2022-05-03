@@ -40,7 +40,7 @@ class SearchScreen extends StatefulWidget {
   SearchScreenState createState() => SearchScreenState();
 }
 
-class SearchScreenState extends State<SearchScreen> {
+class SearchScreenState extends State<SearchScreen>{
   bool _isloadingLine = false;
   bool _isloadingCircle = false;
 
@@ -377,7 +377,6 @@ class SearchScreenState extends State<SearchScreen> {
                             //print(jsonDecode(snapshot.data));
                             getList(snapshot.data);
                           }
-                          print("building list");
                           return buildList();
                         },
 
@@ -418,7 +417,6 @@ class SearchScreenState extends State<SearchScreen> {
   getList(data){
     var list = (json.decode(data.toString()));
     var status = int.parse(list["status_code"].toString());
-    print(status);
     if (status == 200){
       var message = json.decode(list["message"]);
       message.forEach((item){
