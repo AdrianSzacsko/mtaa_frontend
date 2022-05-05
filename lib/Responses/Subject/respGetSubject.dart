@@ -27,6 +27,7 @@ respGetSubjectCache(String getSubject, String getSubjectReviews, APICacheManager
 
   var data = json.decode(cache.syncData);
   var data2 = json.decode(cache2.syncData);
+  print(data2);
 
   List<String> allProfessors = <String>[];
   data?.forEach((item) {
@@ -34,12 +35,20 @@ respGetSubjectCache(String getSubject, String getSubjectReviews, APICacheManager
   });
 
   List<List<String>> allReviews = <List<String>>[];
-  data2?.forEach((item) {
-    allReviews.add([item["id"].toString(),
-      item["user_id"].toString(),
-      item["message"].toString(), item["difficulty"].toString(),
-      item["usability"].toString(), item["prof_avg"].toString()]);
-  });
+  try {
+    if (data2.containsKey("detail")){
+      allReviews = <List<String>>[];
+    }
+  }
+  catch(e){
+    allReviews = <List<String>>[];
+    data2?.forEach((item) {
+      allReviews.add([item["id"].toString(),
+        item["user_id"].toString(),
+        item["message"].toString(), item["difficulty"].toString(),
+        item["usability"].toString(), item["prof_avg"].toString()]);
+    });
+  }
 
   var subject = Subject(
     subj_id: subjectId,
