@@ -1,21 +1,63 @@
 
+import 'dart:convert';
+
+import 'package:api_cache_manager/api_cache_manager.dart';
+import 'package:api_cache_manager/models/cache_db_model.dart';
+
 import '../../Models/User.dart';
 import '../../Models/profile.dart';
 import '../../UI/responseBar.dart';
 import '../../constants.dart';
 import 'package:flutter/material.dart';
 
+import '../../key.dart';
+
+respGetMyUserCache(String getProfile, APICacheManager cacheData) async {
+
+  if (!(await cacheData.isAPICacheKeyExist(getProfile))) {
+    return null;
+  }
+  var cache = await cacheData.getCacheData(getProfile);
+
+  var data = json.decode(cache.syncData);
+
+  var myUser = User(
+      user_id: data[0]["id"],
+      email: data[0]["email"],
+      name: data[0]["name"],
+      comments: data[0]["comments"].toString(),
+      reg_date: data[0]["reg_date"].toString(),
+      study_year: data[0]["study_year"].toString(),
+      image: const AssetImage("assets/Images/profile-unknown.png"),
+      permission: data[0]["permission"].toString().toLowerCase() ==
+          'true' ? true : false
+  );
+  return myUser;
+}
+
+
 respGetMyUser(int user_id, context) async {
+  var cacheData = APICacheManager();
+  String getProfile = urlKey + 'profile/' + user_id.toString();
+
+
   var resp = await Profile().getProfile(user_id.toString());
+  var resp2 = await Profile().getProfilePic(user_id.toString());
+
 
   if (resp == null) {
-    responseBar("There was en error during execution. Check your connection.",
-        secondaryColor, context);
+    var myUser = await respGetMyUserCache(getProfile, cacheData);
+    if (myUser == null) {
+      responseBar("There was en error during execution. Check your connection.",
+          secondaryColor, context);
+    }
+    else{
+      return myUser;
+    }
   }
   else {
     if (resp.statusCode == 200) {
 //responseBar("Registration successful", primaryColor);
-      var resp2 = await Profile().getProfilePic(user_id.toString());
 
       if (resp2 == null) {
         responseBar(
@@ -36,6 +78,7 @@ respGetMyUser(int user_id, context) async {
               permission: resp.data[0]["permission"].toString().toLowerCase() ==
                   'true' ? true : false
           );
+          await cacheData.addCacheData(APICacheDBModel(key: getProfile, syncData: json.encode(resp.data)));
           return myUser;
         }
         else if (resp2[0].statusCode == 401) {
