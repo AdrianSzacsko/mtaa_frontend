@@ -1,12 +1,15 @@
+import 'package:api_cache_manager/api_cache_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:mtaa_frontend/UI/responseBar.dart';
 
 import '../../Models/profile.dart';
 import '../../constants.dart';
+import '../../key.dart';
 
 respDeleteMyUser(context) async {
   Response response = await Profile().deleteProfile();
   if (response.statusCode == 200){
+
     responseBar("Account Deleted", primaryColor[300], context);
     return true;
   }

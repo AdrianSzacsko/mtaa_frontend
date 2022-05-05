@@ -1,4 +1,9 @@
 
+import 'dart:convert';
+
+import 'package:api_cache_manager/api_cache_manager.dart';
+import 'package:api_cache_manager/models/cache_db_model.dart';
+
 import '../../Models/Professor.dart';
 import '../../Models/Subject.dart';
 import '../../Models/User.dart';
@@ -9,11 +14,61 @@ import '../../UI/responseBar.dart';
 import '../../constants.dart';
 import 'package:flutter/material.dart';
 
+import '../../key.dart';
+
+
+respGetSubjectCache(String getSubject, String getSubjectReviews, APICacheManager cacheData, String subjectId) async {
+
+  if (await cacheData.isAPICacheKeyExist(getSubject) == false){
+    return null;
+  }
+  var cache = await cacheData.getCacheData(getSubject);
+  var cache2 = await cacheData.getCacheData(getSubjectReviews);
+
+  var data = json.decode(cache.syncData);
+  var data2 = json.decode(cache2.syncData);
+
+  List<String> allProfessors = <String>[];
+  data?.forEach((item) {
+    allProfessors.add(item["teachers"]);
+  });
+
+  List<List<String>> allReviews = <List<String>>[];
+  data2?.forEach((item) {
+    allReviews.add([item["id"].toString(),
+      item["user_id"].toString(),
+      item["message"].toString(), item["difficulty"].toString(),
+      item["usability"].toString(), item["prof_avg"].toString()]);
+  });
+
+  var subject = Subject(
+    subj_id: subjectId,
+    name: data[0]["name"],
+    professors: allProfessors,
+    reviews: allReviews,
+  );
+
+  return subject;
+}
+
+
 respGetSubject(String subj_id, context) async {
+  var cacheData = APICacheManager();
+  String getSubject = urlKey + 'profile/' + subj_id.toString();
+  String getSubjectReviews = urlKey + 'profile/' + subj_id.toString() + "/reviews";
+
   var resp = await SubjectClass().getSubject(subj_id);
   if (resp == null) {
-    responseBar("There was en error during execution. Check your connection.",
-        secondaryColor, context);
+
+
+    var subject = await respGetSubjectCache(getSubject, getSubjectReviews, cacheData, subj_id);
+    if (subject == null) {
+      responseBar("There was en error during execution. Check your connection.",
+          secondaryColor, context);
+    }
+    else {
+      return subject;
+    }
   }
   else {
     if (resp.statusCode == 200) {
@@ -45,7 +100,8 @@ respGetSubject(String subj_id, context) async {
             professors: allProfessors,
             reviews: allReviews,
           );
-
+          await cacheData.addCacheData(APICacheDBModel(key: getSubject, syncData: json.encode(resp.data)));
+          await cacheData.addCacheData(APICacheDBModel(key: getSubjectReviews, syncData: json.encode(resp2.data)));
           return subject;
         }
         else if (resp2.statusCode == 404) {
@@ -55,7 +111,8 @@ respGetSubject(String subj_id, context) async {
             professors: <String>[],
             reviews: <List<String>>[],
           );
-
+          await cacheData.addCacheData(APICacheDBModel(key: getSubject, syncData: json.encode(resp.data)));
+          await cacheData.addCacheData(APICacheDBModel(key: getSubjectReviews, syncData: json.encode(resp2.data)));
           return subject;
         }
         else if (resp2.statusCode == 401) {
