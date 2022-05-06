@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:api_cache_manager/api_cache_manager.dart';
+import 'package:api_cache_manager/models/cache_db_model.dart';
 
 import '../../Models/Professor.dart';
 import '../../Models/User.dart';
@@ -11,12 +12,62 @@ import '../../UI/responseBar.dart';
 import '../../constants.dart';
 import 'package:flutter/material.dart';
 
+import '../../key.dart';
+
+
+respGetSubjectCache(String getProfessor, String getProfessorReviews, APICacheManager cacheData, String professorId) async {
+
+  if (await cacheData.isAPICacheKeyExist(getProfessor) == false){
+    return null;
+  }
+  var cache = await cacheData.getCacheData(getProfessor);
+  var cache2 = await cacheData.getCacheData(getProfessorReviews);
+
+  var data = json.decode(cache.syncData);
+  var data2 = json.decode(cache2.syncData);
+
+  List<List<String>> allReviews = <List<String>>[];
+  try {
+    if (data2.containsKey("detail")){
+      allReviews = <List<String>>[];
+    }
+  }
+  catch(e){
+    allReviews = <List<String>>[];
+    data2?.forEach((item) {
+      allReviews.add([item["id"].toString(), item["user_id"].toString(),
+        item["message"].toString(), item["rating"].toString()]);
+    });
+  }
+
+  var professor = Professor(
+    prof_id: professorId,
+    name: data[0]["name"],
+    reviews: allReviews,
+  );
+
+  return professor;
+}
+
 
 respGetProfessor(String prof_id, context) async {
+
+  var cacheData = APICacheManager();
+  String getProfessor = urlKey + 'prof/' + prof_id.toString();
+  String getProfessorReviews = urlKey + 'prof/' + prof_id.toString() + "/reviews";
+
   var resp = await ProfessorClass().getProfessor(prof_id);
   if (resp == null) {
-    responseBar("There was en error during execution. Check your connection.",
-        secondaryColor, context);
+
+
+    var professor = await respGetSubjectCache(getProfessor, getProfessorReviews, cacheData, prof_id);
+    if (professor == null) {
+      responseBar("There was en error during execution. Check your connection.",
+          secondaryColor, context);
+    }
+    else{
+      return professor;
+    }
   }
   else {
     if (resp.statusCode == 200) {
@@ -41,6 +92,10 @@ respGetProfessor(String prof_id, context) async {
             name: resp.data[0]["name"],
             reviews: allReviews,
           );
+
+          await cacheData.addCacheData(APICacheDBModel(key: getProfessor, syncData: json.encode(resp.data)));
+          await cacheData.addCacheData(APICacheDBModel(key: getProfessorReviews, syncData: json.encode(resp2.data)));
+
           return professor;
         }
         else if (resp2.statusCode == 404) {
@@ -49,6 +104,10 @@ respGetProfessor(String prof_id, context) async {
             name: resp.data[0]["name"],
             reviews: <List<String>>[],
           );
+
+          await cacheData.addCacheData(APICacheDBModel(key: getProfessor, syncData: json.encode(resp.data)));
+          await cacheData.addCacheData(APICacheDBModel(key: getProfessorReviews, syncData: json.encode(resp2.data)));
+
           return professor;
         }
         else if (resp2.statusCode == 401) {

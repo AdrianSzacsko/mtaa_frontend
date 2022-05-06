@@ -63,8 +63,8 @@ respGetSubjectCache(String getSubject, String getSubjectReviews, APICacheManager
 
 respGetSubject(String subj_id, context) async {
   var cacheData = APICacheManager();
-  String getSubject = urlKey + 'profile/' + subj_id.toString();
-  String getSubjectReviews = urlKey + 'profile/' + subj_id.toString() + "/reviews";
+  String getSubject = urlKey + 'subj/' + subj_id.toString();
+  String getSubjectReviews = urlKey + 'subj/' + subj_id.toString() + "/reviews";
 
   var resp = await SubjectClass().getSubject(subj_id);
   if (resp == null) {
