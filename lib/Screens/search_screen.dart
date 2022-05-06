@@ -3,6 +3,8 @@ import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mtaa_frontend/Database/SearchModel.dart';
+import 'package:mtaa_frontend/Database/operations.dart';
 import 'package:mtaa_frontend/Models/Professor.dart';
 import 'package:mtaa_frontend/Screens/components/autoReconnectWebsocket.dart';
 import 'package:mtaa_frontend/Screens/professor_screen.dart';
@@ -16,6 +18,7 @@ import 'package:mtaa_frontend/Screens/settings_screen.dart';
 import 'package:mtaa_frontend/UI/loading_screen.dart';
 import 'package:mtaa_frontend/key.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../Models/Subject.dart';
@@ -43,6 +46,9 @@ class SearchScreen extends StatefulWidget {
 class SearchScreenState extends State<SearchScreen>{
   bool _isloadingLine = false;
   bool _isloadingCircle = false;
+  late DatabaseHandler handler;
+  bool isLoadedtoDB = false;
+
 
   ScrollController scrollController = ScrollController();
 
@@ -56,9 +62,14 @@ class SearchScreenState extends State<SearchScreen>{
 
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    dataLoadFunctionLine();
+    handler = DatabaseHandler();
+    //dataLoadFunctionLine();
+    handler.initializeDB().whenComplete(() async {
+      //await handler.dropSearch();
+      await dataLoadFunctionLine();
+    });
   }
 
   dataLoadFunctionLine() async {
@@ -314,6 +325,8 @@ class SearchScreenState extends State<SearchScreen>{
                         elevation: 10,
                         //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                         onPressed: (){
+                          channel.setSearchString(searchController.text);
+                          channel.setSearched();
                           dataLoadFunctionLine();
                         },
                         /*onPressed: () async {
@@ -373,9 +386,11 @@ class SearchScreenState extends State<SearchScreen>{
                         stream: channel.stream,
                         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                           if (snapshot.data != null) {
+                            //channel.unsetSearched();
                             list_of_rows.clear();
                             //print(jsonDecode(snapshot.data));
                             getList(snapshot.data);
+
                           }
                           return buildList();
                         },
@@ -414,11 +429,30 @@ class SearchScreenState extends State<SearchScreen>{
     );
   }
 
-  getList(data){
+  getList(data) {
     var list = (json.decode(data.toString()));
     var status = int.parse(list["status_code"].toString());
     if (status == 200){
+
+      List<SearchDB> listMap = <SearchDB>[];
+
       var message = json.decode(list["message"]);
+
+      if ((searchController.text == "" || searchController.text == "default_value") && isLoadedtoDB == false){
+        print("getList");
+        isLoadedtoDB = true;
+        message.forEach((item){
+          listMap.add(SearchDB.fromMap(item));
+          //print(item);
+        });
+        //add to db
+        handler.initializeDB().whenComplete(() async {
+          await handler.insertSearch(listMap);
+        });
+        //handler.insertSearch(listMap);
+
+      }
+
       message.forEach((item){
         list_of_rows.add([item["name"].toString(), item["code"].toString(), item["id"].toString()]);
         //print(item);
