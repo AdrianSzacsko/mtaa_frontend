@@ -17,6 +17,7 @@ import 'package:mtaa_frontend/Screens/sign_in_screen.dart';
 import 'package:mtaa_frontend/Screens/settings_screen.dart';
 import 'package:mtaa_frontend/UI/loading_screen.dart';
 import 'package:mtaa_frontend/key.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -46,6 +47,7 @@ class SearchScreen extends StatefulWidget {
 class SearchScreenState extends State<SearchScreen>{
   bool _isloadingLine = false;
   bool _isloadingCircle = false;
+  bool _isloadingCircle2 = false;
   late DatabaseHandler handler;
   bool isLoadedtoDB = false;
 
@@ -138,6 +140,7 @@ class SearchScreenState extends State<SearchScreen>{
   BouncingScrollPhysics bouncingScrollPhysics = BouncingScrollPhysics();
 
   Widget _buildRow(List<String> row, int index) {
+    _isloadingCircle2 = false;
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(25),
@@ -328,6 +331,9 @@ class SearchScreenState extends State<SearchScreen>{
                           channel.setSearchString(searchController.text);
                           channel.setSearched();
                           dataLoadFunctionLine();
+                          setState(() {
+                            _isloadingCircle2 = true;
+                          });
                         },
                         /*onPressed: () async {
                           setState(() {
@@ -392,7 +398,12 @@ class SearchScreenState extends State<SearchScreen>{
                             getList(snapshot.data);
 
                           }
-                          return buildList();
+                          //_isloadingCircle2 = false;
+                          return Stack(children: [
+                              buildList(),
+                            circularLoadingScreen(_isloadingCircle2),
+                            ],
+                          );
                         },
 
                       ),
