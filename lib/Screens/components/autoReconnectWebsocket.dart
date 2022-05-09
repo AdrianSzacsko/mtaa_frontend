@@ -22,6 +22,7 @@ class AutoReconnectWebSocket{
   bool isSearched = false;
   String searchString = "";
   bool isRunning = true;
+  bool _isconnected = false;
 
   IOWebSocketChannel? webSocketChannel;
 
@@ -51,6 +52,9 @@ class AutoReconnectWebSocket{
 
   void setSearchString(String text){
     searchString = text;
+    if (_isconnected == false) {
+      _connect();
+    }
   }
 
 
@@ -76,26 +80,29 @@ class AutoReconnectWebSocket{
       webSocketChannel = IOWebSocketChannel.connect(_endpoint, headers: {HttpHeaders.authorizationHeader: (token)});
     }
     else {
-      await Future.delayed(Duration(seconds: delay));
+      //await Future.delayed(Duration(seconds: delay));
       if (isSearched == true) {
         isSearched = false;
         _recipientCtrl.add(await createresponse());
       }
-      _connect();
+      //_connect();
     }
     webSocketChannel!.stream.listen((event) {
       _recipientCtrl.add(event);
+      _isconnected = true;
     }, onError: (e) async {
       _recipientCtrl.addError(e);
       if (isSearched == true) {
         isSearched = false;
         _recipientCtrl.add(await createresponse());
       }
-      await Future.delayed(Duration(seconds: delay));
-      _connect();
+      _isconnected = false;
+      //await Future.delayed(Duration(seconds: delay));
+      //_connect();
     }, onDone: () async {
-      await Future.delayed(Duration(seconds: delay));
-      _connect();
+      _isconnected = false;
+      //await Future.delayed(Duration(seconds: delay));
+      //_connect();
     }, cancelOnError: true);
   }
 }

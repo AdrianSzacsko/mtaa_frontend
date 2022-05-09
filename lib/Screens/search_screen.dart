@@ -47,7 +47,6 @@ class SearchScreen extends StatefulWidget {
 class SearchScreenState extends State<SearchScreen>{
   bool _isloadingLine = false;
   bool _isloadingCircle = false;
-  bool _isloadingCircle2 = false;
   late DatabaseHandler handler;
   bool isLoadedtoDB = false;
 
@@ -66,6 +65,8 @@ class SearchScreenState extends State<SearchScreen>{
   @override
   void initState(){
     super.initState();
+    searchController.addListener(searchControllerListener);
+    searchControllerListener();
     handler = DatabaseHandler();
     //dataLoadFunctionLine();
     handler.initializeDB().whenComplete(() async {
@@ -109,7 +110,7 @@ class SearchScreenState extends State<SearchScreen>{
   Widget buildList() {
     return SizedBox(
       width: double.infinity,
-      height: MediaQuery.of(context).size.height -313,
+      height: MediaQuery.of(context).size.height -244,
       child: Align(
         alignment: Alignment.topCenter,
         child: Padding(
@@ -140,7 +141,6 @@ class SearchScreenState extends State<SearchScreen>{
   BouncingScrollPhysics bouncingScrollPhysics = BouncingScrollPhysics();
 
   Widget _buildRow(List<String> row, int index) {
-    _isloadingCircle2 = false;
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(25),
@@ -317,72 +317,6 @@ class SearchScreenState extends State<SearchScreen>{
                     padding: const EdgeInsets.all(5.0),
                     child: userInput(searchController, context),
                   ),
-                  Container(
-                    //height: 200,
-                    child: Align(
-                      alignment: Alignment.center,
-                      //alignment: Alignment.topCenter,
-                      child: FloatingActionButton(
-                        heroTag: null,
-                        backgroundColor: secondaryColor[300],
-                        elevation: 10,
-                        //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                        onPressed: (){
-                          channel.setSearchString(searchController.text);
-                          channel.setSearched();
-                          dataLoadFunctionLine();
-                          setState(() {
-                            _isloadingCircle2 = true;
-                          });
-                        },
-                        /*onPressed: () async {
-                          setState(() {
-                            _isloadingLine = true;
-                          });
-                          print(searchController);
-                          var response = await Search().search(searchController.text);
-
-                          if (response == null) {
-                            responseBar("There was en error during execution. Check your connection.", secondaryColor);
-                          }
-                          else {
-                            if (response.statusCode == 200) {
-                              //responseBar("Login successful", primaryColor);
-                              list_of_rows.clear();
-                              response.data.forEach((item){
-                                list_of_rows.add([item["name"].toString(), item["code"].toString(), item["id"].toString()]);
-                                print(item);
-                              });
-
-                              print(list_of_rows);
-                              searchController.text = '';
-                              //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
-                            }
-                            else if (response.statusCode == 401) {
-                              responseBar("You are not authorized to perform this action.", secondaryColor);
-                            }
-                            else if (response.statusCode == 404) {
-                              responseBar("No such profile.", secondaryColor);
-                            }
-                            else if (response.statusCode! >= 500) {
-                              responseBar("There is an error on server side, sit tight...", secondaryColor);
-                            }
-                            else {
-                              responseBar("There was en error during execution.", secondaryColor);
-                            }
-                          }
-
-                          setState(() {
-                            _isloadingLine = false;
-                          });
-                        },*/
-                        child: const Icon(
-                          Icons.search_outlined,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: defaultPadding),
                   Container(
                     alignment: Alignment.center,
@@ -401,7 +335,6 @@ class SearchScreenState extends State<SearchScreen>{
                           //_isloadingCircle2 = false;
                           return Stack(children: [
                               buildList(),
-                            circularLoadingScreen(_isloadingCircle2),
                             ],
                           );
                         },
@@ -484,6 +417,12 @@ class SearchScreenState extends State<SearchScreen>{
   void dispose() {
     channel.sink.close();
     super.dispose();
+  }
+
+  void searchControllerListener(){
+    channel.setSearchString(searchController.text);
+    channel.setSearched();
+    sendData(searchController.text);
   }
 
 }
