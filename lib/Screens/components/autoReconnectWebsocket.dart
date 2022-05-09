@@ -21,6 +21,7 @@ class AutoReconnectWebSocket{
 
   bool isSearched = false;
   String searchString = "";
+  bool isRunning = true;
 
   IOWebSocketChannel? webSocketChannel;
 
@@ -34,6 +35,10 @@ class AutoReconnectWebSocket{
     });
     _connect();
     handler = DatabaseHandler();
+  }
+
+  void setRunning(bool bool){
+    isRunning = bool;
   }
 
   void setSearched() {
@@ -67,7 +72,17 @@ class AutoReconnectWebSocket{
   Future<void> _connect() async {
     var prefs = await getToken();
     final token = prefs.getString('token') ?? '';
-    webSocketChannel = IOWebSocketChannel.connect(_endpoint, headers: {HttpHeaders.authorizationHeader: ("Bearer " + token)});
+    if (isRunning == true) {
+      webSocketChannel = IOWebSocketChannel.connect(_endpoint, headers: {HttpHeaders.authorizationHeader: (token)});
+    }
+    else {
+      await Future.delayed(Duration(seconds: delay));
+      if (isSearched == true) {
+        isSearched = false;
+        _recipientCtrl.add(await createresponse());
+      }
+      _connect();
+    }
     webSocketChannel!.stream.listen((event) {
       _recipientCtrl.add(event);
     }, onError: (e) async {
@@ -76,7 +91,6 @@ class AutoReconnectWebSocket{
         isSearched = false;
         _recipientCtrl.add(await createresponse());
       }
-      
       await Future.delayed(Duration(seconds: delay));
       _connect();
     }, onDone: () async {

@@ -53,8 +53,8 @@ respGetSubjectCache(String getProfessor, String getProfessorReviews, APICacheMan
 respGetProfessor(String prof_id, context) async {
 
   var cacheData = APICacheManager();
-  String getProfessor = urlKey + 'prof/' + prof_id.toString();
-  String getProfessorReviews = urlKey + 'prof/' + prof_id.toString() + "/reviews";
+  String getProfessor = 'prof/' + prof_id.toString();
+  String getProfessorReviews = 'prof/' + prof_id.toString() + "/reviews";
 
   var resp = await ProfessorClass().getProfessor(prof_id);
   if (resp == null) {

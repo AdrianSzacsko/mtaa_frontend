@@ -405,7 +405,6 @@ class SearchScreenState extends State<SearchScreen>{
                             ],
                           );
                         },
-
                       ),
                       //buildList(),
                     ),
@@ -469,7 +468,8 @@ class SearchScreenState extends State<SearchScreen>{
         //print(item);
       });
     }
-    else {
+    else if (status == 403){
+      channel.setRunning(false);
       var message = list["message"];
       //showSnackBar(message.toString(), primaryColor);
     }
