@@ -219,6 +219,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     MaterialPageRoute<void>(builder: (BuildContext context) => const SignInScreen()),
                     ModalRoute.withName('/'),
                   );
+                  futureQueue.deleteQueue();
                   responseBar("Log Out Successful", primaryColor[300], context);
                 }
               }

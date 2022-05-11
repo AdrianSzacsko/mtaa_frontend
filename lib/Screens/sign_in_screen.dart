@@ -255,6 +255,7 @@ class SignInScreenState extends State<SignInScreen> {
                               }
                               else {
                                 if (response.statusCode == 200) {
+                                  futureQueue.deleteQueue();
                                   responseBar("Login successful", primaryColor);
                                   Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
                                 }

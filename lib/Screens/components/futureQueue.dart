@@ -15,6 +15,10 @@ class FutureQueue{
   Queue queue = Queue();
   int delay;
 
+  void deleteQueue(){
+    queue.clear();
+  }
+
   void push(var object){
     queue.add(object);
   }
