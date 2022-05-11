@@ -12,9 +12,9 @@ respPutSubjectReview(String text, String difficulty, String usability,
     futureQueue.push({"method": ResponseMethods.PutSubjectReview, "params":[text, difficulty, usability,
       prof_avg, subj_id]});
     responseBar(
-        "There was en error modifying the review.", secondaryColor,
+        "You are not connected, review will be modified as soon as you reconnect.", secondaryColor,
         context);
-    return false;
+    return true;
   }
   else {
     if (resp.statusCode == 200) {

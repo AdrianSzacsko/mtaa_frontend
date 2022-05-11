@@ -11,9 +11,9 @@ respPostProfessorReview(String text, String rating, String prof_id, context) asy
   if (resp == null) {
     futureQueue.push({"method": ResponseMethods.PostProfessorReview, "params":[text, rating, prof_id]});
     responseBar(
-        "There was en error posting the review.", secondaryColor,
+        "You are not connected, review will be posted as soon as you reconnect.", secondaryColor,
         context);
-    return false;
+    return true;
   }
   else {
     if (resp.statusCode == 201) {

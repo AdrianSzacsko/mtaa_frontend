@@ -11,9 +11,9 @@ respDeleteProfessorReview(String user_id, String prof_id, context) async {
   if (resp == null) {
     futureQueue.push({"method": ResponseMethods.DeleteProfessorReview, "params":[user_id, prof_id]});
     responseBar(
-        "There was en error deleting the review.", secondaryColor,
+        "You are not connected, review will be deleted as soon as you reconnect.", secondaryColor,
         context);
-    return false;
+    return true;
   }
   else {
     if (resp.statusCode == 200) {

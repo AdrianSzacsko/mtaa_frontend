@@ -10,9 +10,9 @@ respDeleteSubjectReview(String user_id, String subj_id, context) async {
   if (resp == null) {
     futureQueue.push({"method": ResponseMethods.DeleteSubjectReview, "params":[user_id, subj_id]});
     responseBar(
-        "There was en error deleting the review.", secondaryColor,
+        "You are not connected, review will be deleted as soon as you reconnect.", secondaryColor,
         context);
-    return false;
+    return true;
   }
   else {
     if (resp.statusCode == 200) {

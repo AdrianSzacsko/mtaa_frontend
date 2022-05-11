@@ -13,9 +13,9 @@ respPostSubjectReview(String text, String difficulty, String usability,
     futureQueue.push({"method": ResponseMethods.PostSubjectReview, "params":[text, difficulty, usability,
       prof_avg, subj_id]});
     responseBar(
-        "There was en error posting the review.", secondaryColor,
+        "You are not connected, review will be posted as soon as you reconnect.", secondaryColor,
         context);
-    return false;
+    return true;
   }
   else {
     if (resp.statusCode == 201) {

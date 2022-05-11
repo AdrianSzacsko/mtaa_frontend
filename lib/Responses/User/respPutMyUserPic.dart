@@ -9,7 +9,7 @@ respPutMyUserPic(Uint8List newFileBytes, context) async {
   if (resp == null) {
     futureQueue.push({"method": ResponseMethods.PutMyUserPic, "params":[newFileBytes]});
     responseBar(
-        "There was en error putting profile picture.", secondaryColor,
+        "You are not connected, picture will be posted as soon as you reconnect.", secondaryColor,
         context);
   }
   else {

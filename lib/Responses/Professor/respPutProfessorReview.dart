@@ -11,9 +11,9 @@ respPutProfessorReview(String text, String rating, String prof_id, context) asyn
   if (resp == null) {
     futureQueue.push({"method": ResponseMethods.PutProfessorReview, "params":[text, rating, prof_id]});
     responseBar(
-        "There was en error modifying the review.", secondaryColor,
+        "You are not connected, review will be modified as soon as you reconnect.", secondaryColor,
         context);
-    return false;
+    return true;
   }
   else {
     if (resp.statusCode == 200) {
