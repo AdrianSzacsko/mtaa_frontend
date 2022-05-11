@@ -8,6 +8,7 @@ respDeleteSubjectReview(String user_id, String subj_id, context) async {
       subj_id
   );
   if (resp == null) {
+    futureQueue.push({"method": ResponseMethods.DeleteSubjectReview, "params":[user_id, subj_id]});
     responseBar(
         "There was en error deleting the review.", secondaryColor,
         context);

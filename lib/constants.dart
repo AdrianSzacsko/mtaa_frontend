@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'Screens/components/futureQueue.dart';
+
 const primaryColor = Colors.cyan;
 const secondaryColor = Colors.pink;
 const tertiaryColor = Colors.purple;
@@ -11,6 +13,8 @@ const backgroundColor = Color(0xFFEAEAEA);
 
 const defaultPadding = 16.0;
 
+var futureQueue = FutureQueue(5);
+
 OutlineInputBorder textFieldBorder = OutlineInputBorder(
   borderSide: BorderSide(
     color: primaryColor.withOpacity(0.1),
@@ -19,4 +23,15 @@ OutlineInputBorder textFieldBorder = OutlineInputBorder(
 
 const emailError = 'Enter a valid email address';
 const requiredField = "This field is required";
+
+enum ResponseMethods {
+  DeleteProfessorReview,
+  PostProfessorReview,
+  PutProfessorReview,
+  DeleteSubjectReview,
+  PostSubjectReview,
+  PutSubjectReview,
+  DeletePic,
+  PutMyUserPic
+}
 

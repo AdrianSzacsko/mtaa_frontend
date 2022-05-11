@@ -9,6 +9,8 @@ respPutSubjectReview(String text, String difficulty, String usability,
   var resp = await SubjectClass().modifyReview(text, difficulty,
       usability, prof_avg, subj_id);
   if (resp == null) {
+    futureQueue.push({"method": ResponseMethods.PutSubjectReview, "params":[text, difficulty, usability,
+      prof_avg, subj_id]});
     responseBar(
         "There was en error modifying the review.", secondaryColor,
         context);

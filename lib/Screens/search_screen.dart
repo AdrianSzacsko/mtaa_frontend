@@ -382,7 +382,6 @@ class SearchScreenState extends State<SearchScreen>{
       var message = json.decode(list["message"]);
 
       if ((searchController.text == "" || searchController.text == "default_value") && isLoadedtoDB == false){
-        print("getList");
         isLoadedtoDB = true;
         message.forEach((item){
           listMap.add(SearchDB.fromMap(item));

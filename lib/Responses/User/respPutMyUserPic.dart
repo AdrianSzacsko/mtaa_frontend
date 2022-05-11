@@ -7,6 +7,7 @@ import '../../constants.dart';
 respPutMyUserPic(Uint8List newFileBytes, context) async {
   var resp = await Profile().putProfilePic(bytes: newFileBytes);
   if (resp == null) {
+    futureQueue.push({"method": ResponseMethods.PutMyUserPic, "params":[newFileBytes]});
     responseBar(
         "There was en error putting profile picture.", secondaryColor,
         context);

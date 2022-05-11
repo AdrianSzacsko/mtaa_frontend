@@ -9,6 +9,7 @@ respPutProfessorReview(String text, String rating, String prof_id, context) asyn
       prof_id
   );
   if (resp == null) {
+    futureQueue.push({"method": ResponseMethods.PutProfessorReview, "params":[text, rating, prof_id]});
     responseBar(
         "There was en error modifying the review.", secondaryColor,
         context);

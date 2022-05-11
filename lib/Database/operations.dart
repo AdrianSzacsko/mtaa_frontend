@@ -42,7 +42,7 @@ class DatabaseHandler {
     final List<Map<String, Object?>> queryResult = await db.query(
         'search',
       where: "name like ? or code like ?",
-      whereArgs: ["%" + search_string + "%"],
+      whereArgs: ["%" + search_string + "%", "%" + search_string + "%"],
     );
     return queryResult.map((e) => SearchDB.fromMap(e)).toList();
   }

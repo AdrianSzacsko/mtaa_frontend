@@ -10,6 +10,8 @@ respPostSubjectReview(String text, String difficulty, String usability,
       prof_avg, subj_id);
 
   if (resp == null) {
+    futureQueue.push({"method": ResponseMethods.PostSubjectReview, "params":[text, difficulty, usability,
+      prof_avg, subj_id]});
     responseBar(
         "There was en error posting the review.", secondaryColor,
         context);

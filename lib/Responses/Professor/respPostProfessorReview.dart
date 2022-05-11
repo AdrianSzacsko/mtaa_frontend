@@ -9,6 +9,7 @@ respPostProfessorReview(String text, String rating, String prof_id, context) asy
       prof_id
   );
   if (resp == null) {
+    futureQueue.push({"method": ResponseMethods.PostProfessorReview, "params":[text, rating, prof_id]});
     responseBar(
         "There was en error posting the review.", secondaryColor,
         context);

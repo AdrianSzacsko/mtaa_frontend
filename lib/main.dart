@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,7 +19,17 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+
+class _MyAppState extends State<MyApp> {
+  Timer? timer;
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -36,5 +48,12 @@ class MyApp extends StatelessWidget {
         },
       ),
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    timer = Timer.periodic(const Duration(seconds: 5), (Timer t) => futureQueue.start());
+    super.initState();
   }
 }
