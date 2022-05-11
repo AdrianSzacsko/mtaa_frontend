@@ -39,24 +39,27 @@ class FutureQueue{
 
   Future<void> start() async {
     print("im started");
-    if (await Plain().getPlain() == true){
-      print("pinged");
-      while (isEmpty() == false){
-        print("not empty");
+    if (isEmpty() == false) {
+      if (await Plain().getPlain() == true){
+        print("pinged");
+        while (isEmpty() == false){
+          print("not empty");
 
-        //execute REST call
-        var response = await _executeCall();
-        if (response != null){
-          pop();
-        }
-        else{
-          //an error has occured
-          break;
-        }
+          //execute REST call
+          var response = await _executeCall();
+          if (response != null){
+            pop();
+          }
+          else{
+            //an error has occured
+            break;
+          }
 
+        }
+        //we have connection
       }
-      //we have connection
     }
+
     //connection failed
     /*
     await Future.delayed(Duration(seconds: delay));
