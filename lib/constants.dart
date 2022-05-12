@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Screens/components/futureQueue.dart';
 
@@ -12,7 +13,6 @@ const backgroundText = Colors.black26;
 const backgroundColor = Color(0xFFEAEAEA);
 
 const defaultPadding = 16.0;
-
 var futureQueue = FutureQueue(5);
 
 OutlineInputBorder textFieldBorder = OutlineInputBorder(
@@ -34,4 +34,6 @@ enum ResponseMethods {
   DeletePic,
   PutMyUserPic
 }
+
+
 

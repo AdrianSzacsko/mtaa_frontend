@@ -3,7 +3,6 @@
 */
 
 import 'dart:io';
-import 'package:hive/hive.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 
 import 'package:flutter/foundation.dart';

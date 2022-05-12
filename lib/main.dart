@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mtaa_frontend/constants.dart';
 import 'package:provider/provider.dart';
@@ -10,12 +11,13 @@ import './Screens/register_screen.dart';
 import './Screens/sign_in_screen.dart';
 import './Models/auth.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  await GetStorage.init();
   runApp(MyApp());
 }
 

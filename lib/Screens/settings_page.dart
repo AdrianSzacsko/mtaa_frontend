@@ -220,6 +220,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ModalRoute.withName('/'),
                   );
                   futureQueue.deleteQueue();
+                  futureQueue.signOut();
                   responseBar("Log Out Successful", primaryColor[300], context);
                 }
               }
@@ -254,7 +255,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 actions: [
                   CupertinoActionSheetAction(
                     onPressed: (){
-
                     },
                     child: const Text("Sign Out", style: TextStyle(color: secondaryColor),),
                   )

@@ -3,17 +3,35 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:mtaa_frontend/Models/subj.dart';
 import 'package:mtaa_frontend/constants.dart';
 import 'package:mtaa_frontend/key.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Models/prof.dart';
 import '../../Models/profile.dart';
 import '../../Models/respPlainPing.dart';
 
 class FutureQueue{
+  late String codeName;
+  //late String token;
+  final box = GetStorage();
+  bool isInit = false;
+  bool isLoggedIn = false;
+
   Queue queue = Queue();
   int delay;
+
+  void relog(){
+    isInit = false;
+    isLoggedIn = true;
+  }
+
+  void signOut(){
+    queue.clear();
+    isLoggedIn = false;
+  }
 
   void deleteQueue(){
     queue.clear();
@@ -21,13 +39,43 @@ class FutureQueue{
 
   void push(var object){
     queue.add(object);
+    box.write(codeName, toJson());
   }
+
+
+
+  toJson(){
+    var list = queue.toList();
+    for (var i = 0; i < list.length; i++){
+      var element = list.elementAt(i);
+      list.removeAt(i);
+      list.insert(i, {"method": element["method"].index,"params": element["params"]});
+    }
+    /*Map dict = {};
+    list.forEach((element) {
+    });*/
+    return list;
+  }
+
+  fromJson(var dict){
+    var list = dict;
+    queue.clear();
+    for (var i = 0; i < list.length; i++){
+      var element = list.elementAt(i);
+      queue.add({"method": ResponseMethods.values[element["method"]],"params": element["params"]});
+    }
+
+  }
+
+
+
 
   seek(){   //dynamic seek(){
     return queue.first;
   }
 
   dynamic pop(){
+    box.write(codeName, toJson());
     return queue.removeFirst();
   }
 
@@ -41,7 +89,26 @@ class FutureQueue{
 
   FutureQueue(this.delay);
 
+  Future init() async {
+    var prefs = await SharedPreferences.getInstance();
+    //token = prefs.getString('token') ?? '';
+    var user_id = prefs.getInt('user_id') ?? 0;
+    codeName = 'user/' + user_id.toString();
+    print(codeName);
+    //read queue
+    var temp = box.read(codeName) ?? Queue();
+    fromJson(temp);
+    print("init_queue");
+  }
+
   Future<void> start() async {
+    if (isLoggedIn == false){
+      return;
+    }
+    if (isInit == false){
+      await init();
+      isInit = true;
+    }
     print("im started");
     if (isEmpty() == false) {
       if (await Plain().getPlain() == true){
@@ -53,6 +120,7 @@ class FutureQueue{
           var response = await _executeCall();
           if (response != null){
             pop();
+
           }
           else{
             //an error has occured
